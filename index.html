@@ -83,37 +83,31 @@
     font-family: 'Noto Sans KR', sans-serif; flex: none;
   }
 
-  /* 초대장 헤더 */
-  #invitationHead { text-align: center; padding: 2.6rem 1rem 1.2rem; }
+  /* 초대장 (INVITATION + 초대 글이 한 박스 안에) */
+  #invitationHead { text-align: center; padding: 2.6rem 0 1.2rem; }
   #invitationHead .default-invite {
-    display: inline-block; border: 1px solid var(--gold); border-radius: 4px;
-    padding: 1.6rem 3rem; background: var(--paper); position: relative;
+    display: block; border: 1px solid var(--navy); border-radius: 12px;
+    padding: 2.4rem 1.9rem; background: var(--paper); text-align: center;
   }
-  #invitationHead .default-invite::before {
-    content: ''; position: absolute; inset: 6px;
-    border: 1px solid rgba(4, 25, 74, .28); border-radius: 2px;
-  }
-  #invitationHead .default-invite .small { letter-spacing: .6em; text-indent: .6em; font-size: .8rem; color: var(--gold); }
-  #invitationHead .default-invite h1 {
+  #inviteEmblem .small { letter-spacing: .6em; text-indent: .6em; font-size: .8rem; color: var(--navy); }
+  #inviteEmblem h1 {
     font-family: 'Pretendard Variable', 'Pretendard', sans-serif; color: var(--navy);
     font-size: clamp(1.7rem, 5.5vw, 2.3rem); letter-spacing: .5em; text-indent: .5em; font-weight: 600;
   }
-  #invitationHead img.custom { max-width: 100%; border-radius: 10px; }
-  #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; }
-
-  /* 초대 글 */
-  #inviteLetter .letterTitle {
-    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
-    color: var(--navy); font-size: 1.18rem; font-weight: 600;
-    text-align: center; line-height: 1.6; letter-spacing: .02em;
-    margin-bottom: 1.3rem;
+  #inviteEmblem img.custom { max-width: 100%; border-radius: 8px; }
+  .letterHead {
+    color: var(--navy); font-size: 1.15rem; font-weight: 600;
+    line-height: 1.6; letter-spacing: .02em;
+    margin: 1.6rem 0 1.2rem;
   }
-  #inviteLetter .letterBody p {
+  .letterBody { text-align: left; }
+  .letterBody p {
     text-align: justify;            /* 좌우 맞춤 정렬 */
     overflow-wrap: break-word;
     font-size: .98rem; margin-bottom: 1rem;
   }
-  #inviteLetter .letterBody p:last-child { margin-bottom: 0; }
+  .letterBody p:last-child { margin-bottom: 0; }
+  #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; }
 
   /* 쉐랍 소개 */
   #sherab .photo { width: min(300px, 70vw); float: none; margin: 0 auto 1.2rem; display: block; border-radius: 10px; }
@@ -241,22 +235,22 @@
 
     <div id="invitationHead">
       <div class="default-invite" id="defaultInvite">
-        <div class="small">INVITATION</div>
-        <h1>초대장</h1>
+        <div id="inviteEmblem">
+          <div class="small">INVITATION</div>
+          <h1>초대장</h1>
+        </div>
+        <h2 class="letterHead" id="inviteLetterTitle">감정 스트레스 해소를 위한 약사여래 체험 수행</h2>
+        <div class="letterBody" id="inviteLetterBody">
+          <p>과거를 떠나 현재를 놓고, 미래를 여는 약사여래 수행의 길</p>
+          <p>온고이지신(溫故而知新) — 옛것을 익혀 새로운 깨달음을 얻듯, 수행은 과거에 머무는 일이 아니라 지혜를 배워 오늘을 새롭게 살아가는 일입니다. 인공지능과 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
+          <p>과거는 배움으로 남기고, 현재는 수행으로 살아가며, 미래는 서원으로 맞이합니다.</p>
+          <p>혜봉 스님과의 소중한 인연으로 이어진 쉐랍 텐진 선생님의 방한 — 티베트 수행 전통과 약사여래 부처님의 가르침으로 몸과 마음을 정화하고, 자신과 공동체, 인류를 향한 자비심을 키워 가는 여정입니다.</p>
+          <p>이번 수행이 한 사람 한 사람의 회복을 넘어, 다음 세대에게 건강한 철학과 삶의 방향을 전하고 미래 사회를 이끌어 갈 지혜로운 공동체로 이어지기를 서원합니다.</p>
+          <p>약사여래의 자비와 지혜가 함께하는 깨달음의 길에 여러분을 소중히 초대합니다.</p>
+        </div>
       </div>
       <div id="siteTitle" class="serif"></div>
     </div>
-
-    <section class="card" id="inviteLetter">
-      <h2 class="letterTitle" id="inviteLetterTitle">과거를 떠나 현재를 놓고, 미래를 여는 약사여래 수행의 길</h2>
-      <div class="letterBody" id="inviteLetterBody">
-        <p>온고이지신(溫故而知新) — 옛것을 익혀 새로운 깨달음을 얻듯, 수행은 과거에 머무는 일이 아니라 지혜를 배워 오늘을 새롭게 살아가는 일입니다. 인공지능과 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
-        <p>과거는 배움으로 남기고, 현재는 수행으로 살아가며, 미래는 서원으로 맞이합니다.</p>
-        <p>혜봉 스님과의 소중한 인연으로 이어진 쉐랍 텐진 선생님의 방한 — 티베트 수행 전통과 약사여래 부처님의 가르침으로 몸과 마음을 정화하고, 자신과 공동체, 인류를 향한 자비심을 키워 가는 여정입니다.</p>
-        <p>이번 수행이 한 사람 한 사람의 회복을 넘어, 다음 세대에게 건강한 철학과 삶의 방향을 전하고 미래 사회를 이끌어 갈 지혜로운 공동체로 이어지기를 서원합니다.</p>
-        <p>약사여래의 자비와 지혜가 함께하는 깨달음의 길에 여러분을 소중히 초대합니다.</p>
-      </div>
-    </section>
 
     <section class="card" id="sherab">
       <h2 class="sec"><span class="num">1</span><span id="sherabTitle">닥터 쉐랍 텐진</span></h2>
@@ -471,9 +465,9 @@ function render() {
     $('gateArt').innerHTML = '<img src="' + esc(s['게이트이미지URL']) + '" alt="">';
   }
 
-  // 초대장
+  // 초대장 (이미지를 넣으면 INVITATION/초대장 엠블럼 자리만 교체되고 초대 글은 유지됨)
   if (s['초대장이미지URL']) {
-    $('invitationHead').querySelector('#defaultInvite').outerHTML =
+    $('inviteEmblem').innerHTML =
       '<img class="custom" src="' + esc(s['초대장이미지URL']) + '" alt="초대장">';
   }
   $('siteTitle').textContent = s['사이트제목'] || '';
