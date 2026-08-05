@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2026 약사여래 수행 통합 신청</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+Tibetan:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   :root {
@@ -39,11 +39,11 @@
     color: var(--gold-soft); text-align: center; padding: 2rem 1.2rem;
   }
   #gate .art { width: min(420px, 86vw); margin-bottom: 2rem; }
-  #gate .art img { width: 100%; border-radius: 12px; display: block; }
+  #gate .art img { width: 100%; max-height: 52vh; object-fit: contain; border-radius: 12px; display: block; }
   #gate h1 {
-    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-family: 'Noto Serif Tibetan', 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: clamp(1.9rem, 6vw, 2.8rem);
-    font-weight: 200; letter-spacing: 0.35em; text-indent: 0.35em;
+    font-weight: 300; letter-spacing: .04em;
     color: var(--gold-soft); margin-bottom: 1.1rem;
   }
   #gateTo {
@@ -202,29 +202,11 @@
 <!-- ═══════════ 1. 게이트 페이지 ═══════════ -->
 <div id="gate">
   <div class="art" id="gateArt">
-    <!-- 기본 산 그림 (설정 시트에 게이트이미지URL을 넣으면 교체됨) -->
-    <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="산 풍경">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#0A2560"/><stop offset="1" stop-color="#2B4680"/>
-        </linearGradient>
-        <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#8CA0CC"/><stop offset="1" stop-color="#54689B"/>
-        </linearGradient>
-        <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#64789F" /><stop offset="1" stop-color="#2E4373"/>
-        </linearGradient>
-      </defs>
-      <rect width="420" height="300" fill="url(#sky)" rx="12"/>
-      <circle cx="330" cy="70" r="26" fill="#FBF8F2" opacity=".85"/>
-      <path d="M0 230 L90 110 L135 170 L200 80 L280 210 L420 190 L420 300 L0 300 Z" fill="url(#m1)"/>
-      <path d="M185 100 L200 80 L218 105 L207 100 L198 112 Z" fill="#FBF8F2"/>
-      <path d="M0 300 L60 210 L150 260 L260 180 L340 250 L420 220 L420 300 Z" fill="url(#m2)"/>
-      <path d="M78 128 L90 110 L104 130 L95 124 L86 135 Z" fill="#FBF8F2"/>
-    </svg>
+    <!-- 기본 사진 (설정 시트에 게이트이미지URL을 넣으면 교체됨) -->
+    <img src="images/gate.jpg" alt="혜봉 스님과 쉐랍 텐진 선생님">
   </div>
   <div id="gateTo"></div>
-  <h1 id="gateTitle">초대합니다</h1>
+  <h1 id="gateTitle">བཀྲ་ཤིས་བདེ་ལེགས།</h1>
   <p id="gateText"></p>
   <button id="gateNext" type="button">다 음</button>
 </div>
@@ -354,8 +336,8 @@
 var DEFAULT_CONFIG = {
   settings: {
     '사이트제목': '2026 약사여래 수행 통합 신청',
-    '게이트제목': '초대합니다',
-    '게이트문구': '2026년 약사여래 수행\n닥터 쉐랍 텐진과 함께하는 아누 요가의 길',
+    '게이트제목': 'བཀྲ་ཤིས་བདེ་ལེགས།',
+    '게이트문구': '2026년 약사여래 수행\n쉐랍 텐진과 함께하는 요가의 길',
     '게이트버튼': '다음',
     '게이트이미지URL': '',
     '초대장이미지URL': '',
@@ -458,7 +440,7 @@ function render() {
   document.title = s['사이트제목'] || document.title;
 
   // 게이트
-  $('gateTitle').textContent = s['게이트제목'] || '초대합니다';
+  $('gateTitle').textContent = s['게이트제목'] || 'བཀྲ་ཤིས་བདེ་ལེགས།';
   $('gateText').textContent = s['게이트문구'] || '';
   $('gateNext').textContent = (s['게이트버튼'] || '다음').split('').join(' ');
   if (s['게이트이미지URL']) {
