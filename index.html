@@ -41,21 +41,21 @@
   #gate .art { width: min(420px, 86vw); margin-bottom: 2rem; }
   #gate .art img { width: 100%; border-radius: 12px; display: block; }
   #gate h1 {
-    font-family: 'Noto Serif KR', serif;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: clamp(1.9rem, 6vw, 2.8rem);
-    font-weight: 600; letter-spacing: 0.35em; text-indent: 0.35em;
+    font-weight: 200; letter-spacing: 0.35em; text-indent: 0.35em;
     color: var(--gold-soft); margin-bottom: 1.1rem;
   }
   #gateTo {
-    font-family: 'Noto Serif KR', serif;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: 1.15rem; letter-spacing: .3em; text-indent: .3em;
     color: var(--gold-soft); opacity: .95; margin-bottom: .9rem;
   }
   #gateTo:empty { display: none; }
   #gate p { white-space: pre-line; font-size: 1.05rem; opacity: 0.92; margin-bottom: 2.4rem; }
   #gate button {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.15rem; letter-spacing: 0.5em; text-indent: 0.5em;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 1.15rem; font-weight: 300; letter-spacing: 0.5em; text-indent: 0.5em;
     padding: 0.9rem 3.2rem; cursor: pointer;
     color: var(--navy); background: var(--gold-soft);
     border: none; border-radius: 999px;
@@ -179,9 +179,10 @@
   .errMsg { color: #c0392b; font-weight: 700; margin-top: .8rem; text-align: center; white-space: pre-line; }
 
   /* 완료 화면 */
-  #done { text-align: center; padding-top: 3rem; }
+  #done { text-align: center; padding-top: 3rem; color: var(--navy); background: #E8EFFE; min-height: 100vh; }
   #done .mark { font-size: 3rem; }
-  #done h2 { font-family: 'Noto Serif KR', serif; color: var(--navy); margin: .8rem 0; }
+  #done h2 { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 200; letter-spacing: .2em; text-indent: .2em; color: var(--navy); margin: .8rem 0; }
+  #done .infoBox { color: var(--navy); }
   #done .msg { white-space: pre-line; }
   #done .receipt { margin: 1.2rem auto; display: inline-block; background: #F2F4F9; border: 1px solid #C9D2E4; border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
 
