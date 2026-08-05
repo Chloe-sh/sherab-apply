@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 약사여래 수행 통합 신청</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2c5b;
+    --navy-deep: #12203f;
+    --gold: #c9a227;
+    --gold-soft: #e6d9a8;
+    --ivory: #faf7f0;
+    --paper: #ffffff;
+    --ink: #2b2b2b;
+    --line: #e3ddd0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 17px; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--ivory);
+    color: var(--ink);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: 'Noto Serif KR', serif; }
+  .hidden { display: none !important; }
+
+  /* ───────── 게이트 페이지 ───────── */
+  #gate {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #0e1c3d 0%, #1a2c5b 55%, #2c4275 100%);
+    color: #fff; text-align: center; padding: 2rem 1.2rem;
+  }
+  #gate .art { width: min(420px, 86vw); margin-bottom: 2rem; }
+  #gate .art img { width: 100%; border-radius: 12px; display: block; }
+  #gate h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.9rem, 6vw, 2.8rem);
+    font-weight: 600; letter-spacing: 0.35em; text-indent: 0.35em;
+    color: var(--gold-soft); margin-bottom: 1.1rem;
+  }
+  #gateTo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.15rem; letter-spacing: .3em; text-indent: .3em;
+    color: #fff; opacity: .95; margin-bottom: .9rem;
+  }
+  #gateTo:empty { display: none; }
+  #gate p { white-space: pre-line; font-size: 1.05rem; opacity: 0.92; margin-bottom: 2.4rem; }
+  #gate button {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.15rem; letter-spacing: 0.5em; text-indent: 0.5em;
+    padding: 0.9rem 3.2rem; cursor: pointer;
+    color: var(--navy-deep); background: var(--gold-soft);
+    border: none; border-radius: 999px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  #gate button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+
+  /* ───────── 본문 공통 ───────── */
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 1.1rem 4rem; }
+  section.card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.8rem 1.5rem; margin-top: 1.4rem;
+    box-shadow: 0 2px 10px rgba(26,44,91,.05);
+  }
+  h2.sec {
+    font-family: 'Noto Serif KR', serif; color: var(--navy);
+    font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;
+    padding-bottom: .6rem; border-bottom: 2px solid var(--gold);
+    display: flex; align-items: center; gap: .5rem;
+  }
+  h2.sec .num {
+    background: var(--navy); color: #fff; border-radius: 50%;
+    width: 1.7rem; height: 1.7rem; font-size: .95rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Noto Sans KR', sans-serif; flex: none;
+  }
+
+  /* 초대장 헤더 */
+  #invitationHead { text-align: center; padding: 2.6rem 1rem 1.2rem; }
+  #invitationHead .default-invite {
+    display: inline-block; border: 1px solid var(--gold); border-radius: 4px;
+    padding: 1.6rem 3rem; background: var(--paper); position: relative;
+  }
+  #invitationHead .default-invite::before {
+    content: ''; position: absolute; inset: 6px;
+    border: 1px solid var(--gold-soft); border-radius: 2px;
+  }
+  #invitationHead .default-invite .small { letter-spacing: .6em; text-indent: .6em; font-size: .8rem; color: var(--gold); }
+  #invitationHead .default-invite h1 {
+    font-family: 'Noto Serif KR', serif; color: var(--navy);
+    font-size: clamp(1.7rem, 5.5vw, 2.3rem); letter-spacing: .5em; text-indent: .5em; font-weight: 600;
+  }
+  #invitationHead img.custom { max-width: 100%; border-radius: 10px; }
+  #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; }
+
+  /* 쉐랍 소개 */
+  #sherab .photo { width: min(300px, 70vw); float: none; margin: 0 auto 1.2rem; display: block; border-radius: 10px; }
+  #sherab .bio { white-space: pre-line; font-size: .98rem; color: #3d3d3d; }
+
+  /* 프로그램 카드 */
+  .prog {
+    border: 2px solid var(--line); border-radius: 12px; overflow: hidden;
+    margin-bottom: 1rem; cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    background: #fff;
+  }
+  .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); }
+  .prog .head { display: flex; gap: 1rem; padding: 1rem; align-items: flex-start; }
+  .prog .thumb {
+    width: 92px; height: 115px; flex: none; border-radius: 8px; object-fit: cover; background: var(--navy);
+  }
+  .prog .thumb.fallback {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-soft); font-family: 'Noto Serif KR', serif; font-size: 1.6rem;
+  }
+  .prog .tit { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; }
+  .prog .code {
+    background: var(--gold); color: #fff; font-weight: 700; border-radius: 6px;
+    padding: 0 .5rem; font-size: .9rem;
+  }
+  .prog h3 { font-size: 1.08rem; color: var(--navy); font-weight: 700; }
+  .prog .fee { color: var(--gold); font-weight: 700; font-size: 1.02rem; margin-top: .15rem; }
+  .prog .meta { font-size: .88rem; color: #666; margin-top: .3rem; }
+  .prog .desc { font-size: .9rem; color: #555; margin-top: .4rem; }
+  .prog .checkline {
+    background: #f4f1e8; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
+    display: flex; align-items: center; gap: .6rem; font-size: 1rem;
+  }
+  .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
+  .prog.selected .checkline { background: var(--navy); color: #fff; }
+
+  /* 선택별 신청서 */
+  .subform {
+    border: 1px dashed var(--gold); border-radius: 10px; padding: 1.1rem 1rem; margin-bottom: 1rem;
+    background: #fffdf6;
+  }
+  .subform h4 { color: var(--navy); font-size: 1.02rem; margin-bottom: .6rem; }
+  .subform h4 .code { color: var(--gold); }
+
+  /* 폼 요소 */
+  label.q { display: block; font-weight: 700; margin: 1rem 0 .35rem; font-size: .98rem; }
+  label.q .req { color: #c0392b; }
+  .hint { font-size: .85rem; color: #888; margin-bottom: .3rem; }
+  input[type=text], input[type=tel], input[type=number], textarea, select {
+    width: 100%; font: inherit; padding: .65rem .8rem;
+    border: 1.5px solid var(--line); border-radius: 8px; background: #fff;
+  }
+  input:focus, textarea:focus, select:focus { outline: 2px solid rgba(26,44,91,.35); border-color: var(--navy); }
+  textarea { min-height: 4.5rem; resize: vertical; }
+  .radios { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .radios label { display: flex; align-items: center; gap: .4rem; font-size: .98rem; cursor: pointer; }
+  .radios input { width: 1.15rem; height: 1.15rem; accent-color: var(--navy); }
+
+  /* 참가비 요약 */
+  table.feeTable { width: 100%; border-collapse: collapse; margin-top: .4rem; }
+  .feeTable th, .feeTable td { border: 1px solid var(--line); padding: .55rem .7rem; font-size: .95rem; }
+  .feeTable th { background: #f4f1e8; color: var(--navy); }
+  .feeTable td.amount { text-align: right; font-variant-numeric: tabular-nums; }
+  .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #fffbe9; font-size: 1.05rem; }
+  .feeNote { font-size: .85rem; color: #888; margin-top: .5rem; }
+
+  .infoBox { background: #f4f6fb; border-radius: 10px; padding: 1rem 1.1rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
+  .infoBox b { color: var(--navy); }
+
+  /* 제출 */
+  #submitBtn {
+    width: 100%; margin-top: 1.6rem; padding: 1.05rem; font: inherit; font-weight: 700; font-size: 1.15rem;
+    background: var(--navy); color: #fff; border: none; border-radius: 12px; cursor: pointer;
+    letter-spacing: .2em; text-indent: .2em;
+  }
+  #submitBtn:disabled { background: #9aa3b8; cursor: wait; }
+  .errMsg { color: #c0392b; font-weight: 700; margin-top: .8rem; text-align: center; white-space: pre-line; }
+
+  /* 완료 화면 */
+  #done { text-align: center; padding-top: 3rem; }
+  #done .mark { font-size: 3rem; }
+  #done h2 { font-family: 'Noto Serif KR', serif; color: var(--navy); margin: .8rem 0; }
+  #done .msg { white-space: pre-line; }
+  #done .receipt { margin: 1.2rem auto; display: inline-block; background: #fffbe9; border: 1px solid var(--gold-soft); border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
+
+  footer { text-align: center; font-size: .85rem; color: #999; padding: 2rem 0 3rem; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 1. 게이트 페이지 ═══════════ -->
+<div id="gate">
+  <div class="art" id="gateArt">
+    <!-- 기본 산 그림 (설정 시트에 게이트이미지URL을 넣으면 교체됨) -->
+    <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="산 풍경">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#233a6b"/><stop offset="1" stop-color="#4a5f92"/>
+        </linearGradient>
+        <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#8fa3cd"/><stop offset="1" stop-color="#5a6f9e"/>
+        </linearGradient>
+        <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#6b80b0"/><stop offset="1" stop-color="#3d5285"/>
+        </linearGradient>
+      </defs>
+      <rect width="420" height="300" fill="url(#sky)" rx="12"/>
+      <circle cx="330" cy="70" r="26" fill="#e6d9a8" opacity=".9"/>
+      <path d="M0 230 L90 110 L135 170 L200 80 L280 210 L420 190 L420 300 L0 300 Z" fill="url(#m1)"/>
+      <path d="M185 100 L200 80 L218 105 L207 100 L198 112 Z" fill="#f5f2e8"/>
+      <path d="M0 300 L60 210 L150 260 L260 180 L340 250 L420 220 L420 300 Z" fill="url(#m2)"/>
+      <path d="M78 128 L90 110 L104 130 L95 124 L86 135 Z" fill="#f5f2e8"/>
+    </svg>
+  </div>
+  <div id="gateTo"></div>
+  <h1 id="gateTitle">초대합니다</h1>
+  <p id="gateText"></p>
+  <button id="gateNext" type="button">다 음</button>
+</div>
+
+<!-- ═══════════ 2. 통합 신청 페이지 ═══════════ -->
+<div id="main" class="hidden">
+  <div class="wrap">
+
+    <div id="invitationHead">
+      <div class="default-invite" id="defaultInvite">
+        <div class="small">INVITATION</div>
+        <h1>초대장</h1>
+      </div>
+      <div id="siteTitle" class="serif"></div>
+    </div>
+
+    <section class="card" id="sherab">
+      <h2 class="sec"><span class="num">1</span><span id="sherabTitle">닥터 쉐랍 텐진</span></h2>
+      <img class="photo" id="sherabPhoto" alt="쉐랍 텐진" onerror="this.style.display='none'">
+      <div class="bio" id="sherabBio"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="sec"><span class="num">2</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#888;">(여러 개 선택 가능)</span></h2>
+      <p class="hint" id="selectHint"></p>
+      <div id="progList"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="sec"><span class="num">3</span>신청자 기본 정보</h2>
+      <label class="q">이름 <span class="req">*</span></label>
+      <input type="text" id="fName" autocomplete="name">
+      <label class="q">성별 <span class="req">*</span></label>
+      <div class="radios">
+        <label><input type="radio" name="fGender" value="여자">여자</label>
+        <label><input type="radio" name="fGender" value="남자">남자</label>
+      </div>
+      <label class="q">연락처(휴대폰 번호) <span class="req">*</span></label>
+      <div class="hint">예) 010-0000-0000</div>
+      <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-">
+      <label class="q">나이 <span class="req">*</span></label>
+      <input type="number" id="fAge" min="1" max="120">
+      <label class="q">거주지(지역) <span class="req">*</span></label>
+      <div class="hint">구까지만 (예: 서울시 관악구)</div>
+      <input type="text" id="fRegion">
+      <label class="q">수행 경험</label>
+      <div class="radios">
+        <label><input type="radio" name="fExp" value="유">유</label>
+        <label><input type="radio" name="fExp" value="무">무</label>
+        <label><input type="radio" name="fExp" value="쉐랍 텐진 수련 경험 있음">쉐랍 텐진 수련 경험 있음</label>
+      </div>
+      <label class="q">참가 동기 <span class="req">*</span></label>
+      <div class="hint">수행을 통해 원하시는 것이나 기대를 짧게 적어 주세요.</div>
+      <textarea id="fMotivation"></textarea>
+      <label class="q">건강 상태 및 참고(배려) 사항 <span class="req">*</span></label>
+      <div class="hint">주의해야 할 신체적/정신적 특이사항이 있으면 꼭 적어 주세요. (예: 무릎/허리 통증, 임신, 질환 등 · 없으면 "없음")</div>
+      <textarea id="fHealth"></textarea>
+    </section>
+
+    <section class="card" id="subforms" style="display:none">
+      <h2 class="sec"><span class="num">4</span>선택한 수행별 신청서</h2>
+      <div id="subformList"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="sec"><span class="num">5</span>참가비 안내</h2>
+      <table class="feeTable" id="feeTable">
+        <thead><tr><th>선택한 수행</th><th>참가비</th></tr></thead>
+        <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#999;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
+      </table>
+      <div class="feeNote">※ 할인 등 최종 참가비는 담당자 확인 후 개별 안내드립니다.</div>
+      <div class="infoBox" id="paymentInfo"></div>
+      <div class="infoBox"><b>환불 규정</b><br><span id="refundInfo"></span></div>
+      <label class="q">참가비 입금자명</label>
+      <div class="hint">신청자명과 입금자명이 다른 경우만 적어 주세요. 입금 시 "신청자명+수련"으로 입금해 주시면 확인이 빠릅니다.</div>
+      <input type="text" id="fDepositor">
+    </section>
+
+    <section class="card">
+      <h2 class="sec"><span class="num">6</span>동의 및 기타</h2>
+      <label class="q">개인정보 수집 및 이용 동의 <span class="req">*</span></label>
+      <div class="hint">수집 목적: 수행 신청 및 참가자 관리 · 수집 항목: 신청서 기록 내용 · 보유 기간: 별도 기한 없음. 동의하지 않으면 안내 문자 발송 등 접수에 어려움이 있습니다.</div>
+      <div class="radios"><label><input type="checkbox" id="fPrivacy"> 동의합니다</label></div>
+      <label class="q">기록물 수집 및 이용 동의</label>
+      <div class="hint">수행 기간의 후기·사진·영상 등을 콘텐츠 제작에 활용하는 것에 대한 동의입니다.</div>
+      <div class="radios">
+        <label><input type="radio" name="fRecords" value="동의함">동의함</label>
+        <label><input type="radio" name="fRecords" value="동의안함">동의안함</label>
+      </div>
+      <label class="q">기타 문의 사항</label>
+      <textarea id="fEtc" placeholder="주최 측에 전달하고 싶은 메시지나 궁금한 점"></textarea>
+
+      <button id="submitBtn" type="button">신청하기</button>
+      <div class="errMsg" id="errMsg"></div>
+    </section>
+
+    <footer id="contactFoot"></footer>
+  </div>
+</div>
+
+<!-- ═══════════ 3. 완료 화면 ═══════════ -->
+<div id="done" class="hidden">
+  <div class="wrap">
+    <div class="mark">🙏</div>
+    <h2>신청 완료</h2>
+    <p class="msg" id="doneMsg"></p>
+    <div class="receipt" id="doneReceipt"></div>
+    <div class="infoBox" id="donePayment" style="max-width:420px; margin:1rem auto; text-align:left;"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// 로컬 미리보기용 기본 데이터 (실서비스에서는 구글 시트 '설정'/'프로그램' 탭 값 사용)
+// ══════════════════════════════════════════════
+var DEFAULT_CONFIG = {
+  settings: {
+    '사이트제목': '2026 약사여래 수행 통합 신청',
+    '게이트제목': '초대합니다',
+    '게이트문구': '2026년 약사여래 수행\n닥터 쉐랍 텐진과 함께하는 아누 요가의 길',
+    '게이트버튼': '다음',
+    '게이트이미지URL': '',
+    '초대장이미지URL': '',
+    '쉐랍소개제목': '닥터 쉐랍 텐진 (Dr. Sherab Tenzin)',
+    '쉐랍소개': "쉐랍 텐진은 2,500년 전통의 티벳 전통의학 소와 릭빠의 정식 학위(멘 람파)를 지닌 의사이며, 트로가와 린포체로부터 '유톡닝틱' 법맥을 계승한 수행자입니다. 부탄 왕실 주치의로 활동했으며, 내셔널 지오그래픽 및 세계자연기금과 협력하여 히말라야의 멸종위기 약용식물을 보존하는 연구에 참여하셨습니다. 현재 네팔의 파르핑에 퓨어 비전 '소와 릭빠 힐링 센터'를 설립하여 국제적 진료와 교육 활동을 이어오고 계십니다. 한국과는 4년 전부터 매년 약사여래 수행을 통해 한국 수행자를 위한 티벳 불교 전통 수행법과 건강법을 전하고 계십니다.",
+    '쉐랍사진URL': 'images/sherab.jpg',
+    '선택안내': '참가하실 수행을 선택해 주세요. 여러 개를 함께 선택할 수 있습니다.',
+    '입금안내': '참가 신청 후 아래 계좌로 입금 바랍니다. (입금 선착순 마감)\n경제적 배려가 필요한 분들은 연락 바랍니다.',
+    '입금계좌': '국민은행 084-21-0710-611 (김정수)',
+    '문의처': '010-4709-9918 / 010-6313-9189',
+    '환불규정': '7일 전 취소: 100% 환불\n3일~6일 전 취소: 50% 환불\n2일 전~당일 취소: 환불 불가\n환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.',
+    '완료메시지': '신청이 접수되었습니다.\n참가비 입금 후 확인 문자를 보내드립니다. 감사합니다.'
+  },
+  programs: [
+    { code: 'C', name: '행복수업', fee: 300000, schedule: '2026. 9월 (일정 확정 시 수정)', place: '행복수업협동조합 (서울 관악구)', desc: '잠든 상태에서도 깨어 있는 알아차림을 유지하며, 꿈이 마음의 현상임을 직접 체험하는 꿈요가 수행입니다.', image: 'images/card3.jpg' },
+    { code: 'D', name: '아나빠나사띠', fee: 200000, schedule: '2026. 9. 4(금) ~ 9. 8(화) 9:00~17:30', place: '아나빠나사띠명상요가 3층 (서울 관악구, 사당역 4번 출구)', desc: '호흡에 대한 알아차림을 바탕으로, 낮의 현실 또한 꿈과 다르지 않음을 깨달아 삶과 죽음을 명료하게 바라보는 지혜를 기르는 수행입니다.', image: 'images/card4.jpg' },
+    { code: 'E', name: '혜봉추모기념사업회', fee: 100000, schedule: '2026년 (일정 확정 시 수정)', place: '혜봉추모기념사업회 (장소 추후 안내)', desc: '혜봉 선생님의 수행 정신과 가르침을 기리며, 모든 중생이 질병과 고통에서 벗어나기를 서원한 약사여래의 지혜와 자비를 함께 닦는 추모 수행 법회입니다.', image: 'images/card5.jpg' },
+  ],
+  // 프로그램별 신청서 질문 (실서비스에서는 시트의 '질문' 탭에서 관리)
+  questions: {
+    'C': [
+      { order: 1, label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
+      { order: 2, label: '부분 참가 시 참가 가능 시간', type: '단답', options: [], required: false, hint: '' },
+      { order: 3, label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
+    ],
+    'D': [
+      { order: 1, label: '참가 일정', type: '복수선택', options: ['전일 참가', '9월 4일(금)', '9월 5일(토)', '9월 6일(일)', '9월 7일(월)', '9월 8일(화)'], required: true, hint: '전일 참가를 권장하나 부득이한 경우 부분 참가도 가능합니다.' },
+      { order: 2, label: '부분 참가 시 참가 가능 시간과 식사 여부', type: '단답', options: [], required: false, hint: '예) 9/5(토) 오후 수업부터 참가 가능합니다.' },
+      { order: 3, label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '공간이 한정되어 있습니다.' }
+    ],
+    'E': [
+      { order: 1, label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
+      { order: 2, label: '부분 참가 시 참가 가능 시간', type: '단답', options: [], required: false, hint: '' },
+      { order: 3, label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
+    ]
+  }
+};
+
+var IS_APPS_SCRIPT = (typeof google !== 'undefined') && google.script && google.script.run;
+// 외부 호스팅(GitHub Pages 등)에서 접속한 경우 데이터를 주고받을 구글 API 주소
+var API_URL = 'https://script.google.com/macros/s/AKfycbzJYOwA6N-jJ4oMObPbxbCUllfz1N6qz7eAFOoqDxLIytkEFjnL0Oxxs6NANRFt46sz/exec';
+// http(s)로 서빙되고 Apps Script 내부가 아니면 API 모드 (file://로 열면 미리보기 모드)
+var IS_API_MODE = !IS_APPS_SCRIPT && /^https?:$/.test(window.location.protocol) && API_URL;
+var CONFIG = null;
+var selected = {};   // code → true
+var PERSONAL_NAME = '';   // 개인 초대 링크(?to=이름)로 들어온 경우의 이름
+
+function $(id) { return document.getElementById(id); }
+function won(n) { return Number(n).toLocaleString('ko-KR') + '원'; }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+// ── 개인 초대 링크 (?to=이름) ──
+// 배포 URL 뒤에 ?to=이름 을 붙여 보내면 게이트 인사말과 신청서 이름이 자동으로 채워짐
+function loadPersonalName() {
+  function set(v) {
+    PERSONAL_NAME = String(v || '').trim().slice(0, 20);
+    applyPersonal();
+  }
+  if (IS_APPS_SCRIPT && google.script.url && google.script.url.getLocation) {
+    google.script.url.getLocation(function (loc) {
+      set(loc.parameter && (loc.parameter.to || loc.parameter.name));
+    });
+  } else {
+    var q = new URLSearchParams(window.location.search);
+    set(q.get('to') || q.get('name'));
+  }
+}
+
+function applyPersonal() {
+  if (!PERSONAL_NAME) return;
+  $('gateTo').textContent = PERSONAL_NAME + ' 님께';
+  var f = $('fName');
+  if (f && !f.value) f.value = PERSONAL_NAME;
+}
+
+// ── 설정 불러오기 ──
+function loadConfig() {
+  if (IS_APPS_SCRIPT) {
+    google.script.run
+      .withSuccessHandler(function (json) { CONFIG = JSON.parse(json); render(); })
+      .withFailureHandler(function () { CONFIG = DEFAULT_CONFIG; render(); })
+      .getConfig();
+  } else if (IS_API_MODE) {
+    fetch(API_URL + '?action=config')
+      .then(function (r) { return r.json(); })
+      .then(function (cfg) { CONFIG = cfg; render(); })
+      .catch(function () { CONFIG = DEFAULT_CONFIG; render(); });
+  } else {
+    CONFIG = DEFAULT_CONFIG;
+    render();
+  }
+}
+
+function render() {
+  var s = CONFIG.settings;
+  document.title = s['사이트제목'] || document.title;
+
+  // 게이트
+  $('gateTitle').textContent = s['게이트제목'] || '초대합니다';
+  $('gateText').textContent = s['게이트문구'] || '';
+  $('gateNext').textContent = (s['게이트버튼'] || '다음').split('').join(' ');
+  if (s['게이트이미지URL']) {
+    $('gateArt').innerHTML = '<img src="' + esc(s['게이트이미지URL']) + '" alt="">';
+  }
+
+  // 초대장
+  if (s['초대장이미지URL']) {
+    $('invitationHead').querySelector('#defaultInvite').outerHTML =
+      '<img class="custom" src="' + esc(s['초대장이미지URL']) + '" alt="초대장">';
+  }
+  $('siteTitle').textContent = s['사이트제목'] || '';
+
+  // 쉐랍 소개
+  $('sherabTitle').textContent = s['쉐랍소개제목'] || '';
+  $('sherabBio').textContent = s['쉐랍소개'] || '';
+  if (s['쉐랍사진URL']) $('sherabPhoto').src = s['쉐랍사진URL'];
+
+  $('selectHint').textContent = s['선택안내'] || '';
+  $('paymentInfo').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + '<br><b>계좌</b> : ' + esc(s['입금계좌']);
+  $('refundInfo').textContent = s['환불규정'] || '';
+  $('contactFoot').textContent = '문의 : ' + (s['문의처'] || '');
+
+  renderPrograms();
+}
+
+// ── 프로그램 카드 ──
+function renderPrograms() {
+  var list = $('progList');
+  list.innerHTML = '';
+  CONFIG.programs.forEach(function (p) {
+    var div = document.createElement('div');
+    div.className = 'prog';
+    div.id = 'prog-' + p.code;
+    div.innerHTML =
+      '<div class="head">' +
+        (p.image
+          ? '<img class="thumb" src="' + esc(p.image) + '" alt="" onerror="this.outerHTML=\'<div class=&quot;thumb fallback&quot;>' + esc(p.code) + '</div>\'">'
+          : '<div class="thumb fallback">' + esc(p.code) + '</div>') +
+        '<div>' +
+          '<div class="tit"><span class="code">' + esc(p.code) + '</span><h3>' + esc(p.name) + '</h3></div>' +
+          '<div class="fee">참가비 ' + won(p.fee) + '</div>' +
+          '<div class="meta">' + esc(p.schedule) + (p.place ? ' · ' + esc(p.place) : '') + '</div>' +
+          '<div class="desc">' + esc(p.desc) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
+    div.addEventListener('click', function (e) {
+      if (e.target.tagName === 'INPUT') return;
+      toggle(p.code);
+    });
+    div.querySelector('input').addEventListener('change', function () { toggle(p.code, this.checked); });
+    list.appendChild(div);
+  });
+}
+
+function toggle(code, force) {
+  selected[code] = (force !== undefined) ? force : !selected[code];
+  var box = $('chk-' + code);
+  if (box) box.checked = !!selected[code];
+  var card = $('prog-' + code);
+  if (card) card.classList.toggle('selected', !!selected[code]);
+  renderSubforms();
+  renderFees();
+}
+
+// ── 선택별 신청서 (질문 탭 정의 기반으로 자동 생성) ──
+function questionsFor(code) {
+  var qs = (CONFIG.questions && CONFIG.questions[code]) || [];
+  if (!qs.length) {
+    // 질문이 정의되지 않은 프로그램의 기본 신청서
+    qs = [
+      { label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
+      { label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
+    ];
+  }
+  return qs;
+}
+
+function renderSubforms() {
+  var codes = CONFIG.programs.filter(function (p) { return selected[p.code]; });
+  $('subforms').style.display = codes.length ? '' : 'none';
+  var wrapEl = $('subformList');
+
+  // 이미 입력한 값 보존 (질문 라벨 기준)
+  var prev = collectSubforms();
+
+  wrapEl.innerHTML = '';
+  codes.forEach(function (p) {
+    var oldAnswers = {};
+    (prev[p.code] || []).forEach(function (a) { oldAnswers[a.q] = a.a; });
+
+    var d = document.createElement('div');
+    d.className = 'subform';
+    d.dataset.code = p.code;
+    var html =
+      '<h4><span class="code">' + esc(p.code) + '</span> ' + esc(p.name) + ' 신청서</h4>' +
+      '<div class="hint">' + esc(p.schedule) + (p.place ? ' · ' + esc(p.place) : '') + '</div>';
+
+    questionsFor(p.code).forEach(function (q, qi) {
+      var qid = p.code + '-' + qi;
+      var old = oldAnswers[q.label] || '';
+      if (q.type === '안내') {
+        html += '<div class="infoBox">' + esc(q.label) + (q.hint ? '<br>' + esc(q.hint) : '') + '</div>';
+        return;
+      }
+      html += '<label class="q">' + esc(q.label) + (q.required ? ' <span class="req">*</span>' : '') + '</label>';
+      if (q.hint) html += '<div class="hint">' + esc(q.hint) + '</div>';
+
+      if (q.type === '선택') {
+        html += '<div class="radios">' + q.options.map(function (o) {
+          return '<label><input type="radio" name="q-' + esc(qid) + '" value="' + esc(o) + '"' +
+            (old === o ? ' checked' : '') + '>' + esc(o) + '</label>';
+        }).join('') + '</div>';
+      } else if (q.type === '복수선택') {
+        var oldSet = old.split(', ');
+        html += '<div class="radios" style="flex-direction:column; gap:.45rem;">' + q.options.map(function (o) {
+          return '<label><input type="checkbox" name="q-' + esc(qid) + '" value="' + esc(o) + '"' +
+            (oldSet.indexOf(o) >= 0 ? ' checked' : '') + '>' + esc(o) + '</label>';
+        }).join('') + '</div>';
+      } else if (q.type === '장문') {
+        html += '<textarea name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '">' + esc(old) + '</textarea>';
+      } else { // 단답
+        html += '<input type="text" name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" value="' + esc(old) + '">';
+      }
+    });
+
+    d.innerHTML = html;
+    wrapEl.appendChild(d);
+  });
+}
+
+// 결과: { A: [{q: '참가 일정', a: '전일 참가'}, ...], ... }
+function collectSubforms() {
+  var out = {};
+  document.querySelectorAll('#subformList .subform').forEach(function (d) {
+    var code = d.dataset.code;
+    out[code] = [];
+    questionsFor(code).forEach(function (q, qi) {
+      if (q.type === '안내') return;
+      var qid = 'q-' + code + '-' + qi;
+      var val = '';
+      if (q.type === '선택') {
+        var r = d.querySelector('input[name="' + qid + '"]:checked');
+        val = r ? r.value : '';
+      } else if (q.type === '복수선택') {
+        val = Array.prototype.map.call(
+          d.querySelectorAll('input[name="' + qid + '"]:checked'),
+          function (c) { return c.value; }
+        ).join(', ');
+      } else {
+        var el = d.querySelector('[name="' + qid + '"]');
+        val = el ? el.value.trim() : '';
+      }
+      out[code].push({ q: q.label, a: val, required: !!q.required });
+    });
+  });
+  return out;
+}
+
+// ── 참가비 표 ──
+function renderFees() {
+  var body = $('feeBody');
+  var rows = '';
+  var total = 0;
+  CONFIG.programs.forEach(function (p) {
+    if (!selected[p.code]) return;
+    total += p.fee;
+    rows += '<tr><td><b>' + esc(p.code) + '</b> ' + esc(p.name) + '</td><td class="amount">' + won(p.fee) + '</td></tr>';
+  });
+  if (!rows) {
+    body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#999;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
+  } else {
+    body.innerHTML = rows + '<tr class="total"><td>합계</td><td class="amount">' + won(total) + '</td></tr>';
+  }
+}
+
+// ── 제출 ──
+function validate() {
+  var errs = [];
+  var codes = Object.keys(selected).filter(function (c) { return selected[c]; });
+  if (!codes.length) errs.push('참가하실 수행을 1개 이상 선택해 주세요.');
+  if (!$('fName').value.trim()) errs.push('이름을 입력해 주세요.');
+  if (!document.querySelector('input[name="fGender"]:checked')) errs.push('성별을 선택해 주세요.');
+  var phone = $('fPhone').value.trim();
+  if (!/^01[016789][-\s]?\d{3,4}[-\s]?\d{4}$/.test(phone)) errs.push('연락처를 010-0000-0000 형식으로 입력해 주세요.');
+  if (!$('fAge').value.trim()) errs.push('나이를 입력해 주세요.');
+  if (!$('fRegion').value.trim()) errs.push('거주지(지역)를 입력해 주세요.');
+  if (!$('fMotivation').value.trim()) errs.push('참가 동기를 입력해 주세요.');
+  if (!$('fHealth').value.trim()) errs.push('건강 상태를 입력해 주세요. (없으면 "없음")');
+  var subs = collectSubforms();
+  codes.forEach(function (c) {
+    var p = CONFIG.programs.find(function (x) { return x.code === c; });
+    var name = p ? p.name : c;
+    (subs[c] || []).forEach(function (a) {
+      if (a.required && !a.a) errs.push('[' + name + '] "' + a.q + '" 항목을 입력(선택)해 주세요.');
+    });
+  });
+  if (!$('fPrivacy').checked) errs.push('개인정보 수집 및 이용에 동의해 주세요.');
+  return errs;
+}
+
+function submit() {
+  var errs = validate();
+  var errEl = $('errMsg');
+  if (errs.length) {
+    errEl.textContent = errs.join('\n');
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  errEl.textContent = '';
+
+  var subs = collectSubforms();
+  var exp = document.querySelector('input[name="fExp"]:checked');
+  var rec = document.querySelector('input[name="fRecords"]:checked');
+  var payload = {
+    name: $('fName').value.trim(),
+    gender: document.querySelector('input[name="fGender"]:checked').value,
+    phone: $('fPhone').value.trim(),
+    age: $('fAge').value.trim(),
+    region: $('fRegion').value.trim(),
+    experience: exp ? exp.value : '',
+    motivation: $('fMotivation').value.trim(),
+    health: $('fHealth').value.trim(),
+    depositorName: $('fDepositor').value.trim(),
+    recordsConsent: rec ? rec.value : '',
+    etc: $('fEtc').value.trim(),
+    programs: Object.keys(subs).filter(function (c) { return selected[c]; }).map(function (c) {
+      return {
+        code: c,
+        answers: subs[c].filter(function (a) { return a.a !== ''; })
+                        .map(function (a) { return { q: a.q, a: a.a }; })
+      };
+    })
+  };
+
+  var btn = $('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '접수 중…';
+
+  var onOk = function (json) {
+    var res = JSON.parse(json);
+    showDone(res.receiptNo, payload);
+  };
+  var onFail = function (e) {
+    btn.disabled = false;
+    btn.textContent = '신청하기';
+    errEl.textContent = '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.\n(계속 실패하면 문의처로 연락 바랍니다)';
+  };
+
+  if (IS_APPS_SCRIPT) {
+    google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail)
+      .submitApplication(JSON.stringify(payload));
+  } else if (IS_API_MODE) {
+    // 외부 호스팅: 구글 API로 전송 (text/plain 본문 → 브라우저 사전요청 없이 전송됨)
+    fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
+      .then(function (r) { return r.text(); })
+      .then(function (t) {
+        var res = JSON.parse(t);
+        if (res && res.ok) { onOk(t); } else { onFail(res && res.error); }
+      })
+      .catch(onFail);
+  } else {
+    // 로컬 미리보기: 실제 저장 없이 완료 화면만 표시
+    setTimeout(function () { onOk(JSON.stringify({ ok: true, receiptNo: '(미리보기)' })); }, 600);
+  }
+}
+
+function showDone(receiptNo, payload) {
+  var s = CONFIG.settings;
+  $('main').classList.add('hidden');
+  $('done').classList.remove('hidden');
+  window.scrollTo(0, 0);
+  $('doneMsg').textContent = s['완료메시지'] || '신청이 접수되었습니다.';
+  var total = 0;
+  var lines = payload.programs.map(function (sel) {
+    var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
+    total += p ? p.fee : 0;
+    return esc(sel.code) + '. ' + esc(p ? p.name : '') + ' — ' + won(p ? p.fee : 0);
+  });
+  $('doneReceipt').innerHTML =
+    '<b>' + esc(payload.name) + '</b> 님 (접수번호 ' + esc(receiptNo) + ')<br>' +
+    lines.join('<br>') +
+    '<br><b>참가비 합계 : ' + won(total) + '</b>';
+  $('donePayment').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + '<br><b>계좌</b> : ' + esc(s['입금계좌']);
+}
+
+// ── 시작 ──
+$('gateNext').addEventListener('click', function () {
+  $('gate').classList.add('hidden');
+  $('main').classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+$('submitBtn').addEventListener('click', submit);
+loadPersonalName();
+loadConfig();
+</script>
+</body>
+</html>
