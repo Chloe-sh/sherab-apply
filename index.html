@@ -966,7 +966,7 @@ $('pgOverlay').addEventListener('click', function (e) {
   if (e.target === this) closePgDetail(); // 바깥 어두운 부분을 눌러도 닫힘
 });
 
-// ── 수행 경험: '유' 선택 시에만 하위 옵션(쉐랍 텐진 수련 경험) 체크 가능 ──
+// ── 수행 경험: '유' 선택 시에만 하위 옵션(쉐랍 텐진 수행 경험) 체크 가능 ──
 document.querySelectorAll('input[name="fExp"]').forEach(function (r) {
   r.addEventListener('change', function () {
     var yes = this.value === '유';
