@@ -464,6 +464,21 @@ function render() {
   $('contactFoot').textContent = '문의 : ' + (s['문의처'] || '');
 
   renderPrograms();
+  applyPreviewView();
+}
+
+// 디자인 검토용: 주소 뒤에 ?view=main 또는 ?view=done 을 붙이면 해당 화면을 바로 보여줌
+function applyPreviewView() {
+  var v = new URLSearchParams(window.location.search).get('view');
+  if (v === 'main') {
+    $('gate').classList.add('hidden');
+    $('main').classList.remove('hidden');
+  } else if (v === 'done') {
+    showDone('(미리보기)', {
+      name: '홍길동',
+      programs: CONFIG.programs.slice(0, 2).map(function (p) { return { code: p.code }; })
+    });
+  }
 }
 
 // ── 프로그램 카드 ──
