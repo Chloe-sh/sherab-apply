@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>약사여래 수행 신청 페이지 이용 안내</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root{
+    --navy:#04194A;
+    --cream:#FBF8F2;
+    --bg:#E8EFFE;
+    --line:#D5DEEF;
+    --ink:#111;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+    font-weight:300;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 20px 80px;}
+
+  /* 헤더 */
+  .hero{
+    background:var(--navy);
+    color:var(--cream);
+    text-align:center;
+    padding:56px 24px 48px;
+    margin:0 -20px 40px;
+  }
+  .hero .emoji{font-size:40px;display:block;margin-bottom:16px;}
+  .hero h1{font-size:26px;font-weight:600;letter-spacing:-0.02em;line-height:1.4;}
+  .hero p{margin-top:12px;font-size:15px;opacity:.85;font-weight:200;}
+
+  /* 섹션 */
+  section{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:32px 28px;
+    margin-bottom:28px;
+  }
+  h2{
+    font-size:20px;
+    font-weight:600;
+    color:var(--navy);
+    margin-bottom:18px;
+    padding-bottom:12px;
+    border-bottom:2px solid var(--line);
+    letter-spacing:-0.02em;
+  }
+  h3{
+    font-size:16.5px;
+    font-weight:600;
+    color:var(--navy);
+    margin:26px 0 10px;
+  }
+  p{margin-bottom:12px;font-size:15.5px;}
+  strong{font-weight:600;}
+  ol,ul{padding-left:22px;margin-bottom:12px;}
+  li{margin-bottom:8px;font-size:15.5px;}
+  li ul{margin-top:8px;margin-bottom:0;}
+
+  /* 링크 박스 */
+  .linkbox{
+    background:var(--bg);
+    border:1.5px solid var(--navy);
+    border-radius:10px;
+    padding:18px 20px;
+    text-align:center;
+    margin:18px 0;
+  }
+  .linkbox .label{font-size:13.5px;color:var(--navy);font-weight:600;margin-bottom:6px;}
+  .linkbox a{
+    font-size:16px;
+    font-weight:600;
+    color:var(--navy);
+    word-break:break-all;
+  }
+
+  /* 강조 박스 */
+  .note{
+    background:var(--cream);
+    border-left:4px solid var(--navy);
+    border-radius:0 8px 8px 0;
+    padding:14px 18px;
+    margin:16px 0;
+    font-size:15px;
+  }
+  .warn{
+    background:#FFF6F0;
+    border-left:4px solid #C0632E;
+    border-radius:0 8px 8px 0;
+    padding:14px 18px;
+    margin:16px 0;
+    font-size:15px;
+  }
+  .warn strong{color:#A34E1E;}
+  .warn ul{margin:8px 0 0;padding-left:20px;}
+
+  /* 표 */
+  .tablewrap{overflow-x:auto;margin:14px 0;}
+  table{
+    border-collapse:collapse;
+    width:100%;
+    font-size:14.5px;
+    background:#fff;
+  }
+  th,td{
+    border:1px solid var(--line);
+    padding:10px 12px;
+    text-align:left;
+    vertical-align:top;
+  }
+  th{
+    background:var(--navy);
+    color:var(--cream);
+    font-weight:500;
+    white-space:nowrap;
+  }
+  tr:nth-child(even) td{background:#F6F9FF;}
+
+  /* 시트 카드 */
+  .sheet-card{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 22px;
+    margin:16px 0;
+    background:#F9FBFF;
+  }
+  .sheet-card .badge{
+    display:inline-block;
+    background:var(--navy);
+    color:var(--cream);
+    font-size:12.5px;
+    font-weight:500;
+    border-radius:999px;
+    padding:3px 12px;
+    margin-bottom:10px;
+  }
+  .sheet-card h3{margin:0 0 8px;}
+
+  .closing{
+    text-align:center;
+    background:var(--navy);
+    color:var(--cream);
+    border:none;
+    padding:30px 24px;
+  }
+  .closing p{font-size:16px;margin:0;font-weight:400;}
+
+  @media (max-width:480px){
+    .hero h1{font-size:22px;}
+    section{padding:26px 20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="emoji">📿</span>
+    <h1>약사여래 수행 신청 페이지,<br>이렇게 이용하세요</h1>
+    <p>2026 쉐랍 텐진 선생님과 함께하는 약사여래 체험 수행</p>
+  </div>
+
+  <section>
+    <h2>1. 이게 뭐예요?</h2>
+    <p>이번 <strong>2026 쉐랍 텐진 선생님과 함께하는 약사여래 체험 수행</strong>의 신청을 받기 위해 만든 <strong>인터넷 신청 페이지</strong>입니다.</p>
+    <p>예전처럼 종이 신청서를 쓰거나 전화로 접수하지 않아도, <strong>휴대폰으로 링크 하나만 누르면</strong> 신청이 끝납니다.</p>
+    <div class="linkbox">
+      <div class="label">신청 주소는 이것 하나입니다</div>
+      <a href="https://chloe-sh.github.io/sherab-apply/">https://chloe-sh.github.io/sherab-apply/</a>
+    </div>
+    <p>카카오톡, 문자, 어디로 받아서 열어도 다 됩니다. 컴퓨터가 없어도 되고, 휴대폰만 있으면 됩니다.</p>
+  </section>
+
+  <section>
+    <h2>2. 신청하는 분은 어떻게 하나요?</h2>
+    <ol>
+      <li>받은 링크를 <strong>손가락으로 한 번 누릅니다.</strong></li>
+      <li>초대장 화면이 나옵니다. 버튼을 누르면 신청 화면으로 넘어갑니다.</li>
+      <li>화면을 아래로 내리면서 순서대로 보면 됩니다.
+        <ul>
+          <li>쉐랍 텐진 선생님 소개</li>
+          <li>수행 프로그램 안내 (사진을 누르면 자세한 설명이 나옵니다)</li>
+          <li><strong>참여하고 싶은 수행 고르기</strong> (여러 개 골라도 됩니다)</li>
+          <li>이름, 연락처 등 기본 정보 적기</li>
+          <li>고른 수행마다 나오는 간단한 질문에 답하기</li>
+          <li>참가비와 입금 계좌 확인하기</li>
+        </ul>
+      </li>
+      <li>맨 아래 <strong>신청하기 버튼</strong>을 누르면 끝!</li>
+      <li>"접수되었습니다" 화면에 <strong>접수번호와 입금 계좌</strong>가 나옵니다. 안내된 계좌로 참가비를 보내주시면 신청이 완료됩니다.</li>
+    </ol>
+    <div class="note">
+      <strong>어려운 것은 하나도 없습니다.</strong> 그냥 화면에 나오는 대로 적고, 마지막에 버튼만 누르면 됩니다.
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 신청하면 그 내용은 어디로 가나요? <span style="font-weight:300;font-size:15px;">(엑셀 시트 이야기)</span></h2>
+    <p>신청 버튼을 누르는 순간, 신청 내용이 <strong>자동으로 엑셀 표(구글 시트)에 한 줄씩 기록됩니다.</strong> 누가 손으로 옮겨 적는 것이 아니라 기계가 알아서 합니다.</p>
+    <p>이 엑셀 표는 <strong>두 종류</strong>가 있습니다.</p>
+
+    <div class="sheet-card">
+      <span class="badge">① 공통 시트 (통합 시트)</span>
+      <h3>전체를 한눈에 보는 표</h3>
+      <p><strong>총괄 담당자만</strong> 보는 표입니다. 모든 기관의 신청이 여기에 다 모입니다.</p>
+      <ul>
+        <li><strong>개별내역 탭</strong>: "누가 어떤 수행을 신청했는지" 한 줄씩 전부 보입니다.</li>
+        <li><strong>통합내역 탭</strong>: 사람별로 자동 정리됩니다. 예를 들어 —</li>
+      </ul>
+      <div class="tablewrap">
+        <table>
+          <tr><th>이름</th><th>신청한 수행</th><th>개수</th><th>참가비 합계</th></tr>
+          <tr><td>김영희</td><td>욱죵, 꿈요가</td><td>2개</td><td>700,000원</td></tr>
+        </table>
+      </div>
+      <p>이런 식으로 <strong>한 사람이 뭘 몇 개 신청했고 얼마를 내야 하는지</strong> 저절로 계산되어 나옵니다.</p>
+      <p>각 기관 담당자가 입금 확인을 하면, 이 표에도 <strong>실시간으로 자동 반영</strong>됩니다. 서로 전화해서 보고할 필요가 없습니다.</p>
+    </div>
+
+    <div class="sheet-card">
+      <span class="badge">② 개별 시트 (기관별 시트)</span>
+      <h3>우리 기관 것만 보는 표</h3>
+      <p><strong>기관(사업장)마다 하나씩</strong> 따로 있는 표입니다. 각 기관 담당자는 <strong>자기 기관 시트 하나만</strong> 보면 됩니다. 다른 기관 신청은 보이지 않으니 헷갈릴 일이 없습니다.</p>
+      <p>우리 기관 수행에 누가 신청하면, 이 표에 <strong>자동으로 한 줄씩 쌓입니다.</strong> 담당자가 할 일은 딱 <strong>두 칸</strong>입니다.</p>
+      <ol>
+        <li><strong>최종가 적기</strong> — 실제로 받을 금액을 적습니다. (할인 없으면 참가비 그대로, 할인해 드렸으면 할인된 금액, 취소하신 분은 0)</li>
+        <li><strong>입금확인 체크</strong> — 입금이 들어온 것을 확인하면 네모 칸에 ☑ 체크만 하면 됩니다.</li>
+      </ol>
+      <p>이 두 칸만 적으면, 공통 시트에 <strong>자동으로 전달</strong>됩니다. 따로 보고하거나 문서를 보낼 필요가 전혀 없습니다.</p>
+    </div>
+
+    <div class="warn">
+      <strong>⚠️ 딱 세 가지만 지켜주세요</strong>
+      <ul>
+        <li>다른 칸(이름, 연락처 등)은 <strong>고치지 마세요.</strong> 경고창이 뜨면 "취소"를 누르세요.</li>
+        <li>줄을 <strong>지우지 마세요.</strong> 취소하신 분은 최종가에 0만 적으면 됩니다.</li>
+        <li>아래쪽 <strong>탭 이름을 바꾸지 마세요.</strong> 이름이 바뀌면 자동 연결이 끊어집니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. 정리하면</h2>
+    <div class="tablewrap">
+      <table>
+        <tr><th>누구</th><th>하는 일</th></tr>
+        <tr><td><strong>신청자</strong></td><td>링크 열기 → 적기 → 신청 버튼 → 입금</td></tr>
+        <tr><td><strong>기관 담당자</strong></td><td>우리 기관 시트에서 최종가 적고, 입금확인 체크</td></tr>
+        <tr><td><strong>총괄 담당자</strong></td><td>공통 시트에서 전체 현황 확인 (자동 집계)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="closing">
+    <p>신청도 자동, 기록도 자동, 집계도 자동입니다.<br>
+    사람이 할 일은 <strong>"입금 확인하고 체크"</strong>뿐입니다. 🙏</p>
+  </section>
+
+</div>
+</body>
+</html>
