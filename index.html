@@ -6,21 +6,23 @@
 <title>2026 약사여래 수행 통합 신청</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   :root {
-    --navy: #1a2c5b;
-    --navy-deep: #12203f;
-    --gold: #c9a227;
-    --gold-soft: #e6d9a8;
-    --ivory: #faf7f0;
+    --navy: #04194A;        /* 포인트/중요 컬러 */
+    --navy-deep: #020F2E;   /* 네이비보다 살짝 어두운 보조 */
+    --gold: #04194A;        /* 구 골드 포인트 → 네이비로 통일 */
+    --gold-soft: #FBF8F2;   /* 게이트 텍스트/버튼용 미색 */
+    --ivory: #FBF8F2;       /* 본문 배경 미색 (하얀색에 가까운 따뜻한 톤) */
     --paper: #ffffff;
-    --ink: #2b2b2b;
-    --line: #e3ddd0;
+    --ink: #111111;         /* 본문 텍스트 검정 */
+    --line: #e5e1d8;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 17px; }
   body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard Variable', 'Pretendard', 'Noto Sans KR', sans-serif;
+    font-weight: 200; /* 기본 = 프리텐다드 ExtraLight */
     background: var(--ivory);
     color: var(--ink);
     line-height: 1.7;
@@ -33,8 +35,8 @@
   #gate {
     min-height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: linear-gradient(180deg, #0e1c3d 0%, #1a2c5b 55%, #2c4275 100%);
-    color: #fff; text-align: center; padding: 2rem 1.2rem;
+    background: #04194A;
+    color: var(--gold-soft); text-align: center; padding: 2rem 1.2rem;
   }
   #gate .art { width: min(420px, 86vw); margin-bottom: 2rem; }
   #gate .art img { width: 100%; border-radius: 12px; display: block; }
@@ -47,7 +49,7 @@
   #gateTo {
     font-family: 'Noto Serif KR', serif;
     font-size: 1.15rem; letter-spacing: .3em; text-indent: .3em;
-    color: #fff; opacity: .95; margin-bottom: .9rem;
+    color: var(--gold-soft); opacity: .95; margin-bottom: .9rem;
   }
   #gateTo:empty { display: none; }
   #gate p { white-space: pre-line; font-size: 1.05rem; opacity: 0.92; margin-bottom: 2.4rem; }
@@ -55,7 +57,7 @@
     font-family: 'Noto Serif KR', serif;
     font-size: 1.15rem; letter-spacing: 0.5em; text-indent: 0.5em;
     padding: 0.9rem 3.2rem; cursor: pointer;
-    color: var(--navy-deep); background: var(--gold-soft);
+    color: var(--navy); background: var(--gold-soft);
     border: none; border-radius: 999px;
     transition: transform .15s, box-shadow .15s;
   }
@@ -89,7 +91,7 @@
   }
   #invitationHead .default-invite::before {
     content: ''; position: absolute; inset: 6px;
-    border: 1px solid var(--gold-soft); border-radius: 2px;
+    border: 1px solid rgba(4, 25, 74, .28); border-radius: 2px;
   }
   #invitationHead .default-invite .small { letter-spacing: .6em; text-indent: .6em; font-size: .8rem; color: var(--gold); }
   #invitationHead .default-invite h1 {
@@ -128,7 +130,7 @@
   .prog .meta { font-size: .88rem; color: #666; margin-top: .3rem; }
   .prog .desc { font-size: .9rem; color: #555; margin-top: .4rem; }
   .prog .checkline {
-    background: #f4f1e8; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
+    background: #EEF1F7; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
     display: flex; align-items: center; gap: .6rem; font-size: 1rem;
   }
   .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
@@ -137,7 +139,7 @@
   /* 선택별 신청서 */
   .subform {
     border: 1px dashed var(--gold); border-radius: 10px; padding: 1.1rem 1rem; margin-bottom: 1rem;
-    background: #fffdf6;
+    background: #FCFBF7;
   }
   .subform h4 { color: var(--navy); font-size: 1.02rem; margin-bottom: .6rem; }
   .subform h4 .code { color: var(--gold); }
@@ -159,9 +161,9 @@
   /* 참가비 요약 */
   table.feeTable { width: 100%; border-collapse: collapse; margin-top: .4rem; }
   .feeTable th, .feeTable td { border: 1px solid var(--line); padding: .55rem .7rem; font-size: .95rem; }
-  .feeTable th { background: #f4f1e8; color: var(--navy); }
+  .feeTable th { background: #EEF1F7; color: var(--navy); }
   .feeTable td.amount { text-align: right; font-variant-numeric: tabular-nums; }
-  .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #fffbe9; font-size: 1.05rem; }
+  .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #E9EDF5; font-size: 1.05rem; }
   .feeNote { font-size: .85rem; color: #888; margin-top: .5rem; }
 
   .infoBox { background: #f4f6fb; border-radius: 10px; padding: 1rem 1.1rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
@@ -181,7 +183,7 @@
   #done .mark { font-size: 3rem; }
   #done h2 { font-family: 'Noto Serif KR', serif; color: var(--navy); margin: .8rem 0; }
   #done .msg { white-space: pre-line; }
-  #done .receipt { margin: 1.2rem auto; display: inline-block; background: #fffbe9; border: 1px solid var(--gold-soft); border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
+  #done .receipt { margin: 1.2rem auto; display: inline-block; background: #F2F4F9; border: 1px solid #C9D2E4; border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
 
   footer { text-align: center; font-size: .85rem; color: #999; padding: 2rem 0 3rem; }
 </style>
@@ -195,21 +197,21 @@
     <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="산 풍경">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#233a6b"/><stop offset="1" stop-color="#4a5f92"/>
+          <stop offset="0" stop-color="#0A2560"/><stop offset="1" stop-color="#2B4680"/>
         </linearGradient>
         <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#8fa3cd"/><stop offset="1" stop-color="#5a6f9e"/>
+          <stop offset="0" stop-color="#8CA0CC"/><stop offset="1" stop-color="#54689B"/>
         </linearGradient>
         <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#6b80b0"/><stop offset="1" stop-color="#3d5285"/>
+          <stop offset="0" stop-color="#64789F" /><stop offset="1" stop-color="#2E4373"/>
         </linearGradient>
       </defs>
       <rect width="420" height="300" fill="url(#sky)" rx="12"/>
-      <circle cx="330" cy="70" r="26" fill="#e6d9a8" opacity=".9"/>
+      <circle cx="330" cy="70" r="26" fill="#FBF8F2" opacity=".85"/>
       <path d="M0 230 L90 110 L135 170 L200 80 L280 210 L420 190 L420 300 L0 300 Z" fill="url(#m1)"/>
-      <path d="M185 100 L200 80 L218 105 L207 100 L198 112 Z" fill="#f5f2e8"/>
+      <path d="M185 100 L200 80 L218 105 L207 100 L198 112 Z" fill="#FBF8F2"/>
       <path d="M0 300 L60 210 L150 260 L260 180 L340 250 L420 220 L420 300 Z" fill="url(#m2)"/>
-      <path d="M78 128 L90 110 L104 130 L95 124 L86 135 Z" fill="#f5f2e8"/>
+      <path d="M78 128 L90 110 L104 130 L95 124 L86 135 Z" fill="#FBF8F2"/>
     </svg>
   </div>
   <div id="gateTo"></div>
