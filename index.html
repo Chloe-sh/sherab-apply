@@ -55,13 +55,18 @@
   #gate p { white-space: pre-line; font-size: 1.05rem; opacity: 0.92; margin-bottom: 2.4rem; }
   #gate button {
     font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
-    font-size: 1.15rem; font-weight: 300; letter-spacing: 0.5em; text-indent: 0.5em;
-    padding: 0.9rem 3.2rem; cursor: pointer;
+    font-size: 1.1rem; font-weight: 400; letter-spacing: .08em;
+    padding: 0.9rem 2.4rem; cursor: pointer;
     color: var(--navy); background: var(--gold-soft);
     border: none; border-radius: 999px;
     transition: transform .15s, box-shadow .15s;
   }
   #gate button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+  #gateHosts { margin-top: 2.2rem; opacity: .82; }
+  #gateHosts p {
+    white-space: nowrap; margin: .25rem 0 0;
+    font-size: clamp(.64rem, 2.6vw, .85rem); letter-spacing: .02em; opacity: 1;
+  }
 
   /* ───────── 본문 공통 ───────── */
   .wrap { max-width: 720px; margin: 0 auto; padding: 0 1.1rem 4rem; }
@@ -219,6 +224,22 @@
   .radios { display: flex; gap: 1.2rem; flex-wrap: wrap; }
   .radios label { display: flex; align-items: center; gap: .4rem; font-size: .98rem; cursor: pointer; }
   .radios input { width: 1.15rem; height: 1.15rem; accent-color: var(--navy); }
+  /* 부가 옵션 (한 단계 들여쓴 하위 선택지) */
+  .subOption {
+    display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+    margin: .6rem 0 0 1.6rem; padding: .55rem .85rem; width: fit-content;
+    background: #F1F5FC; border-left: 3px solid var(--navy);
+    font-size: .92rem; cursor: pointer;
+  }
+  .subOption input { width: 1.05rem; height: 1.05rem; accent-color: var(--navy); }
+  .subOption .subHint { font-size: .78rem; color: #999; }
+  .subOption.disabled { opacity: .45; cursor: not-allowed; }
+  /* 입금 안내: 기관별 계좌 표 (각진 심플 스타일) */
+  table.accTable { width: 100%; border-collapse: collapse; margin-top: .6rem; background: #fff; }
+  .accTable th, .accTable td { border: 1px solid var(--navy); padding: .6rem .75rem; font-size: .93rem; text-align: left; }
+  .accTable th { background: var(--navy); color: #fff; font-weight: 500; }
+  .accTable td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .accTable td.empty { text-align: center; color: #999; }
 
   /* 참가비 요약 */
   table.feeTable { width: 100%; border-collapse: collapse; margin-top: .4rem; }
@@ -262,7 +283,11 @@
   <div id="gateTo"></div>
   <h1 id="gateTitle">བཀྲ་ཤིས་བདེ་ལེགས།</h1>
   <p id="gateText"></p>
-  <button id="gateNext" type="button">다 음</button>
+  <button id="gateNext" type="button">약사여래 체험수행 로드맵 보기</button>
+  <div id="gateHosts">
+    <p><b>주최</b> 2026년쉐랍텐진방한위원회</p>
+    <p><b>주관</b> 행복수업협동조합 아나빠나사띠명상요가 혜봉추모기념사업회</p>
+  </div>
 </div>
 
 <!-- ═══════════ 2. 통합 신청 페이지 ═══════════ -->
@@ -382,8 +407,12 @@
       <div class="radios">
         <label><input type="radio" name="fExp" value="유">유</label>
         <label><input type="radio" name="fExp" value="무">무</label>
-        <label><input type="radio" name="fExp" value="쉐랍 텐진 수련 경험 있음">쉐랍 텐진 수련 경험 있음</label>
       </div>
+      <label class="subOption disabled" id="expSherabWrap">
+        <input type="checkbox" id="fExpSherab" disabled>
+        <span>쉐랍 텐진 수련 경험 있음</span>
+        <span class="subHint">'유' 선택 시 체크할 수 있어요</span>
+      </label>
       <label class="q">참가 동기 <span class="req">*</span></label>
       <div class="hint">수행을 통해 원하시는 것이나 기대를 짧게 적어 주세요.</div>
       <textarea id="fMotivation"></textarea>
@@ -453,7 +482,7 @@ var DEFAULT_CONFIG = {
     '사이트제목': '2026 약사여래 수행 통합 신청',
     '게이트제목': 'བཀྲ་ཤིས་བདེ་ལེགས།',
     '게이트문구': '2026 쉐랍 텐진과 함께하는 약사여래 체험 수행',
-    '게이트버튼': '다음',
+    '게이트버튼': '약사여래 체험수행 로드맵 보기',
     '게이트이미지URL': '',
     '초대장이미지URL': '',
     '쉐랍소개제목': '쉐랍 텐진 (Dr. Sherab Tenzin)',
@@ -462,7 +491,7 @@ var DEFAULT_CONFIG = {
     '선택안내': '참가하실 수행을 선택해 주세요. 여러 개를 함께 선택할 수 있습니다.',
     '입금안내': '참가 신청 후 아래 계좌로 입금 바랍니다. (입금 선착순 마감)\n경제적 배려가 필요한 분들은 연락 바랍니다.',
     '입금계좌': '국민은행 084-21-0710-611 (김정수)',
-    '문의처': '010-4709-9918 / 010-6313-9189',
+    '문의처': '010-9028-8929 / 010-3293-1634',
     '환불규정': '7일 전 취소: 100% 환불\n3일~6일 전 취소: 50% 환불\n2일 전~당일 취소: 환불 불가\n환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.',
     '완료메시지': '신청이 접수되었습니다.\n참가비 입금 후 확인 문자를 보내드립니다. 감사합니다.'
   },
@@ -557,7 +586,7 @@ function render() {
   // 게이트
   $('gateTitle').textContent = s['게이트제목'] || 'བཀྲ་ཤིས་བདེ་ལེགས།';
   $('gateText').textContent = s['게이트문구'] || '';
-  $('gateNext').textContent = (s['게이트버튼'] || '다음').split('').join(' ');
+  $('gateNext').textContent = s['게이트버튼'] || '약사여래 체험수행 로드맵 보기';
   if (s['게이트이미지URL']) {
     $('gateArt').innerHTML = '<img src="' + esc(s['게이트이미지URL']) + '" alt="">';
   }
@@ -593,12 +622,24 @@ function render() {
   }
 
   $('selectHint').textContent = s['선택안내'] || '';
-  $('paymentInfo').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + '<br><b>계좌</b> : ' + esc(s['입금계좌']);
+  $('paymentInfo').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + '<div id="paymentAccounts"></div>';
   $('refundInfo').textContent = s['환불규정'] || '';
   $('contactFoot').textContent = '문의 : ' + (s['문의처'] || '');
 
   renderPrograms();
+  renderFees();
   applyPreviewView();
+}
+
+// 선택한 수행의 기관별 입금 계좌 표 (각진 심플 스타일)
+function accountTable(programs) {
+  var head = '<table class="accTable"><thead><tr><th>기관</th><th>입금 계좌 (예금주)</th><th>참가비</th></tr></thead><tbody>';
+  if (!programs.length) {
+    return head + '<tr><td class="empty" colspan="3">수행을 선택하시면 입금 계좌가 표시됩니다.</td></tr></tbody></table>';
+  }
+  return head + programs.map(function (p) {
+    return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.account || '계좌 추후 안내') + '</td><td class="amount">' + won(p.fee) + '</td></tr>';
+  }).join('') + '</tbody></table>';
 }
 
 // 디자인 검토용: 주소 뒤에 ?view=main 또는 ?view=done 을 붙이면 해당 화면을 바로 보여줌
@@ -764,6 +805,12 @@ function renderFees() {
   } else {
     body.innerHTML = rows + '<tr class="total"><td>합계</td><td class="amount">' + won(total) + '</td></tr>';
   }
+
+  // 선택한 기관별 입금 계좌 갱신
+  var accEl = document.getElementById('paymentAccounts');
+  if (accEl) {
+    accEl.innerHTML = accountTable(CONFIG.programs.filter(function (p) { return selected[p.code]; }));
+  }
 }
 
 // ── 제출 ──
@@ -803,6 +850,10 @@ function submit() {
 
   var subs = collectSubforms();
   var exp = document.querySelector('input[name="fExp"]:checked');
+  var expValue = exp ? exp.value : '';
+  if (expValue === '유' && $('fExpSherab').checked) {
+    expValue = '유 (쉐랍 텐진 수련 경험 있음)';
+  }
   var rec = document.querySelector('input[name="fRecords"]:checked');
   var payload = {
     name: $('fName').value.trim(),
@@ -810,7 +861,7 @@ function submit() {
     phone: $('fPhone').value.trim(),
     age: $('fAge').value.trim(),
     region: $('fRegion').value.trim(),
-    experience: exp ? exp.value : '',
+    experience: expValue,
     motivation: $('fMotivation').value.trim(),
     health: $('fHealth').value.trim(),
     depositorName: $('fDepositor').value.trim(),
@@ -873,7 +924,10 @@ function showDone(receiptNo, payload) {
     '<b>' + esc(payload.name) + '</b> 님 (접수번호 ' + esc(receiptNo) + ')<br>' +
     lines.join('<br>') +
     '<br><b>참가비 합계 : ' + won(total) + '</b>';
-  $('donePayment').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + '<br><b>계좌</b> : ' + esc(s['입금계좌']);
+  var donePrograms = payload.programs.map(function (sel) {
+    return CONFIG.programs.find(function (x) { return x.code === sel.code; });
+  }).filter(Boolean);
+  $('donePayment').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + accountTable(donePrograms);
 }
 
 // ── 수행 안내: 배너 클릭 시 아래에 큰 글씨로 설명 펼침 ──
@@ -882,9 +936,9 @@ var PG_DATA = {
   lung5: { t: '다섯 룽', b: '정수리·목·심장·배꼽·비밀 자리, 다섯 차크라에 대응하는 다섯 가지 몸동작을 호흡과 결합해 수행합니다.\n외적(몸동작)·내적(에너지)·비밀(마음) 세 층위로 심화되며, 슬픔이 놓이면 기쁨이, 분노가 놓이면 사랑이 드러난다는 식으로 각 정서적 막힘을 해소하게 됩니다.' },
   breath9: { t: '아홉 정화 호흡', b: '세 개의 주요 채널(중앙-청색, 우측-백색, 좌측-적색)을 각각 세 번씩, 총 아홉 번의 호흡으로 정화하는 수행입니다.\n감정과 마음의 막힘을 일으키는 업의 바람을 내보내고, 채널 안에 본래의 청정한 공간을 열어주는 호흡수행입니다.' },
   ukjong: { t: '욱죵', b: '티베트에서 뚬모는 요가에 의해 발생시키는 특수한 몸의 열, 심신의 상관성의 온기(溫氣)를 말합니다. 무한한 자연의 기(氣, 프라나)를 채취하여 체내에 축적한 뒤 그것을 사용해 정액을 신비한 불의 에너지로 바꾸어 신경 계통의 통로로 움직이게 합니다. 욱죵은 티벳 전통에서 \'차(채널)\'와 \'룽(바람, 프라나)\'을 다루는 정화 수행입니다. 몸속 미세한 통로를 따라 흐르는 바람에는 지혜의 바람과 업의 바람 두 갈래가 있다고 설명하며, 욱죵은 호흡과 함께 이 흐름을 다루어 막힌 통로를 열어주는 역할을 합니다.\n전통적으로는 정수리·목·심장·배꼽·비밀 차크라 다섯 지점을 중심으로 지·수·화·풍·공 다섯 원소에 상응하는 다섯 갈래의 수행으로 구성되어 전승된 티베트 수행입니다.\n\'몸·말·마음, 세 개의 문\' 틀 전체를 다룹니다. 몸 수행은 "아홉 프라나" 개념과 만트라를 통해 수행이 진행됩니다. 다섯 룽 동작과 아홉 정화 호흡의 구체적인 수행으로 이보다 더 깊은 단계로 나아가게 할 수행입니다.' },
-  dream: { t: '꿈요가 (Dream Yoga)', b: '우리의 각성과 몽환의 양극의 의식으로부터 깨어있음으로 잠들어 꿈꾸는 동안에도 깨어 있는 자각을 잃지 않는 것을 목표로 하는 수행입니다.\n낮 동안의 의도 세우기와 구루요가 같은 기초 수행에서 시작해, 꿈속에서 지금이 꿈임을 알아차리는 단계, 나아가 꿈의 내용을 자유롭게 바꾸고 변형하는 단계로 나아갑니다.\n삶에서든 중유(中有, 중음)의 상태이든 윤회적으로(또는 카르마) 된 모든 체험은 꿈임을 체험하는 수행입니다.\n결국 꿈 수행에서 얻은 자각을 깊은 잠(수면요가·정광명)과 죽음 이후의 중음(바르도) 상태까지 이어, 삶과 꿈과 죽음을 하나의 수행 여정으로 통합하는 것을 돕습니다.' },
+  dream: { t: '꿈요가 (Dream Yoga)', b: '우리의 각성과 몽환의 양극의 의식으로부터 깨어있음으로 잠들어 꿈꾸는 동안에도 깨어 있는 자각을 잃지 않는 것을 목표로 하는 수행입니다.\n낮 동안의 의도 세우기와 구루요가 같은 기초 수행에서 시작해, 꿈 속에서 지금이 꿈임을 알아차리는 단계, 나아가 꿈의 내용을 자유롭게 바꾸고 변형하는 단계로 나아갑니다.\n삶에서든 중유(中有, 중음)의 상태이든 윤회적으로(또는 카르마) 된 모든 체험은 꿈임을 체험하는 수행입니다.\n결국 꿈 수행에서 얻은 자각을 깊은 잠(수면요가·정광명)과 죽음 이후의 중음(바르도) 상태까지 이어, 삶과 꿈과 죽음을 하나의 수행 여정으로 통합하는 것을 돕습니다.' },
   lungjung: { t: '룽즁쥭 쌍악쑤 닥빠', b: '룽(바람)·즁(날숨)·쥭(들숨)의 흐름을 따라 신성한 만트라(쌍악쑤 닥빠)를 몸과 호흡에 새기는 수행입니다.\n호흡과 명상 기법을 통해 미세한 바람을 중앙 채널로 이끌어 모으고 머무르게 하는 것이 이 수행의 핵심 원리로 전해집니다. 룽즁쥭 쌍악쑤 닥빠는 티벳 밀교 전통에서 \'금강 염송(rdo rje bzlas pa)\'이라 불리는 호흡-만트라 결합 수행입니다.\n들숨-머묾-날숨 세 단계에 씨앗 만트라(옴-아-훔)를 붙여 마음으로 새기며, 좌우로 흩어진 바람을 중앙 채널로 모아들이는 것이 핵심 원리로 전해집니다. 형태와 소리와 색깔과 진리의 비밀스런 상관관계를 통해 자신을 발달시킵니다. 침묵 만트라와 사마타와 호흡을 함께 세 채널과 다섯 차크라를 정화하며, 정수리·목·심장·배꼽·비밀 자리의 다섯 차크라에 대응하는 몸과 호흡과 결합해 수행합니다. 외적(몸동작)·내적(에너지)·비밀(마음) 세 층위로 심화되며, 슬픔이 놓이면 기쁨이, 분노가 놓이면 사랑이 드러난다는 식으로 각 정서적 막힘의 해소를 체험할 수 있습니다. 인간의 의식을 윤회계의 한 존재 상태에서 다른 존재 상태로 전이시키는 수행을 제공합니다.' },
-  naropa: { t: '나로파 육법(六法)이란', b: '인도의 성취자 틸로파의 가르침을 제자 나로파가 체계화한 6가지 완성차제 수행입니다.\n* 4개의 탄트라: 진여(眞如), 또는 궁극적 진리, 밀교, 요기(샥띠) 탄트라, 칼라챠크라 탄트라\n1. 생멸열(內火, 뚬모)요가 — 호흡과 관상으로 몸속 바람을 중맥·심장 차크라로 모아 내적인 열과 정광명을 여는 수행. 나머지 다섯 수행의 토대가 됩니다.\n2. 환신(幻身) 요가 — 모든 현상이 실체 없는 환영과 같음을 몸으로 체득하는 수행\n3. 몽환(夢幻, 꿈요가) 요가 — 꿈 속에서 깨어 있는 자각을 유지하는 수행\n4. 정광명(淨光明)요가 — 가장 미세한 마음의 본성인 맑은 빛을 직접 체험하는 수행\n5. 중음(中陰, 바르도) 요가 — 죽음과 삶 사이의 상태를 수행의 여정으로 전환하는 수행\n6. 의식전이(遷移, 포와) 요가 — 임종의 순간 의식을 정토로 옮기는 수행' }
+  naropa: { t: '나로파 육법(六法)이란', b: '인도의 성취자 틸로파의 가르침을 제자 나로파가 체계화한 6가지 완성차제 수행입니다.\n* 4개의 탄트라: 진여(眞如), 또는 궁극적 진리, 밀교, 요기(샥띠) 탄트라, 칼라차크라 탄트라\n1. 생멸열(內火, 뚬모)요가 — 호흡과 관상으로 몸속 바람을 중맥·심장 차크라로 모아 내적인 열과 정광명을 여는 수행. 나머지 다섯 수행의 토대가 됩니다.\n2. 환신(幻身) 요가 — 모든 현상이 실체 없는 환영과 같음을 몸으로 체득하는 수행\n3. 몽환(夢幻, 꿈요가) 요가 — 꿈 속에서 깨어 있는 자각을 유지하는 수행\n4. 정광명(淨光明)요가 — 가장 미세한 마음의 본성인 맑은 빛을 직접 체험하는 수행\n5. 중음(中陰, 바르도) 요가 — 죽음과 삶 사이의 상태를 수행의 여정으로 전환하는 수행\n6. 의식전이(遷移, 포와) 요가 — 임종의 순간 의식을 정토로 옮기는 수행' }
 };
 
 function openPgDetail(key) {
@@ -910,6 +964,16 @@ document.querySelectorAll('.pgCard[data-pg]').forEach(function (card) {
 $('pgDetailClose').addEventListener('click', closePgDetail);
 $('pgOverlay').addEventListener('click', function (e) {
   if (e.target === this) closePgDetail(); // 바깥 어두운 부분을 눌러도 닫힘
+});
+
+// ── 수행 경험: '유' 선택 시에만 하위 옵션(쉐랍 텐진 수련 경험) 체크 가능 ──
+document.querySelectorAll('input[name="fExp"]').forEach(function (r) {
+  r.addEventListener('change', function () {
+    var yes = this.value === '유';
+    $('fExpSherab').disabled = !yes;
+    if (!yes) $('fExpSherab').checked = false;
+    $('expSherabWrap').classList.toggle('disabled', !yes);
+  });
 });
 
 // ── 시작 ──
