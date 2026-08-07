@@ -294,6 +294,21 @@
   #done .receipt { margin: 1.2rem auto; display: inline-block; background: #F2F4F9; border: 1px solid #C9D2E4; border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
 
   footer { text-align: center; font-size: .85rem; color: #999; padding: 2rem 0 3rem; }
+
+  /* 플로팅 '아래로' 버튼: 긴 페이지 중도 이탈 방지. 맨 아래 근처에선 자동으로 숨김 */
+  #scrollFab {
+    position: fixed; right: 16px; bottom: 18px; z-index: 900;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--navy); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(4,25,74,.35);
+    animation: fabBounce 1.8s ease-in-out infinite;
+  }
+  #scrollFab svg { width: 22px; height: 22px; fill: var(--gold-soft); display: block; }
+  @keyframes fabBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
 </style>
 </head>
 <body>
@@ -509,6 +524,10 @@
 
     <footer id="contactFoot"></footer>
   </div>
+
+  <button id="scrollFab" type="button" aria-label="아래로 내려가기">
+    <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
+  </button>
 </div>
 
 <!-- ═══════════ 3. 완료 화면 ═══════════ -->
@@ -1075,6 +1094,19 @@ document.querySelectorAll('input[name="fExp"]').forEach(function (r) {
     $('expSherabWrap').classList.toggle('disabled', !yes);
   });
 });
+
+// ── 플로팅 '아래로' 버튼: 클릭 시 한 화면 스크롤, 맨 아래 근처에선 숨김 ──
+function updateFab() {
+  var fab = $('scrollFab');
+  if (!fab) return;
+  var nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 400;
+  fab.classList.toggle('hidden', nearBottom);
+}
+$('scrollFab').addEventListener('click', function () {
+  window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' });
+});
+window.addEventListener('scroll', updateFab, { passive: true });
+window.addEventListener('resize', updateFab);
 
 // ── 시작 ──
 $('gateNext').addEventListener('click', function () {
