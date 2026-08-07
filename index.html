@@ -203,6 +203,17 @@
   .prog .fee { color: var(--gold); font-weight: 700; font-size: 1.02rem; margin-top: .15rem; }
   .prog .meta { font-size: .88rem; color: #666; margin-top: .3rem; white-space: pre-line; }
   .schedLine { white-space: pre-line; }
+  /* 일정이 "날짜/프로그램 - 설명" 꼴이면 회차별 블록으로 구조화해서 표시 */
+  .prog .sess { margin-top: .55rem; padding-left: .65rem; border-left: 3px solid var(--line); }
+  .prog .sess .when { color: var(--navy); font-weight: 700; font-size: .92rem; }
+  .prog .sess .what { font-weight: 600; color: #333; font-size: .92rem; }
+  .prog .sess .why { color: #777; font-size: .87rem; margin-top: .1rem; }
+  /* 모바일: 이미지를 위에 꽉 차게, 텍스트는 그 아래로 */
+  @media (max-width: 640px) {
+    .prog .head { flex-direction: column; gap: .8rem; }
+    .prog .thumb { width: 100%; height: 180px; object-fit: cover; }
+    .prog .thumb.fallback { height: 90px; font-size: 2.2rem; }
+  }
   .prog .desc { font-size: .9rem; color: #555; margin-top: .4rem; }
   .prog .checkline {
     background: #EEF1F7; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
@@ -673,6 +684,45 @@ function render() {
   applyPreviewView();
 }
 
+// 일정 문자열을 회차별로 분해: "날짜/프로그램 - 설명" 꼴인 줄만 성공
+// (한 줄에 여러 회차가 문장으로 이어져 있으면 ". " + 날짜 패턴 앞에서 잘라줌)
+function sessionsOf(schedule) {
+  var lines = String(schedule || '').trim().split(/\n+/);
+  if (lines.length === 1) {
+    var parts = lines[0].split(/\.\s+(?=\d{1,2}\.\s*\d{1,2}\s*\()/);
+    if (parts.length > 1) {
+      lines = parts.map(function (t, i) { return i < parts.length - 1 ? t + '.' : t; });
+    }
+  }
+  var out = [];
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    var m = line.match(/^([0-9.()~\-\s월화수목금토일]+)\/(.+)$/);
+    if (!m) return null;                      // 하나라도 다른 꼴이면 기존 방식으로
+    var rest = m[2], at = rest.indexOf(' - ');
+    out.push({
+      when: m[1].trim(),
+      what: (at >= 0 ? rest.slice(0, at) : rest).trim(),
+      why: (at >= 0 ? rest.slice(at + 3) : '').trim()
+    });
+  }
+  return out.length ? out : null;
+}
+
+// 프로그램 카드의 일정·장소 표시 (회차 구조가 읽히면 블록형, 아니면 기존 한 줄형)
+function metaHtml(p) {
+  var sess = sessionsOf(p.schedule);
+  if (!sess) return '<div class="meta">' + schedulePlace(p) + '</div>';
+  var h = sess.map(function (s) {
+    return '<div class="sess"><div class="when">' + esc(s.when) + '</div>' +
+      '<div class="what">' + esc(s.what) + '</div>' +
+      (s.why ? '<div class="why">' + esc(s.why) + '</div>' : '') + '</div>';
+  }).join('');
+  if (p.place) h += '<div class="meta">' + esc(p.place) + '</div>';
+  return h;
+}
+
 // 일정 + 장소 한 줄. 일정이 여러 줄이면 장소도 줄을 바꿔서 표시
 function schedulePlace(p) {
   if (!p.place) return esc(p.schedule);
@@ -721,7 +771,7 @@ function renderPrograms() {
         '<div>' +
           '<div class="tit"><span class="code">' + esc(p.code) + '</span><h3>' + esc(p.name) + '</h3></div>' +
           '<div class="fee">참가비 ' + won(p.fee) + '</div>' +
-          '<div class="meta">' + schedulePlace(p) + '</div>' +
+          metaHtml(p) +
           '<div class="desc">' + esc(p.desc) + '</div>' +
         '</div>' +
       '</div>' +
