@@ -258,8 +258,9 @@
   .feeNote { font-size: .85rem; color: #888; margin-top: .5rem; }
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
-  .scrollCue { text-align: center; margin: 2.2rem 0 .6rem; }
-  .scrollCue img { width: min(150px, 55%); height: auto; display: block; margin: 0 auto; }
+  .scrollCue { margin: 2.2rem 0 .6rem; }
+  .scrollCue svg { width: 100%; height: auto; display: block; fill: var(--navy); }
+  .scrollCue svg text { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 700; }
 
   .infoBox { background: #f4f6fb; border-radius: 10px; padding: 1rem 1.1rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
   .infoBox b { color: var(--navy); }
@@ -411,8 +412,15 @@
       <h2 class="sec"><span class="num">5</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#888;">(여러 개 선택 가능)</span></h2>
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
+      <!-- 아래로 내려가세요: 원본 이미지(125x70)와 같은 비율·색으로 그린 벡터 -->
       <div class="scrollCue">
-        <img src="images/scroll-down.png" alt="아래로 내려가세요">
+        <svg viewBox="0 0 125 70" role="img" aria-label="아래로 내려가세요">
+          <text x="62.5" y="22" font-size="13" text-anchor="middle"
+                textLength="100" lengthAdjust="spacingAndGlyphs">&lt;아래로 내려가세요&gt;</text>
+          <polygon points="10,31 29,31 29,50.5 37.5,50.5 19.5,69 1.5,50.5 10,50.5"/>
+          <polygon points="52.5,31 71.5,31 71.5,50.5 80,50.5 62,69 44,50.5 52.5,50.5"/>
+          <polygon points="95,31 114,31 114,50.5 122.5,50.5 104.5,69 86.5,50.5 95,50.5"/>
+        </svg>
       </div>
     </section>
 
