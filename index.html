@@ -81,6 +81,8 @@
     padding-bottom: .6rem; border-bottom: 2px solid var(--gold);
     display: flex; align-items: center; gap: .5rem;
   }
+  /* 제목의 괄호 부분: 줄이 모자라면 중간에서 끊기지 않고 통째로 다음 줄로 */
+  h2.sec .paren { display: inline-block; white-space: nowrap; }
   h2.sec .num {
     background: var(--navy); color: #fff; border-radius: 50%;
     width: 1.7rem; height: 1.7rem; font-size: .95rem;
@@ -619,7 +621,11 @@ function render() {
   $('siteTitle').textContent = s['사이트제목'] || '';
 
   // 쉐랍 소개
-  $('sherabTitle').textContent = s['쉐랍소개제목'] || '';
+  var sherabT = s['쉐랍소개제목'] || '';
+  var sherabM = sherabT.match(/^([^(]*?)\s*(\(.*\))\s*$/);
+  $('sherabTitle').innerHTML = sherabM
+    ? esc(sherabM[1]) + ' <span class="paren">' + esc(sherabM[2]) + '</span>'
+    : esc(sherabT);
   $('sherabBio').textContent = s['쉐랍소개'] || '';
   if (s['쉐랍사진URL']) $('sherabPhoto').src = s['쉐랍사진URL'];
 
