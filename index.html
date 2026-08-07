@@ -202,6 +202,7 @@
   .prog h3 { font-size: 1.08rem; color: var(--navy); font-weight: 700; }
   .prog .fee { color: var(--gold); font-weight: 700; font-size: 1.02rem; margin-top: .15rem; }
   .prog .meta { font-size: .88rem; color: #666; margin-top: .3rem; white-space: pre-line; }
+  .schedLine { white-space: pre-line; }
   .prog .desc { font-size: .9rem; color: #555; margin-top: .4rem; }
   .prog .checkline {
     background: #EEF1F7; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
@@ -657,6 +658,13 @@ function render() {
   applyPreviewView();
 }
 
+// 일정 + 장소 한 줄. 일정이 여러 줄이면 장소도 줄을 바꿔서 표시
+function schedulePlace(p) {
+  if (!p.place) return esc(p.schedule);
+  var sep = String(p.schedule || '').indexOf('\n') >= 0 ? '\n' : ' · ';
+  return esc(p.schedule) + sep + esc(p.place);
+}
+
 // 선택한 수행의 기관별 입금 계좌 표 (각진 심플 스타일)
 function accountTable(programs) {
   var head = '<table class="accTable"><thead><tr><th>기관</th><th>입금 계좌 (예금주)</th><th>참가비</th></tr></thead><tbody>';
@@ -698,7 +706,7 @@ function renderPrograms() {
         '<div>' +
           '<div class="tit"><span class="code">' + esc(p.code) + '</span><h3>' + esc(p.name) + '</h3></div>' +
           '<div class="fee">참가비 ' + won(p.fee) + '</div>' +
-          '<div class="meta">' + esc(p.schedule) + (p.place ? ' · ' + esc(p.place) : '') + '</div>' +
+          '<div class="meta">' + schedulePlace(p) + '</div>' +
           '<div class="desc">' + esc(p.desc) + '</div>' +
         '</div>' +
       '</div>' +
@@ -753,7 +761,7 @@ function renderSubforms() {
     d.dataset.code = p.code;
     var html =
       '<h4><span class="code">' + esc(p.code) + '</span> ' + esc(p.name) + ' 신청서</h4>' +
-      '<div class="hint">' + esc(p.schedule) + (p.place ? ' · ' + esc(p.place) : '') + '</div>';
+      '<div class="hint schedLine">' + schedulePlace(p) + '</div>';
 
     questionsFor(p.code).forEach(function (q, qi) {
       var qid = p.code + '-' + qi;
