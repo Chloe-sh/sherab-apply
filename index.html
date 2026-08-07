@@ -259,13 +259,7 @@
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
   .scrollCue { text-align: center; margin: 2.2rem 0 .6rem; }
-  .scrollCue img { max-width: min(260px, 70%); height: auto; display: block; margin: 0 auto; }
-  .scrollCue .txt {
-    color: var(--navy); font-weight: 700; font-size: .95rem;
-    letter-spacing: .02em; margin-bottom: .55rem;
-  }
-  .scrollCue .arrows { display: flex; justify-content: center; gap: .9rem; }
-  .scrollCue svg { width: 42px; height: 52px; fill: var(--navy); display: block; }
+  .scrollCue img { width: min(150px, 55%); height: auto; display: block; margin: 0 auto; }
 
   .infoBox { background: #f4f6fb; border-radius: 10px; padding: 1rem 1.1rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
   .infoBox b { color: var(--navy); }
@@ -418,12 +412,7 @@
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
       <div class="scrollCue">
-        <div class="txt">&lt;아래로 내려가세요&gt;</div>
-        <div class="arrows">
-          <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
-          <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
-          <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
-        </div>
+        <img src="images/scroll-down.png" alt="아래로 내려가세요">
       </div>
     </section>
 
