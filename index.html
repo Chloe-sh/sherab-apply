@@ -268,6 +268,15 @@
   .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #E9EDF5; font-size: 1.05rem; }
   .feeNote { font-size: .85rem; color: #888; margin-top: .5rem; }
 
+  /* 일정표: 모바일에서는 원본 크기를 유지하고 좌우 스크롤로 보게 함 */
+  #scheduleBody { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; }
+  #scheduleBody img { width: 100%; border-radius: 10px; display: block; }
+  .schedScrollHint { display: none; }
+  @media (max-width: 700px) {
+    #scheduleBody img { width: 760px; max-width: none; }
+    .schedScrollHint { display: block; font-size: .85rem; color: #888; margin-bottom: .55rem; }
+  }
+
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
   .scrollCue { margin: 2.2rem 0 .6rem; }
   .scrollCue svg { width: 100%; height: auto; display: block; fill: var(--navy); }
@@ -371,8 +380,9 @@
 
     <section class="card" id="schedule">
       <h2 class="sec"><span class="num">3</span>일정표</h2>
+      <div class="schedScrollHint">※ 일정표를 좌우로 밀면 크게 볼 수 있어요.</div>
       <div id="scheduleBody">
-        <img src="images/schedule.png" alt="2026년 쉐랍 텐진 방한수련 일정" style="width:100%; border-radius:10px;">
+        <img src="images/schedule.png" alt="2026년 쉐랍 텐진 방한수련 일정">
       </div>
     </section>
 
@@ -599,6 +609,8 @@ var PERSONAL_NAME = '';   // 개인 초대 링크(?to=이름)로 들어온 경�
 
 function $(id) { return document.getElementById(id); }
 function won(n) { return Number(n).toLocaleString('ko-KR') + '원'; }
+// 참가비 표기: 0원인 수행(한의사 차담)은 금액 대신 자율보시로 표시 (시트 기록은 0원 그대로)
+function feeText(p) { return Number(p.fee) === 0 ? '자율보시' : won(p.fee); }
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -635,13 +647,18 @@ function applyPersonal() {
 // 나중에 시트 쪽을 직접 고치면 여기 보정은 자동으로 무력화된다.
 function applyOverrides(cfg) {
   var s = cfg.settings || (cfg.settings = {});
-  // D 카드 참가비 옆 보조 표기: "참가비 400,000원(1일 8만 원)"
-  if (!s['참가비메모D']) s['참가비메모D'] = '1일 8만 원';
+  // 참가비 옆 보조 표기 (기간)
+  if (!s['참가비메모C']) s['참가비메모C'] = '1일';
+  if (!s['참가비메모D']) s['참가비메모D'] = '5일';
   // 선택 안내에서 중복 선택 안내 문장 제거
   if (s['선택안내']) s['선택안내'] = s['선택안내'].replace(/\s*여러 개를 함께 선택할 수 있습니다\.?/, '').trim();
   (cfg.programs || []).forEach(function (p) {
     // 각 줄 끝의 불필요한 공백 제거
     if (p.schedule) p.schedule = String(p.schedule).replace(/[ \t]+$/gm, '');
+    // 참가비 정정(2026-08-07): 시트 프로그램 탭이 옛 금액인 동안만 보정
+    // ※ 접수 기록의 '참가비(자동)' 열은 백엔드가 시트 값을 읽으므로 시트 셀도 수정해야 함
+    if (p.code === 'C' && Number(p.fee) === 300000) p.fee = 90000;
+    if (p.code === 'F' && Number(p.fee) === 100000) p.fee = 360000;
     if (p.code === 'C') {
       p.schedule = String(p.schedule || '')
         .replace('26.8.26(수)~27(목)', '26. 8. 26(수) ~ 27(목)')
@@ -653,6 +670,16 @@ function applyOverrides(cfg) {
       p.schedule = String(p.schedule || '').replace('4(금)~9.', '4(금) ~ 9.');
     }
   });
+  // 행복수업(C) 신청서: 2026-08-07 지시 내용으로 교체
+  cfg.questions = cfg.questions || {};
+  cfg.questions.C = [
+    { label: '2일 18만 원 / 1일 9만 원(부분 참가 가능, 전일 수행 권장)', type: '안내', hint: '도시형 수행(비숙박)' },
+    { label: '수행 유/무', type: '체크' },
+    { label: '행복수업협동조합 수행 유/무', type: '하위체크' },
+    { label: '참여한 경험이 있는 프로그램을 1개 이상 적어 주세요.', type: '장문' }
+  ];
+  // 한의사 차담(E): 참가 형태·숙박 질문 없음 (빈 배열 = 기본 질문도 쓰지 않음)
+  cfg.questions.E = [];
   return cfg;
 }
 
@@ -789,7 +816,7 @@ function accountTable(programs) {
     return head + '<tr><td class="empty" colspan="3">수행을 선택하시면 입금 계좌가 표시됩니다.</td></tr></tbody></table>';
   }
   return head + programs.map(function (p) {
-    return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.account || '계좌 추후 안내') + '</td><td class="amount">' + won(p.fee) + '</td></tr>';
+    return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.account || '계좌 추후 안내') + '</td><td class="amount">' + feeText(p) + '</td></tr>';
   }).join('') + '</tbody></table>';
 }
 
@@ -818,11 +845,11 @@ function renderPrograms() {
     div.innerHTML =
       '<div class="head">' +
         (p.image
-          ? '<img class="thumb" src="' + esc(p.image) + '" alt="" onerror="this.outerHTML=\'<div class=&quot;thumb fallback&quot;>' + esc(p.code) + '</div>\'">'
-          : '<div class="thumb fallback">' + esc(p.code) + '</div>') +
+          ? '<img class="thumb" src="' + esc(p.image) + '" alt="" onerror="this.outerHTML=\'<div class=&quot;thumb fallback&quot;>' + esc(String(p.name || '').charAt(0)) + '</div>\'">'
+          : '<div class="thumb fallback">' + esc(String(p.name || '').charAt(0)) + '</div>') +
         '<div>' +
-          '<div class="tit"><span class="code">' + esc(p.code) + '</span><h3>' + esc(p.name) + '</h3></div>' +
-          '<div class="fee">참가비 ' + won(p.fee) + feeNote(p) + '</div>' +
+          '<div class="tit"><h3>' + esc(p.name) + '</h3></div>' +
+          '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
           metaHtml(p) +
           '<div class="desc">' + esc(p.desc) + '</div>' +
         '</div>' +
@@ -849,15 +876,13 @@ function toggle(code, force) {
 
 // ── 선택별 신청서 (질문 탭 정의 기반으로 자동 생성) ──
 function questionsFor(code) {
-  var qs = (CONFIG.questions && CONFIG.questions[code]) || [];
-  if (!qs.length) {
-    // 질문이 정의되지 않은 프로그램의 기본 신청서
-    qs = [
-      { label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
-      { label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
-    ];
-  }
-  return qs;
+  var qmap = CONFIG.questions || {};
+  // 빈 배열로 정의된 프로그램(예: E)은 질문 없이 그대로 둠. 아예 정의가 없을 때만 기본 신청서 사용
+  if (qmap[code]) return qmap[code];
+  return [
+    { label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
+    { label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
+  ];
 }
 
 function renderSubforms() {
@@ -877,7 +902,7 @@ function renderSubforms() {
     d.className = 'subform';
     d.dataset.code = p.code;
     var html =
-      '<h4><span class="code">' + esc(p.code) + '</span> ' + esc(p.name) + ' 신청서</h4>' +
+      '<h4>' + esc(p.name) + ' 신청서</h4>' +
       '<div class="hint schedLine">' + schedulePlace(p) + '</div>';
 
     questionsFor(p.code).forEach(function (q, qi) {
@@ -885,6 +910,17 @@ function renderSubforms() {
       var old = oldAnswers[q.label] || '';
       if (q.type === '안내') {
         html += '<div class="infoBox">' + esc(q.label) + (q.hint ? '<br>' + esc(q.hint) : '') + '</div>';
+        return;
+      }
+      if (q.type === '체크') {
+        html += '<div class="radios" style="margin-top:.9rem;"><label><input type="checkbox" name="q-' + esc(qid) + '" data-chk="parent"' +
+          (old === '유' ? ' checked' : '') + '>' + esc(q.label) + '</label></div>';
+        return;
+      }
+      if (q.type === '하위체크') {
+        html += '<label class="subOption disabled"><input type="checkbox" name="q-' + esc(qid) + '" data-chk="child" disabled' +
+          (old === '유' ? ' checked' : '') + '><span>' + esc(q.label) + '</span>' +
+          '<span class="subHint">위 항목 체크 시 선택할 수 있어요</span></label>';
         return;
       }
       html += '<label class="q">' + esc(q.label) + (q.required ? ' <span class="req">*</span>' : '') + '</label>';
@@ -909,6 +945,25 @@ function renderSubforms() {
     });
 
     d.innerHTML = html;
+
+    // 하위체크는 바로 위 체크가 켜져 있어야 활성화 (기본정보의 쉐랍 경험 체크와 같은 동작)
+    var parentChks = Array.prototype.slice.call(d.querySelectorAll('input[data-chk="parent"]'));
+    Array.prototype.forEach.call(d.querySelectorAll('input[data-chk="child"]'), function (child) {
+      var parent = null;
+      parentChks.forEach(function (cand) {
+        if (cand.compareDocumentPosition(child) & Node.DOCUMENT_POSITION_FOLLOWING) parent = cand;
+      });
+      if (!parent) return;
+      var sync = function () {
+        child.disabled = !parent.checked;
+        var wrapLbl = child.closest('.subOption');
+        if (wrapLbl) wrapLbl.classList.toggle('disabled', !parent.checked);
+        if (!parent.checked) child.checked = false;
+      };
+      parent.addEventListener('change', sync);
+      sync();
+    });
+
     wrapEl.appendChild(d);
   });
 }
@@ -923,7 +978,10 @@ function collectSubforms() {
       if (q.type === '안내') return;
       var qid = 'q-' + code + '-' + qi;
       var val = '';
-      if (q.type === '선택') {
+      if (q.type === '체크' || q.type === '하위체크') {
+        var cb = d.querySelector('input[name="' + qid + '"]');
+        val = (cb && cb.checked) ? '유' : '무';
+      } else if (q.type === '선택') {
         var r = d.querySelector('input[name="' + qid + '"]:checked');
         val = r ? r.value : '';
       } else if (q.type === '복수선택') {
@@ -949,7 +1007,7 @@ function renderFees() {
   CONFIG.programs.forEach(function (p) {
     if (!selected[p.code]) return;
     total += p.fee;
-    rows += '<tr><td><b>' + esc(p.code) + '</b> ' + esc(p.name) + '</td><td class="amount">' + won(p.fee) + '</td></tr>';
+    rows += '<tr><td>' + esc(p.name) + '</td><td class="amount">' + feeText(p) + '</td></tr>';
   });
   if (!rows) {
     body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#999;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
@@ -1069,7 +1127,7 @@ function showDone(receiptNo, payload) {
   var lines = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
     total += p ? p.fee : 0;
-    return esc(sel.code) + '. ' + esc(p ? p.name : '') + ' — ' + won(p ? p.fee : 0);
+    return esc(p ? p.name : '') + ' — ' + (p ? feeText(p) : won(0));
   });
   $('doneReceipt').innerHTML =
     '<b>' + esc(payload.name) + '</b> 님 (접수번호 ' + esc(receiptNo) + ')<br>' +
