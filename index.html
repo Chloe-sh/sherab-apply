@@ -703,6 +703,12 @@ function render() {
   applyPreviewView();
 }
 
+// 참가비 옆 보조 표기: 설정 탭에 '참가비메모C' 같은 행을 넣으면 "참가비 300,000원(내용)"으로 표시
+function feeNote(p) {
+  var note = String((CONFIG.settings['참가비메모' + p.code] || '')).trim();
+  return note ? '(' + esc(note) + ')' : '';
+}
+
 // 일정 문자열을 회차별로 분해: "날짜/프로그램 - 설명" 꼴인 줄만 성공
 // (한 줄에 여러 회차가 문장으로 이어져 있으면 ". " + 날짜 패턴 앞에서 잘라줌)
 function sessionsOf(schedule) {
@@ -789,7 +795,7 @@ function renderPrograms() {
           : '<div class="thumb fallback">' + esc(p.code) + '</div>') +
         '<div>' +
           '<div class="tit"><span class="code">' + esc(p.code) + '</span><h3>' + esc(p.name) + '</h3></div>' +
-          '<div class="fee">참가비 ' + won(p.fee) + '</div>' +
+          '<div class="fee">참가비 ' + won(p.fee) + feeNote(p) + '</div>' +
           metaHtml(p) +
           '<div class="desc">' + esc(p.desc) + '</div>' +
         '</div>' +
