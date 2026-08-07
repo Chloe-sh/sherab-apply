@@ -629,20 +629,47 @@ function applyPersonal() {
   if (f && !f.value) f.value = PERSONAL_NAME;
 }
 
+// ── 시트 미반영분 코드 보정 ──
+// 시트에 직접 넣지 못한 수정을 코드에서 적용.
+// 문자열 치환은 시트 원문이 패턴과 일치할 때만 동작하므로,
+// 나중에 시트 쪽을 직접 고치면 여기 보정은 자동으로 무력화된다.
+function applyOverrides(cfg) {
+  var s = cfg.settings || (cfg.settings = {});
+  // D 카드 참가비 옆 보조 표기: "참가비 400,000원(1일 8만 원)"
+  if (!s['참가비메모D']) s['참가비메모D'] = '1일 8만 원';
+  // 선택 안내에서 중복 선택 안내 문장 제거
+  if (s['선택안내']) s['선택안내'] = s['선택안내'].replace(/\s*여러 개를 함께 선택할 수 있습니다\.?/, '').trim();
+  (cfg.programs || []).forEach(function (p) {
+    // 각 줄 끝의 불필요한 공백 제거
+    if (p.schedule) p.schedule = String(p.schedule).replace(/[ \t]+$/gm, '');
+    if (p.code === 'C') {
+      p.schedule = String(p.schedule || '')
+        .replace('26.8.26(수)~27(목)', '26. 8. 26(수) ~ 27(목)')
+        .replace(/\n8\.\s*29\(토\)~30\(일\)/, '\n26. 8. 29(토) ~ 30(일)')
+        .replace(/(② ?룽즁쥭 쌍악쑤 닥빠)$/, '$1(참가비 문의)');
+      p.desc = String(p.desc || '').replace('호흡 수행(참가비 문의)', '호흡 수행');
+    }
+    if (p.code === 'D') {
+      p.schedule = String(p.schedule || '').replace('4(금)~9.', '4(금) ~ 9.');
+    }
+  });
+  return cfg;
+}
+
 // ── 설정 불러오기 ──
 function loadConfig() {
   if (IS_APPS_SCRIPT) {
     google.script.run
-      .withSuccessHandler(function (json) { CONFIG = JSON.parse(json); render(); })
-      .withFailureHandler(function () { CONFIG = DEFAULT_CONFIG; render(); })
+      .withSuccessHandler(function (json) { CONFIG = applyOverrides(JSON.parse(json)); render(); })
+      .withFailureHandler(function () { CONFIG = applyOverrides(DEFAULT_CONFIG); render(); })
       .getConfig();
   } else if (IS_API_MODE) {
     fetch(API_URL + '?action=config')
       .then(function (r) { return r.json(); })
-      .then(function (cfg) { CONFIG = cfg; render(); })
-      .catch(function () { CONFIG = DEFAULT_CONFIG; render(); });
+      .then(function (cfg) { CONFIG = applyOverrides(cfg); render(); })
+      .catch(function () { CONFIG = applyOverrides(DEFAULT_CONFIG); render(); });
   } else {
-    CONFIG = DEFAULT_CONFIG;
+    CONFIG = applyOverrides(DEFAULT_CONFIG);
     render();
   }
 }
