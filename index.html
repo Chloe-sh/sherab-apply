@@ -124,6 +124,11 @@
   #sherab .photo { width: min(300px, 70vw); float: none; margin: 0 auto 1.2rem; display: block; border-radius: 10px; }
   #sherab .bio { white-space: pre-line; font-size: .98rem; color: #3d3d3d; }
 
+  /* 혜봉 선생님 소개 */
+  #hyebong .bio { font-size: .98rem; color: #3d3d3d; }
+  #hyebong .bio p { text-align: justify; overflow-wrap: break-word; margin-bottom: .9rem; }
+  #hyebong .bio p:last-child { margin-bottom: 0; }
+
   /* 수행 안내 배너 */
   .pgGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; margin-top: .8rem; }
   .pgCard {
@@ -314,21 +319,31 @@
       <div id="siteTitle" class="serif"></div>
     </div>
 
+    <section class="card" id="hyebong">
+      <h2 class="sec"><span class="num">1</span>혜봉 선생님의 명상 생애</h2>
+      <div class="bio">
+        <p>혜봉(1956년 경북 영양 출생)은 동국대학교 불교학과를 졸업하고, 1985년 법륜스님과 함께 '정토회'를 설립하며 대중 수행 지도에 첫발을 내디뎠습니다.</p>
+        <p>1990년대부터 2000년대 중반까지 용타스님의 동사섭, 서암스님의 간화선, 미얀마·인도의 위빠사나를 거쳐, 2004~2006년에는 인도 다람살라에서 티베트 로종 명상을 공부했습니다. 이 인연으로 해외 선지식들을 국내에 초청해 금강승 수행과 티베트 명상을 국내 수행자들에게 알리는 데 크게 기여했습니다.</p>
+        <p>이후 정토회 문경수련원 지도, 명상아카데미 설립(1998년), (사)밝은세상 설립(2000년)을 비롯해 명상수행학교 행복수업과 한산명상수행학교를 운영하며 한국과 미국을 오가며 현대인을 위한 명상 프로그램을 지도·교육했습니다.</p>
+        <p>2017년부터 2023년 입적 전까지는 행복수업협동조합을 설립해 초기·대승·금강승·선불교를 통합한 맞춤형 코칭 수행 체계를 완성했습니다. 이 체계는 알아차림 명상 → 보리심 명상 → 다르마 명상 → 대화 명상·까르마 명상의 4단계로 구성되며, 담마 스쿨·멘토 스쿨·선재 스쿨 프로그램을 통해 개인과 공동체, 사회의 행복과 변화를 이끄는 평화의 리더를 양성했습니다.</p>
+      </div>
+    </section>
+
     <section class="card" id="sherab">
-      <h2 class="sec"><span class="num">1</span><span id="sherabTitle">쉐랍 텐진</span></h2>
+      <h2 class="sec"><span class="num">2</span><span id="sherabTitle">쉐랍 텐진</span></h2>
       <img class="photo" id="sherabPhoto" alt="쉐랍 텐진" onerror="this.style.display='none'">
       <div class="bio" id="sherabBio"></div>
     </section>
 
     <section class="card" id="schedule">
-      <h2 class="sec"><span class="num">2</span>일정표</h2>
+      <h2 class="sec"><span class="num">3</span>일정표</h2>
       <div id="scheduleBody">
         <img src="images/schedule.png" alt="2026년 쉐랍 텐진 방한수련 일정" style="width:100%; border-radius:10px;">
       </div>
     </section>
 
     <section class="card" id="practiceGuide">
-      <h2 class="sec"><span class="num">3</span>수행 안내</h2>
+      <h2 class="sec"><span class="num">4</span>수행 안내</h2>
       <p class="hint">각 배너의 [자세히 보기]를 누르면 자세한 설명 창이 열립니다.</p>
       <div class="pgGrid" id="pgGrid">
         <div class="pgCard pgPhoto">
@@ -386,13 +401,13 @@
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">4</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#888;">(여러 개 선택 가능)</span></h2>
+      <h2 class="sec"><span class="num">5</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#888;">(여러 개 선택 가능)</span></h2>
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">5</span>신청자 기본 정보</h2>
+      <h2 class="sec"><span class="num">6</span>신청자 기본 정보</h2>
       <label class="q">이름 <span class="req">*</span></label>
       <input type="text" id="fName" autocomplete="name">
       <label class="q">성별 <span class="req">*</span></label>
@@ -427,12 +442,12 @@
     </section>
 
     <section class="card" id="subforms" style="display:none">
-      <h2 class="sec"><span class="num">6</span>선택한 수행별 신청서</h2>
+      <h2 class="sec"><span class="num">7</span>선택한 수행별 신청서</h2>
       <div id="subformList"></div>
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">7</span>참가비 안내</h2>
+      <h2 class="sec"><span class="num">8</span>참가비 안내</h2>
       <table class="feeTable" id="feeTable">
         <thead><tr><th>선택한 수행</th><th>참가비</th></tr></thead>
         <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#999;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
@@ -446,7 +461,7 @@
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">8</span>동의 및 기타</h2>
+      <h2 class="sec"><span class="num">9</span>동의 및 기타</h2>
       <label class="q">개인정보 수집 및 이용 동의 <span class="req">*</span></label>
       <div class="hint">수집 목적 : 수행 신청 및 참가자 관리 · 수집 항목 : 신청서 기록 내용 · 보유 기간 : 별도 기한 없음. 동의하지 않으면 안내 문자 발송 등 접수에 어려움이 있습니다.</div>
       <div class="radios"><label><input type="checkbox" id="fPrivacy"> 동의합니다</label></div>
