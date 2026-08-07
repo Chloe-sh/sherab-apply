@@ -257,6 +257,15 @@
   .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #E9EDF5; font-size: 1.05rem; }
   .feeNote { font-size: .85rem; color: #888; margin-top: .5rem; }
 
+  /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
+  .scrollCue { text-align: center; margin: 1.6rem 0 .2rem; }
+  .scrollCue .txt {
+    color: var(--navy); font-weight: 700; font-size: .95rem;
+    letter-spacing: .02em; margin-bottom: .55rem;
+  }
+  .scrollCue .arrows { display: flex; justify-content: center; gap: .9rem; }
+  .scrollCue svg { width: 42px; height: 52px; fill: var(--navy); display: block; }
+
   .infoBox { background: #f4f6fb; border-radius: 10px; padding: 1rem 1.1rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
   .infoBox b { color: var(--navy); }
 
@@ -408,6 +417,15 @@
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
     </section>
+
+    <div class="scrollCue">
+      <div class="txt">&lt;아래로 내려가세요&gt;</div>
+      <div class="arrows">
+        <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
+        <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
+        <svg viewBox="0 0 40 50"><polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/></svg>
+      </div>
+    </div>
 
     <section class="card">
       <h2 class="sec"><span class="num">6</span>신청자 기본 정보</h2>
