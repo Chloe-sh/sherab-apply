@@ -146,8 +146,9 @@
     padding: .6rem 1.2rem; cursor: pointer; letter-spacing: .05em;
   }
   .pgCard.active { outline: 3px solid var(--navy); }
-  .pgPhoto { padding: .7rem; justify-content: center; }
-  .pgPhoto img { width: 100%; max-height: 220px; object-fit: contain; }
+  /* 쉐랍 사진: 그리드 상단 풀폭 배너 (좌우반전) */
+  .pgPhoto { grid-column: 1 / -1; padding: .7rem; justify-content: center; }
+  .pgPhoto img { width: 100%; max-height: 260px; object-fit: contain; transform: scaleX(-1); }
   /* 배너 위로 뜨는 설명 창 (스크롤 없이 바로 보임) */
   #pgOverlay {
     position: fixed; inset: 0; z-index: 1000;
@@ -657,7 +658,7 @@ var DEFAULT_CONFIG = {
     '완료메시지': '신청이 접수되었습니다.\n참가비 입금 후 확인 문자를 보내드립니다. 감사합니다.'
   },
   programs: [
-    { code: 'C', name: '행복수업', fee: 300000, schedule: '2026. 9월 (일정 확정 시 수정)', place: '행복수업협동조합 (서울 관악구)', desc: '잠든 상태에서도 깨어 있는 알아차림을 유지하며, 꿈이 마음의 현상임을 직접 체험하는 꿈요가 수행입니다.', image: 'images/card3.jpg' },
+    { code: 'C', name: '행복수업협동조합', fee: 300000, schedule: '2026. 9월 (일정 확정 시 수정)', place: '행복수업협동조합 (서울 관악구)', desc: '잠든 상태에서도 깨어 있는 알아차림을 유지하며, 꿈이 마음의 현상임을 직접 체험하는 꿈요가 수행입니다.', image: 'images/card3.jpg' },
     { code: 'D', name: '아나빠나사띠', fee: 200000, schedule: '2026. 9. 4(금) ~ 9. 8(화) 9:00~17:30', place: '아나빠나사띠명상요가 3층 (서울 관악구, 사당역 4번 출구)', desc: '호흡에 대한 알아차림을 바탕으로, 낮의 현실 또한 꿈과 다르지 않음을 깨달아 삶과 죽음을 명료하게 바라보는 지혜를 기르는 수행입니다.', image: 'images/card4.jpg' },
     { code: 'E', name: '혜봉추모기념사업회', fee: 100000, schedule: '2026년 (일정 확정 시 수정)', place: '혜봉추모기념사업회 (장소 추후 안내)', desc: '혜봉 선생님의 수행 정신과 가르침을 기리며, 모든 중생이 질병과 고통에서 벗어나기를 서원한 약사여래의 지혜와 자비를 함께 닦는 추모 수행 법회입니다.', image: 'images/card5.jpg' },
   ],
