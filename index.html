@@ -120,7 +120,7 @@
     margin: 3.4rem -5mm .6rem 1.3rem;  /* 아래로 내리고(상단여백) 오른쪽으로 5mm 이동 */
     filter: saturate(70%);             /* 채도 30% 감소 (모양 변화 없음) */
   }
-  #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; }
+  #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; font-weight: 700; }
 
   /* 쉐랍 소개 */
   #sherab .photo { width: min(300px, 70vw); float: none; margin: 0 auto 1.2rem; display: block; border-radius: 10px; }
@@ -278,9 +278,9 @@
   }
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
-  .scrollCue { margin: 2.2rem 0 .6rem; }
-  .scrollCue svg { width: 100%; height: auto; display: block; fill: var(--navy); }
-  .scrollCue svg text { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 700; }
+  .scrollCue { margin: 2.2rem 0 .6rem; text-align: center; }
+  .scrollCue p { font-size: .98rem; font-weight: 500; color: var(--navy); margin-bottom: .8rem; line-height: 1.55; }
+  .scrollCue svg { width: 30px; height: auto; display: block; margin: 0 auto; fill: var(--navy); }
 
   .infoBox { background: #f4f6fb; border-radius: 10px; padding: 1rem 1.1rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
   .infoBox b { color: var(--navy); }
@@ -448,14 +448,11 @@
       <h2 class="sec"><span class="num">5</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#888;">(여러 개 선택 가능)</span></h2>
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
-      <!-- 아래로 내려가세요: 원본 이미지(125x70)와 같은 비율·색으로 그린 벡터 -->
+      <!-- 아래로 안내: 문구 + 화살표 하나 -->
       <div class="scrollCue">
-        <svg viewBox="0 0 125 70" role="img" aria-label="아래로 내려가세요">
-          <text x="62.5" y="22" font-size="13" text-anchor="middle"
-                textLength="100" lengthAdjust="spacingAndGlyphs">&lt;아래로 내려가세요&gt;</text>
-          <polygon points="10,31 29,31 29,50.5 37.5,50.5 19.5,69 1.5,50.5 10,50.5"/>
-          <polygon points="52.5,31 71.5,31 71.5,50.5 80,50.5 62,69 44,50.5 52.5,50.5"/>
-          <polygon points="95,31 114,31 114,50.5 122.5,50.5 104.5,69 86.5,50.5 95,50.5"/>
+        <p>수행 신청을 위한 정보 입력이 필요합니다.<br>아래로 내려가 주세요.</p>
+        <svg viewBox="0 0 40 50" role="img" aria-label="아래로 내려가 주세요">
+          <polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/>
         </svg>
       </div>
     </section>
@@ -674,8 +671,8 @@ function applyOverrides(cfg) {
   cfg.questions = cfg.questions || {};
   cfg.questions.C = [
     { label: '2일 18만 원 / 1일 9만 원(부분 참가 가능, 전일 수행 권장)', type: '안내', hint: '도시형 수행(비숙박)' },
-    { label: '수행 유/무', type: '체크' },
-    { label: '행복수업협동조합 수행 유/무', type: '하위체크' },
+    { label: '수행 유/무', type: '유무' },
+    { label: '행복수업협동조합 수행 유/무', type: '하위유무' },
     { label: '참여한 경험이 있는 프로그램을 1개 이상 적어 주세요.', type: '장문' }
   ];
   // 한의사 차담(E): 참가 형태·숙박 질문 없음 (빈 배열 = 기본 질문도 쓰지 않음)
@@ -912,15 +909,21 @@ function renderSubforms() {
         html += '<div class="infoBox">' + esc(q.label) + (q.hint ? '<br>' + esc(q.hint) : '') + '</div>';
         return;
       }
-      if (q.type === '체크') {
-        html += '<div class="radios" style="margin-top:.9rem;"><label><input type="checkbox" name="q-' + esc(qid) + '" data-chk="parent"' +
-          (old === '유' ? ' checked' : '') + '>' + esc(q.label) + '</label></div>';
+      if (q.type === '유무') {
+        html += '<label class="q">' + esc(q.label) + (q.required ? ' <span class="req">*</span>' : '') + '</label>' +
+          '<div class="radios">' + ['유', '무'].map(function (o) {
+            return '<label><input type="radio" name="q-' + esc(qid) + '" value="' + o + '" data-chk="parent"' +
+              (old === o ? ' checked' : '') + '>' + o + '</label>';
+          }).join('') + '</div>';
         return;
       }
-      if (q.type === '하위체크') {
-        html += '<label class="subOption disabled"><input type="checkbox" name="q-' + esc(qid) + '" data-chk="child" disabled' +
-          (old === '유' ? ' checked' : '') + '><span>' + esc(q.label) + '</span>' +
-          '<span class="subHint">위 항목 체크 시 선택할 수 있어요</span></label>';
+      if (q.type === '하위유무') {
+        html += '<div class="subOption disabled" data-chk-sub><span>' + esc(q.label) + '</span>' +
+          '<span class="radios" style="gap:.9rem;">' + ['유', '무'].map(function (o) {
+            return '<label><input type="radio" name="q-' + esc(qid) + '" value="' + o + '" disabled' +
+              (old === o ? ' checked' : '') + '>' + o + '</label>';
+          }).join('') + '</span>' +
+          '<span class="subHint">위 항목에서 "유" 선택 시 답할 수 있어요</span></div>';
         return;
       }
       html += '<label class="q">' + esc(q.label) + (q.required ? ' <span class="req">*</span>' : '') + '</label>';
@@ -946,21 +949,25 @@ function renderSubforms() {
 
     d.innerHTML = html;
 
-    // 하위체크는 바로 위 체크가 켜져 있어야 활성화 (기본정보의 쉐랍 경험 체크와 같은 동작)
-    var parentChks = Array.prototype.slice.call(d.querySelectorAll('input[data-chk="parent"]'));
-    Array.prototype.forEach.call(d.querySelectorAll('input[data-chk="child"]'), function (child) {
-      var parent = null;
-      parentChks.forEach(function (cand) {
-        if (cand.compareDocumentPosition(child) & Node.DOCUMENT_POSITION_FOLLOWING) parent = cand;
+    // 하위유무는 바로 위 유/무에서 '유'를 골라야 활성화 (기본정보의 쉐랍 경험 체크와 같은 동작)
+    Array.prototype.forEach.call(d.querySelectorAll('[data-chk-sub]'), function (block) {
+      var parents = Array.prototype.filter.call(d.querySelectorAll('input[data-chk="parent"]'), function (cand) {
+        return cand.compareDocumentPosition(block) & Node.DOCUMENT_POSITION_FOLLOWING;
       });
-      if (!parent) return;
+      if (!parents.length) return;
+      var groupName = parents[parents.length - 1].name;
+      var groupRadios = d.querySelectorAll('input[name="' + groupName + '"]');
+      var childRadios = block.querySelectorAll('input');
       var sync = function () {
-        child.disabled = !parent.checked;
-        var wrapLbl = child.closest('.subOption');
-        if (wrapLbl) wrapLbl.classList.toggle('disabled', !parent.checked);
-        if (!parent.checked) child.checked = false;
+        var yesEl = d.querySelector('input[name="' + groupName + '"][value="유"]');
+        var yes = !!(yesEl && yesEl.checked);
+        Array.prototype.forEach.call(childRadios, function (r) {
+          r.disabled = !yes;
+          if (!yes) r.checked = false;
+        });
+        block.classList.toggle('disabled', !yes);
       };
-      parent.addEventListener('change', sync);
+      Array.prototype.forEach.call(groupRadios, function (r) { r.addEventListener('change', sync); });
       sync();
     });
 
@@ -978,10 +985,7 @@ function collectSubforms() {
       if (q.type === '안내') return;
       var qid = 'q-' + code + '-' + qi;
       var val = '';
-      if (q.type === '체크' || q.type === '하위체크') {
-        var cb = d.querySelector('input[name="' + qid + '"]');
-        val = (cb && cb.checked) ? '유' : '무';
-      } else if (q.type === '선택') {
+      if (q.type === '선택' || q.type === '유무' || q.type === '하위유무') {
         var r = d.querySelector('input[name="' + qid + '"]:checked');
         val = r ? r.value : '';
       } else if (q.type === '복수선택') {
