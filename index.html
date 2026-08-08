@@ -297,7 +297,14 @@
   .badge.fill { background: #E8EFFE; color: var(--navy); }
   .badge.line { background: #F3F4F6; color: #374151; }
   .schedCard .tit { font-weight: 700; font-size: 1.05rem; color: #111; line-height: 1.55; }
-  .schedMeta { display: flex; gap: 2rem; margin-top: .7rem; }
+  .schedMeta {
+    display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: .2rem 1.6rem; margin-top: .7rem; max-width: 36rem;
+  }
+  /* 모바일: 좁은 2열이 장소를 잘게 쪼개므로 세로로 쌓음 */
+  @media (max-width: 640px) {
+    .schedMeta { grid-template-columns: 1fr; gap: .55rem; }
+  }
   .schedMeta > div { min-width: 0; }
   .schedMeta .lbl { display: block; font-size: .82rem; color: #6E6E6E; margin-bottom: .12rem; }
   .schedMeta .val { font-size: .98rem; color: #333; line-height: 1.5; }
