@@ -470,10 +470,6 @@
   .dsTitle { background: var(--navy); color: #FBF8F2; padding: 1.1rem 1.3rem; }
   .dsTitle .t { font-weight: 700; font-size: 1.05rem; }
   .dsTitle .s { font-size: .85rem; opacity: .88; margin-top: .2rem; font-variant-numeric: tabular-nums; }
-  /* 세부 일정 미확정 안내 (안거 1·2·4) */
-  .dsPending {
-    padding: 1.3rem; font-size: .92rem; line-height: 1.65; color: #6B7684; text-align: center;
-  }
   .dsDays { padding: .3rem 1.3rem 1rem; }
   .dsDayHead { display: flex; align-items: center; gap: .6rem; margin-top: 1.1rem; }
   .dsDayHead .d { font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -533,7 +529,7 @@
   .doneCheck { width: 54px; height: 54px; margin: 0 auto 1.1rem; display: block; }
   .doneCheck circle { stroke: #FBF8F2; opacity: .35; }
   .doneCheck path { stroke: #FBF8F2; }
-  .doneHero h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: .02em; color: #FBF8F2; margin: 0; }
+  .doneHero h2 { font-size: clamp(1.25rem, 4.6vw, 1.5rem); font-weight: 700; letter-spacing: .02em; color: #FBF8F2; margin: 0; word-break: keep-all; }
   .doneHero .msg { margin: .75rem 0 0; font-size: .92rem; line-height: 1.65; opacity: .78; white-space: pre-line; }
   .doneBody { max-width: 460px; margin: 0 auto; padding: 0 1.15rem; }
   .doneCard { margin-top: -2.6rem; background: #fff; border-radius: 20px; padding: 1.4rem 1.4rem 1.1rem; box-shadow: 0 10px 30px rgba(2,15,46,.16); }
@@ -699,8 +695,90 @@
             <button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="ds2" onclick="dsToggleBtn(this, 'ds2')">세부 일정 보기 ▾</button>
           </div>
         </div>
-        <div class="dsBlock" id="ds1"></div>
-        <div class="dsBlock" id="ds2"></div>
+        <div class="dsBlock" id="ds1">
+          <div class="dsTitle">
+            <div class="t">룽즁쥭 쌍악쑤 닥빠 세부 일정</div>
+            <div class="s">2026. 8. 26(수) ~ 8. 27(목) · 행복수업협동조합</div>
+          </div>
+          <table class="dsTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>8. 26 ~ 27 (수 · 목)<span class="tag">이틀 동일</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="tm">09:00~10:30</td><td>수행</td></tr>
+              <tr><td class="tm">10:30~10:45</td><td>쉼</td></tr>
+              <tr><td class="tm">10:45~12:15</td><td>수행</td></tr>
+              <tr><td class="tm">12:15~13:45</td><td>점심식사 &amp; 이완</td></tr>
+              <tr><td class="tm">13:45~15:15</td><td>수행</td></tr>
+              <tr><td class="tm">15:15~15:30</td><td>쉼</td></tr>
+              <tr><td class="tm">15:30~17:00</td><td>수행</td></tr>
+              <tr><td class="tm">17:00~17:15</td><td>쉼</td></tr>
+              <tr><td class="tm">17:15~18:00</td><td>수행</td></tr>
+            </tbody>
+          </table>
+          <div class="dsDays">
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">8. 26 ~ 27<em>수 · 목</em></span><span class="tag">이틀 동일</span></div>
+              <ul class="dsList">
+                <li><span class="tm">09:00~10:30</span><span class="ac">수행</span></li>
+                <li><span class="tm">10:30~10:45</span><span class="ac">쉼</span></li>
+                <li><span class="tm">10:45~12:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">12:15~13:45</span><span class="ac">점심식사 &amp; 이완</span></li>
+                <li><span class="tm">13:45~15:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">15:15~15:30</span><span class="ac">쉼</span></li>
+                <li><span class="tm">15:30~17:00</span><span class="ac">수행</span></li>
+                <li><span class="tm">17:00~17:15</span><span class="ac">쉼</span></li>
+                <li><span class="tm">17:15~18:00</span><span class="ac">수행</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
+        </div>
+        <div class="dsBlock" id="ds2">
+          <div class="dsTitle">
+            <div class="t">꿈요가 세부 일정</div>
+            <div class="s">2026. 8. 29(토) ~ 8. 30(일) · 행복수업협동조합</div>
+          </div>
+          <table class="dsTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>8. 29 ~ 30 (토 · 일)<span class="tag">이틀 동일</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="tm">09:00~10:30</td><td>수행</td></tr>
+              <tr><td class="tm">10:30~10:45</td><td>쉼</td></tr>
+              <tr><td class="tm">10:45~12:15</td><td>수행</td></tr>
+              <tr><td class="tm">12:15~13:45</td><td>점심식사 &amp; 이완</td></tr>
+              <tr><td class="tm">13:45~15:15</td><td>수행</td></tr>
+              <tr><td class="tm">15:15~15:30</td><td>쉼</td></tr>
+              <tr><td class="tm">15:30~17:00</td><td>수행</td></tr>
+              <tr><td class="tm">17:00~17:15</td><td>쉼</td></tr>
+              <tr><td class="tm">17:15~18:00</td><td>수행</td></tr>
+            </tbody>
+          </table>
+          <div class="dsDays">
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">8. 29 ~ 30<em>토 · 일</em></span><span class="tag">이틀 동일</span></div>
+              <ul class="dsList">
+                <li><span class="tm">09:00~10:30</span><span class="ac">수행</span></li>
+                <li><span class="tm">10:30~10:45</span><span class="ac">쉼</span></li>
+                <li><span class="tm">10:45~12:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">12:15~13:45</span><span class="ac">점심식사 &amp; 이완</span></li>
+                <li><span class="tm">13:45~15:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">15:15~15:30</span><span class="ac">쉼</span></li>
+                <li><span class="tm">15:30~17:00</span><span class="ac">수행</span></li>
+                <li><span class="tm">17:00~17:15</span><span class="ac">쉼</span></li>
+                <li><span class="tm">17:15~18:00</span><span class="ac">수행</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
+        </div>
 
         <div class="schedMonth">2026년 9월</div>
         <div class="schedGrid">
@@ -722,7 +800,7 @@
               <span class="cat cat-retreat">안거 4</span>
               <span class="interp">통역 양지애</span>
             </div>
-            <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠</div>
+            <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가</div>
             <div class="host">아나빠나사띠명상요가</div>
             <div class="sp"></div>
             <div class="btm">
@@ -771,7 +849,62 @@
           </div>
         </div>
 
-        <div class="dsBlock" id="ds4"></div>
+        <div class="dsBlock" id="ds4">
+          <div class="dsTitle">
+            <div class="t">욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 세부 일정</div>
+            <div class="s">2026. 9. 4(금) ~ 9. 8(화) · 아나빠나사띠명상요가</div>
+          </div>
+          <table class="dsTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>9. 4 ~ 7 (금 ~ 월)<span class="tag">수행일</span></th>
+                <th>9. 8 (화)<span class="tag">마지막날</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="tm">09:00~10:30</td><td>수행</td><td>수행</td></tr>
+              <tr><td class="tm">10:30~10:45</td><td>쉼</td><td>쉼</td></tr>
+              <tr><td class="tm">10:45~12:15</td><td>수행</td><td>수행</td></tr>
+              <tr><td class="tm">12:15~13:45</td><td>점심식사 &amp; 이완</td><td>점심식사 &amp; 이완</td></tr>
+              <tr><td class="tm">13:45~15:15</td><td>수행</td><td>수행</td></tr>
+              <tr><td class="tm">15:15~15:30</td><td>쉼</td><td>쉼</td></tr>
+              <tr><td class="tm">15:30~17:00</td><td>수행</td><td>수행</td></tr>
+              <tr><td class="tm">17:00~17:15</td><td>쉼</td><td rowspan="2">쉼(종료)</td></tr>
+              <tr><td class="tm">17:15~18:00</td><td>수행</td></tr>
+            </tbody>
+          </table>
+          <div class="dsDays">
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">9. 4 ~ 7<em>금 ~ 월</em></span><span class="tag">수행일</span></div>
+              <ul class="dsList">
+                <li><span class="tm">09:00~10:30</span><span class="ac">수행</span></li>
+                <li><span class="tm">10:30~10:45</span><span class="ac">쉼</span></li>
+                <li><span class="tm">10:45~12:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">12:15~13:45</span><span class="ac">점심식사 &amp; 이완</span></li>
+                <li><span class="tm">13:45~15:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">15:15~15:30</span><span class="ac">쉼</span></li>
+                <li><span class="tm">15:30~17:00</span><span class="ac">수행</span></li>
+                <li><span class="tm">17:00~17:15</span><span class="ac">쉼</span></li>
+                <li><span class="tm">17:15~18:00</span><span class="ac">수행</span></li>
+              </ul>
+            </div>
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">9. 8<em>화</em></span><span class="tag">마지막날</span></div>
+              <ul class="dsList">
+                <li><span class="tm">09:00~10:30</span><span class="ac">수행</span></li>
+                <li><span class="tm">10:30~10:45</span><span class="ac">쉼</span></li>
+                <li><span class="tm">10:45~12:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">12:15~13:45</span><span class="ac">점심식사 &amp; 이완</span></li>
+                <li><span class="tm">13:45~15:15</span><span class="ac">수행</span></li>
+                <li><span class="tm">15:15~15:30</span><span class="ac">쉼</span></li>
+                <li><span class="tm">15:30~17:00</span><span class="ac">수행</span></li>
+                <li><span class="tm">17:00~</span><span class="ac">쉼(종료)</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
+        </div>
 
         <div class="dsBlock" id="dsDetail">
           <div class="dsTitle">
@@ -852,26 +985,6 @@
       if (o) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     (function () {
-      // 안거 1·2·4 세부 일정은 아직 확정 전.
-      // 예전에는 안거 5(9.10~9.13) 표를 그대로 복제해 제목만 바꿔 넣었는데,
-      // 8월 안거 카드에 9월 일정이 뜨는 잘못된 안내가 되어 안내 문구로 교체함.
-      // 일정이 확정되면 아래 meta의 note 대신 실제 표 HTML을 넣으면 된다.
-      var meta = {
-        ds1: ['룽즁쥭 쌍악쑤 닥빠 세부 일정', '2026. 8. 26(수) ~ 8. 27(목) · 행복수업협동조합'],
-        ds2: ['꿈요가 세부 일정', '2026. 8. 29(토) ~ 8. 30(일) · 행복수업협동조합'],
-        ds4: ['욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 세부 일정', '2026. 9. 4(금) ~ 9. 8(화) · 아나빠나사띠명상요가']
-      };
-      Object.keys(meta).forEach(function (id) {
-        var el = document.getElementById(id);
-        if (!el || el.innerHTML.trim()) return;
-        el.innerHTML =
-          '<div class="dsTitle"><div class="t"></div><div class="s"></div></div>' +
-          '<div class="dsPending">시간대별 세부 일정은 아직 확정되지 않았습니다.<br>' +
-          '확정되는 대로 이 자리에 안내드리며, 신청하신 분께는 문자로도 알려드립니다.</div>';
-        el.querySelector('.dsTitle .t').textContent = meta[id][0];
-        el.querySelector('.dsTitle .s').textContent = meta[id][1];
-      });
-
       // 접근성: 어떤 안거의 세부 일정인지 버튼 이름에 담는다 (BUG-05와 같은 취지)
       document.querySelectorAll('.dsCardBtn').forEach(function (btn) {
         var card = btn.closest('.schedCard');
@@ -1067,7 +1180,7 @@
       <circle cx="26" cy="26" r="24.5" stroke-width="2"/>
       <path d="M15.5 27l7.5 7.5 13.5-15" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <h2>신청 완료</h2>
+    <h2>약사여래 수행과 연결되었습니다.</h2>
     <p class="msg" id="doneMsg"></p>
   </div>
   <div class="doneBody">
@@ -1097,7 +1210,7 @@ var CONFIG_DATA = {
     "입금계좌": "국민은행 084-21-0710-611 (김정수)",
     "문의처": "010-9028-8929 / 010-3293-1634",
     "환불규정": "7일 전 취소 : 100% 환불\n3일 ~ 6일 전 취소 : 50% 환불\n2일 전 ~ 당일 취소 : 환불 불가\n※ 환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.",
-    "완료메시지": "약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.",
+    "완료메시지": "참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.",
     "참가비메모C": "2일 기준, 1일 참여 시 9만 원",
     "참가비메모D": "5일 기준, 1일 참여 시 9만 원"
   },
@@ -1877,7 +1990,7 @@ function showDone(receiptNo, payload) {
   $('main').classList.add('hidden');
   $('done').classList.remove('hidden');
   window.scrollTo(0, 0);
-  $('doneMsg').textContent = s['완료메시지'] || '약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.';
+  $('doneMsg').textContent = s['완료메시지'] || '참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.';
   var total = 0;
   var rows = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
