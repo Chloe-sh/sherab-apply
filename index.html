@@ -287,7 +287,7 @@
     color: var(--navy); line-height: 1.45; padding-top: .1rem;
     font-variant-numeric: tabular-nums;
   }
-  .schedCard .date b { font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
+  .schedCard .date b { font-weight: 700; font-size: 1.1rem; }
   .schedCard .date .dow { display: block; font-weight: 400; font-size: .9rem; color: #555; margin-top: .25rem; }
   .schedCard .main { flex: 1; min-width: 0; }
   .badge {
@@ -301,8 +301,14 @@
     display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     gap: .2rem 1.6rem; margin-top: .7rem; max-width: 36rem;
   }
-  /* 모바일: 좁은 2열이 장소를 잘게 쪼개므로 세로로 쌓음 */
+  /* 모바일: 날짜를 카드 상단 한 줄로 빼고, 본문이 전체 폭 사용 */
   @media (max-width: 640px) {
+    .schedCard { display: block; }
+    .schedCard .date {
+      display: flex; align-items: baseline; gap: .6rem;
+      width: auto; padding-top: 0; margin-bottom: .6rem;
+    }
+    .schedCard .date .dow { margin-top: 0; }
     .schedMeta { grid-template-columns: 1fr; gap: .55rem; }
   }
   .schedMeta > div { min-width: 0; }
@@ -416,7 +422,7 @@
       <div id="scheduleBody">
         <div class="schedMonth">2026년 8월</div>
         <div class="schedCard">
-          <div class="date"><b>8. 22 ~<br>8. 23</b><span class="dow">토 · 일</span></div>
+          <div class="date"><b>8.&nbsp;22&nbsp;~ 8.&nbsp;23</b><span class="dow">토 · 일</span></div>
           <div class="main">
             <span class="badge line">공식행사</span>
             <div class="tit">선명상엑스포 메인 섹션</div>
@@ -437,7 +443,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>8. 26 ~<br>8. 27</b><span class="dow">수 · 목</span></div>
+          <div class="date"><b>8.&nbsp;26&nbsp;~ 8.&nbsp;27</b><span class="dow">수 · 목</span></div>
           <div class="main">
             <span class="badge fill">안거 1</span>
             <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
@@ -448,7 +454,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>8. 29 ~<br>8. 30</b><span class="dow">토 · 일</span></div>
+          <div class="date"><b>8.&nbsp;29&nbsp;~ 8.&nbsp;30</b><span class="dow">토 · 일</span></div>
           <div class="main">
             <span class="badge fill">안거 2</span>
             <div class="tit">꿈요가 — 현대인 스트레스 완화 및 마음챙김</div>
@@ -460,7 +466,7 @@
         </div>
         <div class="schedMonth">2026년 9월</div>
         <div class="schedCard">
-          <div class="date"><b>9. 1 ~<br>9. 2</b><span class="dow">화 · 수</span></div>
+          <div class="date"><b>9.&nbsp;1&nbsp;~ 9.&nbsp;2</b><span class="dow">화 · 수</span></div>
           <div class="main">
             <span class="badge fill">안거 3</span>
             <div class="tit">① 한의사 다담(茶談) 수행 ② 능행스님 독담(獨談)</div>
@@ -471,7 +477,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9. 4 ~<br>9. 8</b><span class="dow">금 ~ 화</span></div>
+          <div class="date"><b>9.&nbsp;4&nbsp;~ 9.&nbsp;8</b><span class="dow">금 ~ 화</span></div>
           <div class="main">
             <span class="badge fill">안거 4</span>
             <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠</div>
@@ -492,7 +498,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9. 9 ~<br>9. 10</b><span class="dow">수 · 목</span></div>
+          <div class="date"><b>9.&nbsp;9&nbsp;~ 9.&nbsp;10</b><span class="dow">수 · 목</span></div>
           <div class="main">
             <span class="badge line">탐방안거</span>
             <div class="tit">법주사 탐방·안거 후 대원사 이동</div>
@@ -502,7 +508,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9. 10 ~<br>9. 13</b><span class="dow">목 ~ 일</span></div>
+          <div class="date"><b>9.&nbsp;10&nbsp;~ 9.&nbsp;13</b><span class="dow">목 ~ 일</span></div>
           <div class="main">
             <span class="badge fill">안거 5</span>
             <div class="tit">약사여래 수행</div>
