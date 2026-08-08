@@ -460,7 +460,7 @@
           <div class="date"><b>8.&nbsp;29&nbsp;~ 8.&nbsp;30</b><span class="dow">토 · 일</span></div>
           <div class="main">
             <span class="badge fill">안거 2</span>
-            <div class="tit">꿈요가 — 현대인 스트레스 완화 및 마음챙김</div>
+            <div class="tit">꿈요가 — 현대인 스트레스 해소 및 마음챙김</div>
             <div class="schedMeta">
               <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
               <div><span class="lbl">장소</span><span class="val">서울 관악구 봉천로31길 3 1층</span></div>
@@ -812,13 +812,18 @@ function applyOverrides(cfg) {
       p.schedule = String(p.schedule || '')
         .replace('26.8.26(수)~27(목)', '26. 8. 26(수) ~ 27(목)')
         .replace(/\n8\.\s*29\(토\)~30\(일\)/, '\n26. 8. 29(토) ~ 30(일)')
-        .replace(/(② ?룽즁쥭 쌍악쑤 닥빠)$/, '$1(참가비 문의)');
+        .replace(/(② ?룽즁쥭 쌍악쑤 닥빠)$/, '$1(참가비 문의)')
+        .replace(/[①②]\s?/g, '')
+        .replace('27(목)/', '27(목) 9:00~18:00/')
+        .replace('30(일)/', '30(일) 9:00~18:00/');
       p.desc = String(p.desc || '')
         .replace('호흡 수행(참가비 문의)', '호흡 수행')
         .replace('혜봉님 인연', '혜봉 선생님 인연');
     }
     if (p.code === 'D') {
-      p.schedule = String(p.schedule || '').replace('4(금)~9.', '4(금) ~ 9.');
+      p.schedule = String(p.schedule || '')
+        .replace('4(금)~9.', '4(금) ~ 9.')
+        .replace('9:00~17:30', '9:00~18:00');
     }
     // 시간·연도 표기 통일 (시트 원문이 고쳐지면 자동 무력화)
     if (p.code === 'E') {
@@ -829,7 +834,7 @@ function applyOverrides(cfg) {
       );
     }
     if (p.code === 'F') {
-      p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
+      p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ').replace(/9\. 13\(일\)$/, '9. 13(일) · 숙박');
       p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
     }
   });
@@ -963,7 +968,7 @@ function sessionsOf(schedule) {
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].trim();
     if (!line) continue;
-    var m = line.match(/^([0-9.()~\-\s월화수목금토일]+)\/(.+)$/);
+    var m = line.match(/^([0-9.():~\-\s월화수목금토일]+)\/(.+)$/);
     if (!m) return null;                      // 하나라도 다른 꼴이면 기존 방식으로
     var rest = m[2], at = rest.indexOf(' - ');
     out.push({
@@ -975,17 +980,15 @@ function sessionsOf(schedule) {
   return out.length ? out : null;
 }
 
-// 프로그램 카드의 일정·장소 표시 (회차 구조가 읽히면 블록형, 아니면 기존 한 줄형)
+// 프로그램 카드의 일정 표시 (회차 구조가 읽히면 블록형, 아니면 한 줄형 — 장소는 카드 상단에서 따로 표시)
 function metaHtml(p) {
   var sess = sessionsOf(p.schedule);
-  if (!sess) return '<div class="meta">' + schedulePlace(p) + '</div>';
-  var h = sess.map(function (s) {
+  if (!sess) return '<div class="meta">' + esc(p.schedule) + '</div>';
+  return sess.map(function (s) {
     return '<div class="sess"><div class="when">' + esc(s.when) + '</div>' +
       '<div class="what">' + esc(s.what) + '</div>' +
       (s.why ? '<div class="why">' + esc(s.why) + '</div>' : '') + '</div>';
   }).join('');
-  if (p.place) h += '<div class="meta">' + esc(p.place) + '</div>';
-  return h;
 }
 
 // 일정 + 장소 한 줄. 일정이 여러 줄이면 장소도 줄을 바꿔서 표시
@@ -1032,8 +1035,9 @@ function renderPrograms() {
       '<div class="nameBanner">' + esc(p.name) + '</div>' +
       '<div class="cardBody">' +
         '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
-        metaHtml(p) +
+        (p.place ? '<div class="meta">' + esc(p.place) + '</div>' : '') +
         '<div class="desc">' + esc(p.desc) + '</div>' +
+        metaHtml(p) +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
     div.addEventListener('click', function (e) {
