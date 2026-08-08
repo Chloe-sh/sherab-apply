@@ -108,10 +108,11 @@
   }
   #inviteEmblem img.custom { max-width: 100%; border-radius: 8px; }
   .letterHead {
-    color: #FBF8F2; font-size: 1.15rem; font-weight: 600;
-    line-height: 1.6; letter-spacing: .02em;
-    margin: 1.6rem 0 1.2rem;
+    color: #FBF8F2; font-size: clamp(1.35rem, 4.5vw, 1.7rem); font-weight: 600;
+    line-height: 1.5; letter-spacing: .02em;
+    margin: .4rem 0 1.2rem;
   }
+  .letterHead span { white-space: nowrap; display: inline-block; }
   .letterBody { text-align: left; color: #FBF8F2; }
   .letterBody p {
     text-align: justify; word-break: normal;  /* 양끝 맞춤 + 끝선에서 글자 단위 개행 */
@@ -133,7 +134,7 @@
     .letterPhoto.posPc { display: none; }
     .letterPhoto.posM { display: block; margin-top: .15rem; }
   }
-  #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; font-weight: 700; }
+  #siteTitle { margin: 4.6rem 0 2rem; color: var(--navy); font-size: 1.5rem; letter-spacing: .1em; font-weight: 700; }
 
   /* 쉐랍 소개 */
   #sherab .photo { width: min(300px, 70vw); float: none; margin: 0 auto 1.2rem; display: block; border-radius: 10px; }
@@ -371,12 +372,12 @@
     padding: .22rem .7rem; border-radius: 999px;
     background: #E8EDF5; color: #33415C;
   }
-  .schedCard .cat.cat-official { background: #EEEDFE; color: #3C3489; }
-  .schedCard .cat.cat-lecture { background: #E1F5EE; color: #085041; }
-  .schedCard .cat.cat-retreat { background: #FAECE7; color: #712B13; }
+  .schedCard .cat.cat-official { background: #E6F1FB; color: #0C447C; }
+  .schedCard .cat.cat-lecture { background: #E6F1FB; color: #0C447C; }
+  .schedCard .cat.cat-retreat { background: #8E1A3D; color: #fff; }
   .schedCard .interp {
     font-size: .78rem; font-weight: 500; padding: .2rem .65rem;
-    border-radius: 999px; background: #F7F9FC; border: 1px solid var(--line);
+    border-radius: 999px; background: transparent; border: 1px solid var(--line);
     color: #4E5968; white-space: nowrap;
   }
   .schedCard .tit {
@@ -470,11 +471,7 @@
 
     <div id="invitationHead">
       <div class="default-invite" id="defaultInvite">
-        <div id="inviteEmblem">
-          <div class="small">INVITATION</div>
-          <h1>초대장</h1>
-        </div>
-        <h2 class="letterHead" id="inviteLetterTitle">현대인을 위한 약사여래 체험 수행</h2>
+        <h2 class="letterHead" id="inviteLetterTitle"><span>현대인을 위한 약사여래</span> <span>체험 수행 초대장</span></h2>
         <div class="letterBody" id="inviteLetterBody">
           <img class="letterPhoto posM" src="images/baby.png" alt="합장하는 아기">
           <p>AI 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
