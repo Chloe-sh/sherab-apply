@@ -110,9 +110,10 @@
   .letterHead {
     color: #FBF8F2; font-size: clamp(1.35rem, 4.5vw, 1.7rem); font-weight: 600;
     line-height: 1.5; letter-spacing: .02em;
-    margin: .4rem 0 1.2rem;
+    margin: .4rem 0 1.2rem; text-align: center;
   }
-  .letterHead span { white-space: nowrap; display: inline-block; }
+  /* 제목은 항상 두 줄 고정: "현대인을 위한 약사여래 / 체험 수행 초대장" */
+  .letterHead span { white-space: nowrap; display: block; }
   .letterBody { text-align: left; color: #FBF8F2; }
   .letterBody p {
     text-align: justify; word-break: normal;  /* 양끝 맞춤 + 끝선에서 글자 단위 개행 */
@@ -403,6 +404,32 @@
     .schedCard .sp { min-height: .9rem; }
   }
   .schedNote { font-size: .9rem; color: #6E6E6E; margin-top: 1.1rem; }
+
+  /* 숙박형 약사여래 수행(안거 5) 세부 일정: 모바일은 날짜별 세로 타임라인, PC는 3단 */
+  .dsBlock { background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; margin-top: 1.1rem; }
+  .dsTitle { background: var(--navy); color: #FBF8F2; padding: 1.1rem 1.3rem; }
+  .dsTitle .t { font-weight: 700; font-size: 1.05rem; }
+  .dsTitle .s { font-size: .85rem; opacity: .88; margin-top: .2rem; font-variant-numeric: tabular-nums; }
+  .dsDays { padding: .3rem 1.3rem 1rem; }
+  .dsDayHead { display: flex; align-items: center; gap: .6rem; margin-top: 1.1rem; }
+  .dsDayHead .d { font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dsDayHead .d em { font-style: normal; font-weight: 400; font-size: .85rem; color: #555; margin-left: .15rem; }
+  .dsDayHead .tag {
+    font-size: .78rem; font-weight: 600; padding: .18rem .62rem;
+    border-radius: 999px; background: #8E1A3D; color: #fff; white-space: nowrap;
+  }
+  .dsList { list-style: none; margin-top: .4rem; }
+  .dsList li {
+    display: flex; gap: .9rem; align-items: baseline;
+    padding: .48rem 0; border-bottom: 1px solid #EDF1F7; font-size: .95rem;
+  }
+  .dsList li:last-child { border-bottom: none; }
+  .dsList .tm { flex: none; width: 7.2em; color: var(--navy); font-weight: 600; font-size: .88rem; font-variant-numeric: tabular-nums; }
+  .dsList .ac { color: #333; word-break: keep-all; }
+  .dsNote { font-size: .85rem; color: #6E6E6E; padding: 0 1.3rem 1.1rem; }
+  @media (min-width: 700px) {
+    .dsDays { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 1.7rem; align-items: start; padding-bottom: 1.2rem; }
+  }
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
   .scrollCue { margin: 2.2rem 0 .6rem; text-align: center; }
@@ -904,8 +931,8 @@ function applyOverrides(cfg) {
     // ※ 접수 기록의 '참가비(자동)' 열은 백엔드가 시트 값을 읽으므로 시트 셀도 수정해야 함
     if (p.code === 'C' && (Number(p.fee) === 300000 || Number(p.fee) === 90000)) p.fee = 180000;
     if (p.code === 'F' && Number(p.fee) === 100000) p.fee = 360000;
-    // 기관별 문의 전화(2026-08-08 사용자 제공) — 시트에 열이 없어 코드로 주입
-    var PHONE = { C: '010-6685-6957', D: '010-6313-9189', F: '010-3007-6631' };
+    // 기관별 문의 전화(2026-08-08 사용자 제공) — 시트에 열이 없어 코드로 주입. E(차담)는 아나빠나(D)와 동일
+    var PHONE = { C: '010-6685-6957', D: '010-6313-9189', E: '010-6313-9189', F: '010-3007-6631' };
     if (!p.phone && PHONE[p.code]) p.phone = PHONE[p.code];
     if (p.code === 'C') {
       p.schedule = String(p.schedule || '')
@@ -927,7 +954,7 @@ function applyOverrides(cfg) {
         .replace('9:00~17:30', '9:00~18:00');
       // 회차 미니카드 템플릿(날짜/수행명 - 설명)으로 변환 — 시트에 이미 '/'가 있으면 건드리지 않음
       if (p.schedule.indexOf('/') < 0) {
-        p.schedule += '/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다';
+        p.schedule += '/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.';
         p.desc = '';
       }
     }
@@ -935,10 +962,12 @@ function applyOverrides(cfg) {
     // 접기(fold)는 desc를 일정 문자열로 흡수하고 비우므로, desc를 고치는 보정은 반드시 접기보다 먼저 와야 한다.
     // (2026-08-08 실사고: E 블록이 두 개로 갈라져 접기가 먼저 돌면서 개정 문구가 유실됐음 — 블록을 쪼개지 말 것)
     if (p.code === 'E') {
+      // 장소·문의·계좌는 아나빠나사띠(D)와 동일 (2026-08-08 사용자 확정)
+      if (!p.account || p.account === '계좌 추후 안내') p.account = '국민은행 084-21-0710-611 (김정수)';
       p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
       p.desc = String(p.desc || '').replace(
         '한의사, 동서양 또는 대체 의학, 치료·웰니스 분야 전문가를 위한 티베트 수행 및 학술 교류',
-        '한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다'
+        '한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.'
       );
       if (p.schedule.indexOf('/') < 0) {
         p.schedule += '/한의사 茶談 수행 - ' + String(p.desc || '').trim();
