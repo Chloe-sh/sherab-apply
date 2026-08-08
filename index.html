@@ -54,7 +54,12 @@
     font-size: clamp(1.9rem, 6vw, 2.8rem);
     font-weight: 300; letter-spacing: .04em;
     color: var(--gold-soft); margin-bottom: 1.1rem;
+    /* 따시델렉 펜 라이팅 효과: 왼쪽부터 서서히 드러나며 손으로 쓰는 느낌 */
+    clip-path: inset(-15% 100% -15% 0);
+    animation: tashiWrite 2.4s ease-out .5s forwards;
   }
+  @keyframes tashiWrite { to { clip-path: inset(-15% 0 -15% 0); } }
+  @media (prefers-reduced-motion: reduce) { #gate h1 { animation: none; clip-path: none; } }
   #gateTo {
     font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: 1.15rem; letter-spacing: .3em; text-indent: .3em;
