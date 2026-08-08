@@ -789,6 +789,13 @@ function applyOverrides(cfg) {
     if (p.code === 'D') {
       p.schedule = String(p.schedule || '').replace('4(금)~9.', '4(금) ~ 9.');
     }
+    // 시간·연도 표기 통일 (시트 원문이 고쳐지면 자동 무력화)
+    if (p.code === 'E') {
+      p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
+    }
+    if (p.code === 'F') {
+      p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
+    }
   });
   // 행복수업(C) 신청서: 2026-08-07 지시 내용으로 교체
   cfg.questions = cfg.questions || {};
