@@ -208,7 +208,7 @@
   .prog .sess { margin-top: .55rem; padding-left: .65rem; border-left: 3px solid var(--line); }
   .prog .sess .when { color: var(--navy); font-weight: 700; font-size: .92rem; }
   .prog .sess .what { font-weight: 600; color: #333; font-size: .92rem; }
-  .prog .sess .why { color: #777; font-size: .87rem; margin-top: .1rem; }
+  .prog .sess .why { color: #6E6E6E; font-size: .87rem; margin-top: .1rem; }
   /* 모바일: 이미지를 위에 꽉 차게, 텍스트는 그 아래로 */
   @media (max-width: 640px) {
     .prog .head { flex-direction: column; gap: .8rem; }
@@ -234,7 +234,7 @@
   /* 폼 요소 */
   label.q { display: block; font-weight: 700; margin: 1rem 0 .35rem; font-size: .98rem; }
   label.q .req { color: #c0392b; }
-  .hint { font-size: .85rem; color: #888; margin-bottom: .3rem; }
+  .hint { font-size: .85rem; color: #6E6E6E; margin-bottom: .3rem; }
   input[type=text], input[type=tel], input[type=number], textarea, select {
     width: 100%; font: inherit; padding: .65rem .8rem;
     border: 1.5px solid var(--line); border-radius: 8px; background: #fff;
@@ -252,14 +252,14 @@
     font-size: .92rem; cursor: pointer;
   }
   .subOption input { width: 1.05rem; height: 1.05rem; accent-color: var(--navy); }
-  .subOption .subHint { font-size: .78rem; color: #999; }
+  .subOption .subHint { font-size: .78rem; color: #767676; }
   .subOption.disabled { opacity: .45; cursor: not-allowed; }
   /* 입금 안내: 기관별 계좌 표 (각진 심플 스타일) */
   table.accTable { width: 100%; border-collapse: collapse; margin-top: .6rem; background: #fff; }
   .accTable th, .accTable td { border: 1px solid var(--navy); padding: .6rem .75rem; font-size: .93rem; text-align: left; }
   .accTable th { background: var(--navy); color: #fff; font-weight: 500; }
   .accTable td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .accTable td.empty { text-align: center; color: #999; }
+  .accTable td.empty { text-align: center; color: #767676; }
 
   /* 참가비 요약 */
   table.feeTable { width: 100%; border-collapse: collapse; margin-top: .4rem; }
@@ -267,7 +267,7 @@
   .feeTable th { background: #EEF1F7; color: var(--navy); }
   .feeTable td.amount { text-align: right; font-variant-numeric: tabular-nums; }
   .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #E9EDF5; font-size: 1.05rem; }
-  .feeNote { font-size: .85rem; color: #888; margin-top: .5rem; }
+  .feeNote { font-size: .85rem; color: #6E6E6E; margin-top: .5rem; }
 
   /* 일정표: 월별 그룹 카드 리스트 (흰 바탕 + 네이비 포인트) */
   .schedMonth {
@@ -288,20 +288,20 @@
     font-variant-numeric: tabular-nums;
   }
   .schedCard .date b { font-weight: 700; font-size: .98rem; white-space: nowrap; }
-  .schedCard .date .dow { display: block; font-weight: 400; font-size: .76rem; color: #A6A6A6; margin-top: .2rem; }
+  .schedCard .date .dow { display: block; font-weight: 400; font-size: .76rem; color: #767676; margin-top: .2rem; }
   .schedCard .main { flex: 1; min-width: 0; }
   .badge {
     display: inline-block; font-size: .7rem; font-weight: 600; letter-spacing: .04em;
     border-radius: 5px; padding: .14rem .48rem; margin-bottom: .4rem; white-space: nowrap;
   }
   .badge.fill { background: #E8EFFE; color: var(--navy); }
-  .badge.line { background: #F3F4F6; color: #6B7280; }
+  .badge.line { background: #F3F4F6; color: #4B5563; }
   .schedCard .tit { font-weight: 700; font-size: .95rem; color: #161616; line-height: 1.5; }
   .schedMeta { display: flex; gap: 1.8rem; margin-top: .6rem; }
   .schedMeta > div { min-width: 0; }
-  .schedMeta .lbl { display: block; font-size: .7rem; color: #A6A6A6; margin-bottom: .08rem; }
+  .schedMeta .lbl { display: block; font-size: .7rem; color: #767676; margin-bottom: .08rem; }
   .schedMeta .val { font-size: .84rem; color: #555; line-height: 1.45; }
-  .schedNote { font-size: .8rem; color: #999; margin-top: 1rem; }
+  .schedNote { font-size: .8rem; color: #767676; margin-top: 1rem; }
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
   .scrollCue { margin: 2.2rem 0 .6rem; text-align: center; }
@@ -328,7 +328,7 @@
   #done .msg { white-space: pre-line; }
   #done .receipt { margin: 1.2rem auto; display: inline-block; background: #F2F4F9; border: 1px solid #C9D2E4; border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
 
-  footer { text-align: center; font-size: .85rem; color: #999; padding: 2rem 0 3rem; }
+  footer { text-align: center; font-size: .85rem; color: #767676; padding: 2rem 0 3rem; }
 
   /* 플로팅 '아래로' 버튼: 긴 페이지 중도 이탈 방지. 맨 아래 근처에선 자동으로 숨김 */
   #scrollFab {
@@ -409,7 +409,7 @@
       <div id="scheduleBody">
         <div class="schedMonth">2026년 8월</div>
         <div class="schedCard">
-          <div class="date"><b>8/22 ~<br>8/23</b><span class="dow">토 · 일</span></div>
+          <div class="date"><b>8. 22 ~<br>8. 23</b><span class="dow">토 · 일</span></div>
           <div class="main">
             <span class="badge line">공식행사</span>
             <div class="tit">선명상엑스포 메인 섹션</div>
@@ -419,7 +419,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>8/24</b><span class="dow">월</span></div>
+          <div class="date"><b>8. 24</b><span class="dow">월</span></div>
           <div class="main">
             <span class="badge line">특강</span>
             <div class="tit">삶에 지친 시민을 만나는 정치인의 자세와 자기수행</div>
@@ -430,7 +430,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>8/26 ~<br>8/27</b><span class="dow">수 · 목</span></div>
+          <div class="date"><b>8. 26 ~<br>8. 27</b><span class="dow">수 · 목</span></div>
           <div class="main">
             <span class="badge fill">안거 1</span>
             <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
@@ -441,7 +441,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>8/29 ~<br>8/30</b><span class="dow">토 · 일</span></div>
+          <div class="date"><b>8. 29 ~<br>8. 30</b><span class="dow">토 · 일</span></div>
           <div class="main">
             <span class="badge fill">안거 2</span>
             <div class="tit">꿈요가 — 현대인 스트레스 완화 및 마음챙김</div>
@@ -453,7 +453,7 @@
         </div>
         <div class="schedMonth">2026년 9월</div>
         <div class="schedCard">
-          <div class="date"><b>9/1 ~<br>9/2</b><span class="dow">화 · 수</span></div>
+          <div class="date"><b>9. 1 ~<br>9. 2</b><span class="dow">화 · 수</span></div>
           <div class="main">
             <span class="badge fill">안거 3</span>
             <div class="tit">① 한의사 다담(茶談) 수행 ② 능행스님 독담(獨談)</div>
@@ -464,7 +464,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9/4 ~<br>9/8</b><span class="dow">금 ~ 화</span></div>
+          <div class="date"><b>9. 4 ~<br>9. 8</b><span class="dow">금 ~ 화</span></div>
           <div class="main">
             <span class="badge fill">안거 4</span>
             <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠</div>
@@ -475,7 +475,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9/5</b><span class="dow">토</span></div>
+          <div class="date"><b>9. 5</b><span class="dow">토</span></div>
           <div class="main">
             <span class="badge line">특강</span>
             <div class="tit">서울시 요가대회 — 프라나 나디 요가</div>
@@ -485,7 +485,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9/9 ~<br>9/10</b><span class="dow">수 · 목</span></div>
+          <div class="date"><b>9. 9 ~<br>9. 10</b><span class="dow">수 · 목</span></div>
           <div class="main">
             <span class="badge line">탐방안거</span>
             <div class="tit">법주사 탐방·안거 후 대원사 이동</div>
@@ -495,7 +495,7 @@
           </div>
         </div>
         <div class="schedCard">
-          <div class="date"><b>9/10 ~<br>9/13</b><span class="dow">목 ~ 일</span></div>
+          <div class="date"><b>9. 10 ~<br>9. 13</b><span class="dow">목 ~ 일</span></div>
           <div class="main">
             <span class="badge fill">안거 5</span>
             <div class="tit">약사여래 수행</div>
@@ -568,7 +568,7 @@
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">5</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#888;">(여러 개 선택 가능)</span></h2>
+      <h2 class="sec"><span class="num">5</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#6E6E6E;">(여러 개 선택 가능)</span></h2>
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
       <!-- 아래로 안내: 문구 + 화살표 하나 -->
@@ -624,7 +624,7 @@
       <h2 class="sec"><span class="num">8</span>참가비 안내</h2>
       <table class="feeTable" id="feeTable">
         <thead><tr><th>선택한 수행</th><th>참가비</th></tr></thead>
-        <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#999;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
+        <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
       </table>
       <div class="feeNote">※ 할인 등 최종 참가비는 담당자 확인 후 개별 안내드립니다.</div>
       <div class="infoBox" id="paymentInfo"></div>
@@ -1137,7 +1137,7 @@ function renderFees() {
     rows += '<tr><td>' + esc(p.name) + '</td><td class="amount">' + feeText(p) + '</td></tr>';
   });
   if (!rows) {
-    body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#999;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
+    body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
   } else {
     body.innerHTML = rows + '<tr class="total"><td>합계</td><td class="amount">' + won(total) + '</td></tr>';
   }
