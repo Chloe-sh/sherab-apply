@@ -294,7 +294,10 @@
   .sess { background: #F7F9FC; border-radius: 12px; padding: .85rem .95rem; display: flex; flex-direction: column; }
   .sess .what { font-weight: 700; color: #111; font-size: .98rem; }
   .sess .why { color: #6B7684; font-size: .85rem; margin-top: .2rem; line-height: 1.5; }
-  .sess .feeAsk { background: #FFF3BF; color: #5C4A00; padding: .05rem .4rem; border-radius: 4px; white-space: nowrap; }
+  .sess .feeAsk {
+    background: #FFF3BF; color: #5C4A00; padding: .05rem .4rem; border-radius: 4px;
+    box-decoration-break: clone; -webkit-box-decoration-break: clone;
+  }
   /* 날짜·시간은 카드 하단 고정: 좌우 카드의 설명 줄 수가 달라도 같은 높이에 정렬 */
   .sess .when { color: var(--navy); font-weight: 700; font-size: .9rem; margin-top: auto; padding-top: .55rem; font-variant-numeric: tabular-nums; }
   .sess .when .t { font-weight: 400; color: #555; display: block; margin-top: .1rem; }
@@ -1593,7 +1596,9 @@ function metaHtml(p, brief) {
     }
     var wm = s.when.match(/^(.*\))\s+(\d\S*.*)$/);
     var whenHtml = wm ? esc(wm[1]) + ' <span class="t">' + esc(wm[2]) + '</span>' : esc(s.when);
-    var whyHtml = esc(why) + (feeAsk ? (why ? ' ' : '') + '<span class="feeAsk">참가비 문의</span>' : '');
+    var whyHtml = feeAsk
+      ? '<span class="feeAsk">' + esc((why ? why + ' ' : '') + '참가비 문의') + '</span>'
+      : esc(why);
     return '<div class="sess"><div class="what">' + esc(what) + '</div>' +
       (!brief && (why || feeAsk) ? '<div class="why">' + whyHtml + '</div>' : '') +
       '<div class="when">' + whenHtml + '</div></div>';
