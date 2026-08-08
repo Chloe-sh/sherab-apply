@@ -110,7 +110,7 @@
   }
   .letterBody { text-align: left; color: #FBF8F2; }
   .letterBody p {
-    text-align: justify;            /* 좌우 맞춤 정렬 */
+    text-align: left;               /* 양쪽 맞춤은 keep-all과 만나면 단어 간격이 벌어짐 */
     overflow-wrap: break-word;
     font-size: .98rem; margin-bottom: 1rem;
   }
@@ -120,6 +120,10 @@
     float: right; width: min(230px, 44%);
     margin: 3.4rem -5mm .6rem 1.3rem;  /* 아래로 내리고(상단여백) 오른쪽으로 5mm 이동 */
     filter: saturate(70%);             /* 채도 30% 감소 (모양 변화 없음) */
+  }
+  /* 모바일: 플로트가 본문 폭을 절반으로 줄이므로 사진을 문단 사이 가운데 블록으로 */
+  @media (max-width: 640px) {
+    .letterPhoto { float: none; display: block; width: min(200px, 58%); margin: .3rem auto 1.1rem; }
   }
   #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; font-weight: 700; }
 
