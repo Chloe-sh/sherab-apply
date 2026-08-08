@@ -828,7 +828,7 @@
     <section class="card">
       <h2 class="sec"><span class="num">6</span>신청자 기본 정보</h2>
       <label class="q">이름 <span class="req">*</span></label>
-      <input type="text" id="fName" autocomplete="name" maxlength="40">
+      <input type="text" id="fName" autocomplete="name" maxlength="30">
       <label class="q">성별 <span class="req">*</span></label>
       <div class="radios">
         <label><input type="radio" name="fGender" value="여자">여자</label>
@@ -836,12 +836,13 @@
       </div>
       <label class="q">휴대폰 번호 <span class="req">*</span></label>
       <div class="hint">예 : 010-0000-0000</div>
-      <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-" maxlength="20">
+      <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-" maxlength="13">
       <label class="q">나이 <span class="req">*</span></label>
-      <input type="number" id="fAge" min="1" max="120">
+      <!-- type="number"는 maxlength가 무시되므로 text + 숫자 키패드로 처리 (아래 JS가 숫자만 남김) -->
+      <input type="text" id="fAge" inputmode="numeric" autocomplete="off" maxlength="3" data-digits>
       <label class="q">거주하는 지역 <span class="req">*</span></label>
       <div class="hint">예 : 서울시 관악구</div>
-      <input type="text" id="fRegion" maxlength="60">
+      <input type="text" id="fRegion" maxlength="40">
       <label class="q">수행 경험</label>
       <div class="radios">
         <label><input type="radio" name="fExp" value="유">유</label>
@@ -853,7 +854,7 @@
       </label>
       <label class="q">참가 동기 <span class="req">*</span></label>
       <div class="hint">수행을 통해 원하시는 것이나 기대를 짧게 적어 주세요.</div>
-      <textarea id="fMotivation" maxlength="1000"></textarea>
+      <textarea id="fMotivation" maxlength="500"></textarea>
       <label class="q">건강 상태 및 참고(배려) 사항 <span class="req">*</span></label>
       <div class="hint">주의해야 할 신체적/정신적 특이사항이 있으면 꼭 적어 주세요. (예 : 무릎/허리 통증, 임신, 질환 등 · 없으면 "없음")</div>
       <textarea id="fHealth" maxlength="1000"></textarea>
@@ -875,7 +876,7 @@
       <div class="infoBox"><b>환불 규정</b><br><span id="refundInfo"></span></div>
       <label class="q">참가비 입금자명</label>
       <div class="hint">신청자명과 입금자명이 다른 경우만 적어 주세요. 입금 시 "신청자명+수행"으로 입금해 주시면 확인이 빠릅니다.</div>
-      <input type="text" id="fDepositor" maxlength="40">
+      <input type="text" id="fDepositor" maxlength="20">
     </section>
 
     <section class="card">
@@ -906,7 +907,7 @@
         <label><input type="radio" name="fRecords" value="동의안함">동의안함</label>
       </div>
       <label class="q">기타 문의 사항</label>
-      <textarea id="fEtc" placeholder="주최 측에 전달하고 싶은 메시지나 궁금한 점" maxlength="1000"></textarea>
+      <textarea id="fEtc" placeholder="주최 측에 전달하고 싶은 메시지나 궁금한 점" maxlength="500"></textarea>
 
       <!-- 스팸 봇 차단용. 사람에게는 보이지 않으며, 값이 채워지면 서버가 접수를 거부합니다. -->
       <div aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;">
@@ -1423,9 +1424,9 @@ function renderSubforms() {
             (oldSet.indexOf(o) >= 0 ? ' checked' : '') + '>' + esc(o) + '</label>';
         }).join('') + '</div>';
       } else if (q.type === '장문') {
-        html += '<textarea name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" maxlength="1000">' + esc(old) + '</textarea>';
+        html += '<textarea name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" maxlength="500">' + esc(old) + '</textarea>';
       } else { // 단답
-        html += '<input type="text" name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" value="' + esc(old) + '" maxlength="200">';
+        html += '<input type="text" name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" value="' + esc(old) + '" maxlength="100">';
       }
     });
 
@@ -1532,7 +1533,12 @@ function validate() {
   if (!document.querySelector('input[name="fGender"]:checked')) errs.push('성별을 선택해 주세요.');
   var phone = $('fPhone').value.trim();
   if (!/^01[016789][-\s]?\d{3,4}[-\s]?\d{4}$/.test(phone)) errs.push('휴대폰 번호를 010-0000-0000 형식으로 입력해 주세요.');
-  if (!$('fAge').value.trim()) errs.push('나이를 입력해 주세요.');
+  var age = $('fAge').value.trim();
+  if (!age) {
+    errs.push('나이를 입력해 주세요.');
+  } else if (!/^\d{1,3}$/.test(age) || Number(age) < 1 || Number(age) > 120) {
+    errs.push('나이를 1~120 사이 숫자로 입력해 주세요.');
+  }
   if (!$('fRegion').value.trim()) errs.push('거주하는 지역을 입력해 주세요.');
   if (!$('fMotivation').value.trim()) errs.push('참가 동기를 입력해 주세요.');
   if (!$('fHealth').value.trim()) errs.push('건강 상태를 입력해 주세요. (없으면 "없음")');
@@ -1687,6 +1693,15 @@ $('pgOverlay').addEventListener('click', function (e) {
 });
 
 // ── 수행 경험: '유' 선택 시에만 하위 옵션(쉐랍 텐진 수행 경험) 체크 가능 ──
+// data-digits 가 붙은 칸은 숫자만 남긴다.
+// (type="number"는 maxlength가 무시되므로 type="text" + 이 필터로 자릿수를 제한한다)
+document.querySelectorAll('input[data-digits]').forEach(function (el) {
+  el.addEventListener('input', function () {
+    var only = el.value.replace(/\D/g, '');
+    if (el.value !== only) el.value = only;
+  });
+});
+
 document.querySelectorAll('input[name="fExp"]').forEach(function (r) {
   r.addEventListener('change', function () {
     var yes = this.value === '유';
