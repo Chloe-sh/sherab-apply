@@ -40,7 +40,7 @@
     color: var(--gold-soft); text-align: center; padding: 2rem 1.2rem;
   }
   #gate .art { width: min(420px, 86vw); margin-bottom: 2rem; }
-  #gate .art img { width: 100%; max-height: 52vh; object-fit: contain; border-radius: 12px; display: block; }
+  #gate .art img, #gate .art video { width: 100%; max-height: 52vh; object-fit: contain; border-radius: 12px; display: block; }
   #gate h1 {
     font-family: 'Noto Serif Tibetan', 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: clamp(1.9rem, 6vw, 2.8rem);
@@ -422,8 +422,9 @@
 <!-- ═══════════ 1. 게이트 페이지 ═══════════ -->
 <div id="gate">
   <div class="art" id="gateArt">
-    <!-- 기본 사진 (설정 시트에 게이트이미지URL을 넣으면 교체됨) -->
-    <img src="images/gate.jpg" alt="혜봉 선생님과 쉐랍 텐진 선생님">
+    <!-- 무음 자동재생 영상 (소리 있는 자동재생은 브라우저가 차단). 로드 실패 시 기존 사진으로 대체 -->
+    <video id="gateVideo" src="images/gate.mp4" autoplay muted loop playsinline
+           poster="images/gate.jpg" aria-label="혜봉 선생님과 쉐랍 텐진 선생님"></video>
   </div>
   <div id="gateTo"></div>
   <h1 id="gateTitle">བཀྲ་ཤིས་བདེ་ལེགས།</h1>
@@ -1510,6 +1511,17 @@ window.addEventListener('scroll', updateFab, { passive: true });
 window.addEventListener('resize', updateFab);
 
 // ── 시작 ──
+// 게이트 영상: 무음 강제 후 재생 시도 (자동재생 차단 시 포스터 사진이 그대로 보임), 파일 오류 시 사진으로 대체
+(function () {
+  var gv = document.getElementById('gateVideo');
+  if (!gv) return;
+  gv.muted = true;
+  gv.addEventListener('error', function () {
+    $('gateArt').innerHTML = '<img src="images/gate.jpg" alt="혜봉 선생님과 쉐랍 텐진 선생님">';
+  });
+  var p = gv.play();
+  if (p && p.catch) p.catch(function () {});
+})();
 $('gateNext').addEventListener('click', function () {
   $('gate').classList.add('hidden');
   $('main').classList.remove('hidden');
