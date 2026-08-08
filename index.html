@@ -838,6 +838,7 @@ function applyOverrides(cfg) {
     if (p.code === 'F') {
       p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ').replace(/9\. 13\(일\)$/, '9. 13(일) · 숙박');
       p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
+      if (!p.account || p.account === '계좌 추후 안내') p.account = '농협 302-1813-2303-91 (박서현)';
     }
   });
   // 장소를 도로명주소로 통일 (시트 원문이 주소로 바뀌면 자동 무력화)
@@ -1000,6 +1001,16 @@ function schedulePlace(p) {
   return esc(p.schedule) + sep + esc(p.place);
 }
 
+// 기관명이 길어 셀이 좁아지지 않도록 지정 위치에서 줄바꿈
+function orgNameHtml(name) {
+  var brMap = {
+    '행복수업협동조합': '행복수업<br>협동조합',
+    '아나빠나사띠명상요가': '아나빠나사띠<br>명상요가',
+    '혜봉추모기념사업회': '혜봉추모<br>기념사업회'
+  };
+  return brMap[name] || esc(name);
+}
+
 // 선택한 수행의 기관별 입금 계좌 표 (각진 심플 스타일)
 function accountTable(programs) {
   var head = '<table class="accTable"><thead><tr><th>기관</th><th>입금 계좌 (예금주)</th><th>참가비</th></tr></thead><tbody>';
@@ -1007,7 +1018,7 @@ function accountTable(programs) {
     return head + '<tr><td class="empty" colspan="3">수행을 선택하시면 입금 계좌가 표시됩니다.</td></tr></tbody></table>';
   }
   return head + programs.map(function (p) {
-    return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.account || '계좌 추후 안내') + '</td><td class="amount">' + feeText(p) + '</td></tr>';
+    return '<tr><td>' + orgNameHtml(p.name) + '</td><td>' + esc(p.account || '계좌 추후 안내') + '</td><td class="amount">' + feeText(p) + '</td></tr>';
   }).join('') + '</tbody></table>';
 }
 
