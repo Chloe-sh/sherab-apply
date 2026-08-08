@@ -245,7 +245,11 @@
   .sess .what { font-weight: 700; color: #111; font-size: .98rem; }
   .sess .why { color: #6B7684; font-size: .85rem; margin-top: .2rem; line-height: 1.5; }
   .sess .when { color: var(--navy); font-weight: 700; font-size: .9rem; margin-top: .55rem; font-variant-numeric: tabular-nums; }
-  .sess .when .t { font-weight: 400; color: #555; }
+  .sess .when .t { font-weight: 400; color: #555; display: block; margin-top: .1rem; }
+  /* 모바일: 참가비 기준 문구는 금액 아래 줄로 */
+  @media (max-width: 640px) {
+    .prog .feeSub { display: block; margin-left: 0; margin-top: .15rem; }
+  }
   .metaWhen { color: var(--navy); font-weight: 500; font-size: .95rem; margin-top: .8rem; white-space: pre-line; }
   .infoLine { font-size: .87rem; color: #6B7684; margin-top: .75rem; }
   .infoLine + .infoLine { margin-top: .2rem; }
@@ -471,7 +475,7 @@
     </div>
 
     <section class="card" id="hyebong">
-      <h2 class="sec"><span class="num">1</span>혜봉 선생님의 명상 생애</h2>
+      <h2 class="sec"><span class="num">1</span>혜봉 선생님</h2>
       <div class="bio">
         <p>혜봉 선생님은 동국대학교 불교학과를 졸업하고, 1985년 법륜스님과 '정토회'를 설립, 대중 수행 지도에 첫발을 내디뎠습니다. 1990년대부터 동사섭·간화선·위빠사나를 거쳐, 2004년부터는 인도 다람살라에서 티베트 로종 명상을 공부하셨고, 이 인연으로 해외 선지식들을 국내에 초청하여 금강승 수행과 티베트 명상을 전하는 데 기여하셨습니다.</p>
         <p>이후 명상아카데미와 (사)밝은세상 설립(2000년)을 비롯해 명상수행학교 행복수업과 한산명상수행학교를 운영하시고, 외국에서도 현대인을 위한 명상 프로그램을 교육하셨습니다. 2023년 입적 전까지는 행복수업협동조합을 설립해 초기·대승·금강승·선불교를 통합한 코칭 수행 체계를 완성하셨으며, 담마·멘토·선재 스쿨 프로그램을 통해 평화의 리더를 양성하셨습니다.</p>
@@ -696,13 +700,13 @@
         <label><input type="radio" name="fGender" value="여자">여자</label>
         <label><input type="radio" name="fGender" value="남자">남자</label>
       </div>
-      <label class="q">연락처(휴대폰 번호) <span class="req">*</span></label>
+      <label class="q">휴대폰 번호 <span class="req">*</span></label>
       <div class="hint">예 : 010-0000-0000</div>
       <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-">
       <label class="q">나이 <span class="req">*</span></label>
       <input type="number" id="fAge" min="1" max="120">
-      <label class="q">거주지(지역) <span class="req">*</span></label>
-      <div class="hint">구까지만 (예 : 서울시 관악구)</div>
+      <label class="q">거주하는 지역 <span class="req">*</span></label>
+      <div class="hint">예 : 서울시 관악구</div>
       <input type="text" id="fRegion">
       <label class="q">수행 경험</label>
       <div class="radios">
@@ -910,7 +914,25 @@ function applyOverrides(cfg) {
       p.schedule = String(p.schedule || '')
         .replace('4(금)~9.', '4(금) ~ 9.')
         .replace('9:00~17:30', '9:00~18:00');
-      p.desc = String(p.desc || '').replace('닥빠/꿈요가 5일 수행', '닥빠/꿈요가 : 5일 수행');
+      // 회차 미니카드 템플릿(날짜/수행명 - 설명)으로 변환 — 시트에 이미 '/'가 있으면 건드리지 않음
+      if (p.schedule.indexOf('/') < 0) {
+        p.schedule += '/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다';
+        p.desc = '';
+      }
+    }
+    if (p.code === 'E') {
+      p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
+      if (p.schedule.indexOf('/') < 0) {
+        p.schedule += '/한의사 茶談 수행 - ' + String(p.desc || '').trim();
+        p.desc = '';
+      }
+    }
+    if (p.code === 'F') {
+      p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
+      if (p.schedule.indexOf('/') < 0) {
+        p.schedule += '/약사여래 수행 - ' + String(p.desc || '').trim();
+        p.desc = '';
+      }
     }
     // 시간·연도 표기 통일 (시트 원문이 고쳐지면 자동 무력화)
     if (p.code === 'E') {
@@ -1001,12 +1023,10 @@ function render() {
   }
   $('siteTitle').textContent = s['사이트제목'] || '';
 
-  // 쉐랍 소개
+  // 쉐랍 소개 — 괄호 영문 표기(Dr. Sherab Tenzin)는 표시하지 않음(2026-08-08 사용자 지시)
   var sherabT = s['쉐랍소개제목'] || '';
   var sherabM = sherabT.match(/^([^(]*?)\s*(\(.*\))\s*$/);
-  $('sherabTitle').innerHTML = sherabM
-    ? esc(sherabM[1]) + ' <span class="paren">' + esc(sherabM[2]) + '</span>'
-    : esc(sherabT);
+  $('sherabTitle').textContent = sherabM ? sherabM[1] : sherabT;
   $('sherabBio').textContent = s['쉐랍소개'] || '';
   if (s['쉐랍사진URL']) $('sherabPhoto').src = s['쉐랍사진URL'];
 
@@ -1048,7 +1068,8 @@ function feeNote(p) {
 // (한 줄에 여러 회차가 문장으로 이어져 있으면 ". " + 날짜 패턴 앞에서 잘라줌)
 function sessionsOf(schedule) {
   var lines = String(schedule || '').trim().split(/\n+/);
-  if (lines.length === 1) {
+  // 이미 "날짜/수행명" 꼴인 한 줄은 사전 분할 없이 그대로 파싱 (날짜의 "26."에서 잘못 쪼개지는 것 방지)
+  if (lines.length === 1 && !/^[0-9.():~\-\s월화수목금토일]+\//.test(lines[0])) {
     var parts = lines[0].split(/\.\s+(?=\d{1,2}\.\s*\d{1,2}\s*\()/);
     if (parts.length > 1) {
       lines = parts.map(function (t, i) { return i < parts.length - 1 ? t + '.' : t; });
@@ -1152,8 +1173,8 @@ function renderPrograms() {
           (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</div>' +
         metaHtml(p) +
         (descHtml ? '<div class="desc">' + descHtml + '</div>' : '') +
-        (p.place ? '<div class="infoLine">장소 · ' + esc(p.place) + '</div>' : '') +
-        (p.phone ? '<div class="infoLine">문의 · ' + esc(p.phone) + '</div>' : '') +
+        (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '') +
+        (p.phone ? '<div class="infoLine">문의 : ' + esc(p.phone) + '</div>' : '') +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
     div.addEventListener('click', function (e) {
@@ -1205,7 +1226,7 @@ function renderSubforms() {
     var html =
       '<h4>' + esc(p.name) + ' 신청서</h4>' +
       metaHtml(p, true) +
-      (p.place ? '<div class="infoLine">장소 · ' + esc(p.place) + '</div>' : '');
+      (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '');
 
     questionsFor(p.code).forEach(function (q, qi) {
       var qid = p.code + '-' + qi;
@@ -1353,9 +1374,9 @@ function validate() {
   if (!$('fName').value.trim()) errs.push('이름을 입력해 주세요.');
   if (!document.querySelector('input[name="fGender"]:checked')) errs.push('성별을 선택해 주세요.');
   var phone = $('fPhone').value.trim();
-  if (!/^01[016789][-\s]?\d{3,4}[-\s]?\d{4}$/.test(phone)) errs.push('연락처를 010-0000-0000 형식으로 입력해 주세요.');
+  if (!/^01[016789][-\s]?\d{3,4}[-\s]?\d{4}$/.test(phone)) errs.push('휴대폰 번호를 010-0000-0000 형식으로 입력해 주세요.');
   if (!$('fAge').value.trim()) errs.push('나이를 입력해 주세요.');
-  if (!$('fRegion').value.trim()) errs.push('거주지(지역)를 입력해 주세요.');
+  if (!$('fRegion').value.trim()) errs.push('거주하는 지역을 입력해 주세요.');
   if (!$('fMotivation').value.trim()) errs.push('참가 동기를 입력해 주세요.');
   if (!$('fHealth').value.trim()) errs.push('건강 상태를 입력해 주세요. (없으면 "없음")');
   var subs = collectSubforms();
