@@ -147,6 +147,20 @@
   #hyebong .bio p { text-align: justify; word-break: normal; overflow-wrap: break-word; margin-bottom: .9rem; }
   #hyebong .bio p:last-child { margin-bottom: 0; }
 
+  /* 소개 글 더보기 접기: 처음 서너 줄만 보이고, 아래는 흰색으로 페이드 → 버튼으로 전체 펼침 */
+  .bioClamp { position: relative; max-height: 6.4em; overflow: hidden; }
+  .bioClamp::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3em;
+    background: linear-gradient(rgba(255,255,255,0), #fff); pointer-events: none;
+  }
+  .bioClamp.open { max-height: none; }
+  .bioClamp.open::after { display: none; }
+  .bioMoreBtn {
+    display: block; margin: .6rem auto 0; font: inherit; font-size: .9rem; font-weight: 600;
+    color: #4E5968; background: #F2F4F8; border: none; border-radius: 10px;
+    padding: .55rem 1.4rem; cursor: pointer;
+  }
+
   /* 수행 안내: 쉐랍 배너 + 토스풍 리스트 (제목 · 설명 · 보기 버튼) */
   .pgList { margin-top: .3rem; }
   .pgRow {
@@ -463,7 +477,7 @@
         <h2 class="letterHead" id="inviteLetterTitle">현대인을 위한 약사여래 체험 수행</h2>
         <div class="letterBody" id="inviteLetterBody">
           <img class="letterPhoto posM" src="images/baby.png" alt="합장하는 아기">
-          <p>溫故而知新 — 옛것을 익혀 새로운 깨달음을 얻듯, 수행은 지혜를 배워 오늘을 새롭게 살아가는 일입니다. 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
+          <p>AI 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
           <img class="letterPhoto posPc" src="images/baby.png" alt="합장하는 아기">
           <p>과거는 배움으로 남기고, 현재는 수행으로 살아가며, 미래는 서원으로 맞이합니다.</p>
           <p>혜봉 선생님과의 소중한 인연으로 이어진 쉐랍 텐진 선생님의 방한 — 티베트 수행 전통과 약사여래 부처님의 가르침으로 몸과 마음을 정화하고, 자신과 공동체, 인류를 향한 자비심을 키워 가는 여정입니다.</p>
@@ -475,16 +489,18 @@
 
     <section class="card" id="hyebong">
       <h2 class="sec"><span class="num">1</span>혜봉 선생님</h2>
-      <div class="bio">
+      <div class="bio bioClamp">
         <p>혜봉 선생님은 동국대학교 불교학과를 졸업하고, 1985년 법륜스님과 '정토회'를 설립, 대중 수행 지도에 첫발을 내디뎠습니다. 1990년대부터 동사섭·간화선·위빠사나를 거쳐, 2004년부터는 인도 다람살라에서 티베트 로종 명상을 공부하셨고, 이 인연으로 해외 선지식들을 국내에 초청하여 금강승 수행과 티베트 명상을 전하는 데 기여하셨습니다.</p>
         <p>이후 명상아카데미와 (사)밝은세상 설립(2000년)을 비롯해 명상수행학교 행복수업과 한산명상수행학교를 운영하시고, 외국에서도 현대인을 위한 명상 프로그램을 교육하셨습니다. 2023년 입적 전까지는 행복수업협동조합을 설립해 초기·대승·금강승·선불교를 통합한 코칭 수행 체계를 완성하셨으며, 담마·멘토·선재 스쿨 프로그램을 통해 평화의 리더를 양성하셨습니다.</p>
       </div>
+      <button class="bioMoreBtn" type="button">더 보기</button>
     </section>
 
     <section class="card" id="sherab">
       <h2 class="sec"><span class="num">2</span><span id="sherabTitle">쉐랍 텐진</span></h2>
       <img class="photo" id="sherabPhoto" alt="쉐랍 텐진" onerror="this.style.display='none'">
-      <div class="bio" id="sherabBio"></div>
+      <div class="bio bioClamp" id="sherabBio"></div>
+      <button class="bioMoreBtn" type="button">더 보기</button>
     </section>
 
     <section class="card" id="schedule">
@@ -1556,6 +1572,14 @@ $('gateNext').addEventListener('click', function () {
   window.scrollTo(0, 0);
 });
 $('submitBtn').addEventListener('click', submit);
+// 소개 글 더보기/접기 (혜봉·쉐랍)
+document.querySelectorAll('.bioMoreBtn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var box = btn.previousElementSibling;
+    var open = box.classList.toggle('open');
+    btn.textContent = open ? '접기' : '더 보기';
+  });
+});
 loadPersonalName();
 loadConfig();
 </script>
