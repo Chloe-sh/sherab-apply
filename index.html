@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'self'; form-action 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline'; connect-src https://script.google.com https://script.googleusercontent.com;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>2026 약사여래 수행 통합 신청</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+Tibetan:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" integrity="sha384-GIdEBaqGN9mNkDkMkzMHW8EKUqtpPIe/sLj1X7DIrnc9uPtLROJgmuDlh+3rBw0j" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
   :root {
     --navy: #04194A;        /* 포인트/중요 컬러 */
@@ -732,7 +735,7 @@
     <section class="card">
       <h2 class="sec"><span class="num">6</span>신청자 기본 정보</h2>
       <label class="q">이름 <span class="req">*</span></label>
-      <input type="text" id="fName" autocomplete="name">
+      <input type="text" id="fName" autocomplete="name" maxlength="40">
       <label class="q">성별 <span class="req">*</span></label>
       <div class="radios">
         <label><input type="radio" name="fGender" value="여자">여자</label>
@@ -740,12 +743,12 @@
       </div>
       <label class="q">휴대폰 번호 <span class="req">*</span></label>
       <div class="hint">예 : 010-0000-0000</div>
-      <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-">
+      <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-" maxlength="20">
       <label class="q">나이 <span class="req">*</span></label>
       <input type="number" id="fAge" min="1" max="120">
       <label class="q">거주하는 지역 <span class="req">*</span></label>
       <div class="hint">예 : 서울시 관악구</div>
-      <input type="text" id="fRegion">
+      <input type="text" id="fRegion" maxlength="60">
       <label class="q">수행 경험</label>
       <div class="radios">
         <label><input type="radio" name="fExp" value="유">유</label>
@@ -757,10 +760,10 @@
       </label>
       <label class="q">참가 동기 <span class="req">*</span></label>
       <div class="hint">수행을 통해 원하시는 것이나 기대를 짧게 적어 주세요.</div>
-      <textarea id="fMotivation"></textarea>
+      <textarea id="fMotivation" maxlength="1000"></textarea>
       <label class="q">건강 상태 및 참고(배려) 사항 <span class="req">*</span></label>
       <div class="hint">주의해야 할 신체적/정신적 특이사항이 있으면 꼭 적어 주세요. (예 : 무릎/허리 통증, 임신, 질환 등 · 없으면 "없음")</div>
-      <textarea id="fHealth"></textarea>
+      <textarea id="fHealth" maxlength="1000"></textarea>
     </section>
 
     <section class="card" id="subforms" style="display:none">
@@ -779,22 +782,44 @@
       <div class="infoBox"><b>환불 규정</b><br><span id="refundInfo"></span></div>
       <label class="q">참가비 입금자명</label>
       <div class="hint">신청자명과 입금자명이 다른 경우만 적어 주세요. 입금 시 "신청자명+수행"으로 입금해 주시면 확인이 빠릅니다.</div>
-      <input type="text" id="fDepositor">
+      <input type="text" id="fDepositor" maxlength="40">
     </section>
 
     <section class="card">
       <h2 class="sec"><span class="num">9</span>동의 및 기타</h2>
       <label class="q">개인정보 수집 및 이용 동의 <span class="req">*</span></label>
-      <div class="hint">수집 목적 : 수행 신청 및 참가자 관리 · 수집 항목 : 신청서 기록 내용 · 보유 기간 : 별도 기한 없음. 동의하지 않으면 안내 문자 발송 등 접수에 어려움이 있습니다.</div>
+      <div class="hint">
+        수집 항목 : 이름, 성별, 연락처, 나이, 거주지(구 단위), 수행 경험, 참가 동기, 입금자명, 수행별 신청서 답변<br>
+        수집 목적 : 수행 신청 접수 및 참가자 관리, 안내 문자·연락, 참가비 입금 확인<br>
+        보유 기간 : 수행 종료 후 1년까지 보관 후 지체 없이 파기<br>
+        동의를 거부하실 수 있으나, 거부 시 신청 접수가 불가능합니다.
+      </div>
       <div class="radios"><label><input type="checkbox" id="fPrivacy"> 동의합니다</label></div>
-      <label class="q">기록물 수집 및 이용 동의</label>
-      <div class="hint">수행 기간의 후기·사진·영상 등을 콘텐츠 제작에 활용하는 것에 대한 동의입니다.</div>
+
+      <label class="q">민감정보(건강 상태) 수집 및 이용 동의 <span class="req">*</span></label>
+      <div class="hint">
+        수집 항목 : 건강 상태 및 참고(배려) 사항 (질환·통증·임신 여부 등)<br>
+        수집 목적 : 수행 중 안전 확보 및 응급 상황 대응, 개인별 배려 사항 반영<br>
+        보유 기간 : 수행 종료 후 1년까지 보관 후 지체 없이 파기<br>
+        「개인정보 보호법」 제23조에 따른 민감정보로, 위 개인정보 동의와 별도로 동의를 받습니다.
+        동의를 거부하실 수 있으나, 거부 시 안전 확인이 어려워 신청 접수가 불가능합니다.
+      </div>
+      <div class="radios"><label><input type="checkbox" id="fHealthConsent"> 동의합니다</label></div>
+
+      <label class="q">기록물 수집 및 이용 동의 (선택)</label>
+      <div class="hint">수행 기간의 후기·사진·영상 등을 콘텐츠 제작에 활용하는 것에 대한 동의입니다. 동의하지 않아도 신청에는 영향이 없습니다.</div>
       <div class="radios">
         <label><input type="radio" name="fRecords" value="동의함">동의함</label>
         <label><input type="radio" name="fRecords" value="동의안함">동의안함</label>
       </div>
       <label class="q">기타 문의 사항</label>
-      <textarea id="fEtc" placeholder="주최 측에 전달하고 싶은 메시지나 궁금한 점"></textarea>
+      <textarea id="fEtc" placeholder="주최 측에 전달하고 싶은 메시지나 궁금한 점" maxlength="1000"></textarea>
+
+      <!-- 스팸 봇 차단용. 사람에게는 보이지 않으며, 값이 채워지면 서버가 접수를 거부합니다. -->
+      <div aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;">
+        <label for="fWebsite">홈페이지 주소</label>
+        <input type="text" id="fWebsite" name="website" tabindex="-1" autocomplete="off">
+      </div>
 
       <button id="submitBtn" type="button">신청하기</button>
       <div class="errMsg" id="errMsg"></div>
@@ -867,6 +892,9 @@ var DEFAULT_CONFIG = {
     ]
   }
 };
+
+// 페이지 진입 시각. 제출까지 걸린 시간을 서버로 보내 봇의 즉시 제출을 걸러냅니다.
+var PAGE_LOADED_AT = Date.now();
 
 var IS_APPS_SCRIPT = (typeof google !== 'undefined') && google.script && google.script.run;
 // 외부 호스팅(GitHub Pages 등)에서 접속한 경우 데이터를 주고받을 구글 API 주소
@@ -1302,9 +1330,9 @@ function renderSubforms() {
             (oldSet.indexOf(o) >= 0 ? ' checked' : '') + '>' + esc(o) + '</label>';
         }).join('') + '</div>';
       } else if (q.type === '장문') {
-        html += '<textarea name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '">' + esc(old) + '</textarea>';
+        html += '<textarea name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" maxlength="1000">' + esc(old) + '</textarea>';
       } else { // 단답
-        html += '<input type="text" name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" value="' + esc(old) + '">';
+        html += '<input type="text" name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" value="' + esc(old) + '" maxlength="200">';
       }
     });
 
@@ -1424,6 +1452,7 @@ function validate() {
     });
   });
   if (!$('fPrivacy').checked) errs.push('개인정보 수집 및 이용에 동의해 주세요.');
+  if (!$('fHealthConsent').checked) errs.push('민감정보(건강 상태) 수집 및 이용에 동의해 주세요.');
   return errs;
 }
 
@@ -1454,8 +1483,12 @@ function submit() {
     motivation: $('fMotivation').value.trim(),
     health: $('fHealth').value.trim(),
     depositorName: $('fDepositor').value.trim(),
+    privacyConsent: $('fPrivacy').checked ? '동의함' : '',
+    healthConsent: $('fHealthConsent').checked ? '동의함' : '',
     recordsConsent: rec ? rec.value : '',
     etc: $('fEtc').value.trim(),
+    website: $('fWebsite').value,                  // 허니팟 : 정상 신청이면 항상 빈 값
+    elapsedMs: Date.now() - PAGE_LOADED_AT,        // 페이지 진입 → 제출까지 걸린 시간
     programs: Object.keys(subs).filter(function (c) { return selected[c]; }).map(function (c) {
       return {
         code: c,
