@@ -120,12 +120,18 @@
   }
   .letterBody p:last-child { margin-bottom: 0; }
   .letterBody::after { content: ''; display: block; clear: both; }
-  /* 아기 사진: 우측에 띄우고 텍스트가 사진을 타고 자연스럽게 흘러내리는 구조 */
-  /* 아기 사진: 뒤쪽 두 문단이 아기 왼쪽을 타고 흘러내리며 우측 하단에 안착 */
+  /* 아기 사진: 우측 float, 텍스트가 사진을 타고 흘러내리는 구조.
+     PC = 우측 하단(뒤쪽 문단 옆), 모바일 = 우측 상단(첫 문단 옆).
+     같은 사진을 posPc/posM 두 장 넣고 뷰포트별로 하나만 표시한다. */
   .letterPhoto {
     float: right; width: min(230px, 44%);
     margin: .3rem -1.1rem 0 1.3rem;
     filter: saturate(70%);             /* 채도 30% 감소 (모양 변화 없음) */
+  }
+  .letterPhoto.posM { display: none; }
+  @media (max-width: 640px) {
+    .letterPhoto.posPc { display: none; }
+    .letterPhoto.posM { display: block; margin-top: .15rem; }
   }
   #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; font-weight: 700; }
 
@@ -453,8 +459,9 @@
         </div>
         <h2 class="letterHead" id="inviteLetterTitle">현대인을 위한 약사여래 체험 수행</h2>
         <div class="letterBody" id="inviteLetterBody">
+          <img class="letterPhoto posM" src="images/baby.png" alt="합장하는 아기">
           <p>溫故而知新 — 옛것을 익혀 새로운 깨달음을 얻듯, 수행은 지혜를 배워 오늘을 새롭게 살아가는 일입니다. 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
-          <img class="letterPhoto" src="images/baby.png" alt="합장하는 아기">
+          <img class="letterPhoto posPc" src="images/baby.png" alt="합장하는 아기">
           <p>과거는 배움으로 남기고, 현재는 수행으로 살아가며, 미래는 서원으로 맞이합니다.</p>
           <p>혜봉 선생님과의 소중한 인연으로 이어진 쉐랍 텐진 선생님의 방한 — 티베트 수행 전통과 약사여래 부처님의 가르침으로 몸과 마음을 정화하고, 자신과 공동체, 인류를 향한 자비심을 키워 가는 여정입니다.</p>
           <p>다음 세대로 이어지는 지혜로운 공동체를 서원하며, 약사여래의 깨달음의 길에 여러분을 소중히 초대합니다.</p>
@@ -1009,10 +1016,10 @@ function render() {
     var paras = s['초대글'].split(/\n\s*\n/).map(function (t) {
       return '<p>' + esc(t).replace(/\n/g, '<br>') + '</p>';
     });
-    // 아기 사진은 두 번째 문단 앞에 넣어, 이후 문단들이 아기를 피해 흘러내리며 우측 하단에 오게 함
+    // 아기 사진 두 장: posPc는 끝에서 세 번째 문단 앞(PC 우측 하단), posM은 맨 앞(모바일 우측 상단)
     // (문단 앞에 넣어야 브라우저가 줄을 접어 텍스트와 절대 겹치지 않음 — 음수 top 여백 금지)
-    var photoTag = '<img class="letterPhoto" src="images/baby.png" alt="합장하는 아기">';
-    paras.splice(Math.max(0, paras.length - 3), 0, photoTag);
+    paras.splice(Math.max(0, paras.length - 3), 0, '<img class="letterPhoto posPc" src="images/baby.png" alt="합장하는 아기">');
+    paras.unshift('<img class="letterPhoto posM" src="images/baby.png" alt="합장하는 아기">');
     $('inviteLetterBody').innerHTML = paras.join('');
   }
 
