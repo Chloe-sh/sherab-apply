@@ -219,7 +219,8 @@
   .prog .sess .when { color: var(--navy); font-weight: 700; font-size: .92rem; }
   .prog .sess .what { font-weight: 600; color: #333; font-size: .92rem; }
   .prog .sess .why { color: #6E6E6E; font-size: .87rem; margin-top: .1rem; }
-  .prog .desc { font-size: .9rem; color: #555; margin-top: .4rem; white-space: pre-line; }
+  .prog .desc { font-size: .9rem; color: #555; margin-top: .45rem; }
+  .prog .desc > div { padding-left: .95em; text-indent: -.95em; }  /* 줄바꿈 시 텍스트 시작점에 맞춰 들여쓰기 */
   .prog .checkline {
     background: #EEF1F7; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
     display: flex; align-items: center; gap: .6rem; font-size: 1rem;
@@ -824,6 +825,7 @@ function applyOverrides(cfg) {
       p.schedule = String(p.schedule || '')
         .replace('4(금)~9.', '4(금) ~ 9.')
         .replace('9:00~17:30', '9:00~18:00');
+      p.desc = String(p.desc || '').replace('닥빠/꿈요가 5일 수행', '닥빠/꿈요가 : 5일 수행');
     }
     // 시간·연도 표기 통일 (시트 원문이 고쳐지면 자동 무력화)
     if (p.code === 'E') {
@@ -1031,13 +1033,16 @@ function renderPrograms() {
     var div = document.createElement('div');
     div.className = 'prog';
     div.id = 'prog-' + p.code;
+    var descHtml = String(p.desc || '').split('\n').map(function (l) {
+      return l.trim() ? '<div>' + esc(l.trim()) + '</div>' : '';
+    }).join('');
     div.innerHTML =
       '<div class="nameBanner">' + esc(p.name) + '</div>' +
       '<div class="cardBody">' +
         '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
-        (p.place ? '<div class="meta">' + esc(p.place) + '</div>' : '') +
-        '<div class="desc">' + esc(p.desc) + '</div>' +
         metaHtml(p) +
+        '<div class="desc">' + descHtml + '</div>' +
+        (p.place ? '<div class="meta">' + esc(p.place) + '</div>' : '') +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
     div.addEventListener('click', function (e) {
