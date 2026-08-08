@@ -54,12 +54,27 @@
     font-size: clamp(1.9rem, 6vw, 2.8rem);
     font-weight: 300; letter-spacing: .04em;
     color: var(--gold-soft); margin-bottom: 1.1rem;
-    /* 따시델렉 펜 라이팅 효과: 왼쪽부터 서서히 드러나며 손으로 쓰는 느낌 */
-    clip-path: inset(-15% 100% -15% 0);
-    animation: tashiWrite 2.4s ease-out .5s forwards;
   }
-  @keyframes tashiWrite { to { clip-path: inset(-15% 0 -15% 0); } }
-  @media (prefers-reduced-motion: reduce) { #gate h1 { animation: none; clip-path: none; } }
+  /* 따시델렉 손글씨 효과: 음절별로 획 윤곽을 따라 그린 뒤(스트로크) 먹이 스미듯 채움 */
+  .tashiSvg { width: min(82vw, 470px); height: auto; overflow: visible; display: block; margin: 0 auto; }
+  .tashiText {
+    font-family: 'Noto Serif Tibetan', serif; font-size: 72px; font-weight: 300; letter-spacing: .04em;
+  }
+  .tashiText tspan {
+    fill: var(--gold-soft); fill-opacity: 0;
+    stroke: var(--gold-soft); stroke-width: 1.1;
+    stroke-dasharray: 700 700; stroke-dashoffset: 700;
+    animation: tashiDraw 1.5s ease-in-out forwards, tashiFill .9s ease-out forwards;
+  }
+  .tashiText tspan:nth-child(1) { animation-delay: .4s, 1.5s; }
+  .tashiText tspan:nth-child(2) { animation-delay: 1.2s, 2.3s; }
+  .tashiText tspan:nth-child(3) { animation-delay: 2.0s, 3.1s; }
+  .tashiText tspan:nth-child(4) { animation-delay: 2.8s, 3.9s; }
+  @keyframes tashiDraw { to { stroke-dashoffset: 0; } }
+  @keyframes tashiFill { to { fill-opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .tashiText tspan { animation: none; stroke-dashoffset: 0; fill-opacity: 1; }
+  }
   #gateTo {
     font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: 1.15rem; letter-spacing: .3em; text-indent: .3em;
@@ -292,8 +307,16 @@
     background: #F7F9FC;
   }
   .subform input[type=text], .subform textarea, .subform select { background: #fff; }
-  .subform h4 { color: var(--navy); font-size: 1.02rem; margin-bottom: .6rem; }
+  .subform h4 {
+    color: var(--navy); font-size: 1.12rem; font-weight: 700;
+    padding-bottom: .8rem; margin-bottom: 1rem; border-bottom: 1px solid #E3EAF4;
+  }
   .subform h4 .code { color: var(--gold); }
+  /* 신청서 배경(#F7F9FC) 위에서는 미니카드·안내박스를 흰색+테두리로 반전해 위계 확보 */
+  .subform .sess { background: #fff; border: 1px solid var(--line); }
+  .subform .sessGrid { margin-top: .2rem; }
+  .subform .infoLine { margin-top: .6rem; }
+  .subform .infoBox { background: #fff; border: 1px solid var(--line); }
 
   /* 폼 요소 */
   label.q { display: block; font-weight: 700; margin: 1rem 0 .35rem; font-size: .98rem; }
@@ -516,7 +539,11 @@
            poster="images/gate.jpg" aria-label="혜봉 선생님과 쉐랍 텐진 선생님"></video>
   </div>
   <div id="gateTo"></div>
-  <h1 id="gateTitle">བཀྲ་ཤིས་བདེ་ལེགས།</h1>
+  <h1 id="gateTitle">
+    <svg class="tashiSvg" viewBox="0 0 640 120" role="img" aria-label="བཀྲ་ཤིས་བདེ་ལེགས། (따시델렉)">
+      <text class="tashiText" x="320" y="82" text-anchor="middle"><tspan>བཀྲ་</tspan><tspan>ཤིས་</tspan><tspan>བདེ་</tspan><tspan>ལེགས།</tspan></text>
+    </svg>
+  </h1>
   <p id="gateText"></p>
   <button id="gateNext" type="button">약사여래 체험 수행 로드맵 보기</button>
   <div id="gateHosts">
@@ -1203,7 +1230,8 @@ function render() {
   document.title = s['사이트제목'] || document.title;
 
   // 게이트
-  $('gateTitle').textContent = s['게이트제목'] || 'བཀྲ་ཤིས་བདེ་ལེགས།';
+  // 게이트 제목: 기본값(따시델렉)일 때는 손글씨 SVG를 유지, 시트에서 다른 문구를 넣었을 때만 교체
+  if (s['게이트제목'] && s['게이트제목'] !== 'བཀྲ་ཤིས་བདེ་ལེགས།') $('gateTitle').textContent = s['게이트제목'];
   $('gateText').textContent = s['게이트문구'] || '';
   $('gateNext').textContent = s['게이트버튼'] || '약사여래 체험 수행 로드맵 보기';
   if (s['게이트이미지URL']) {
