@@ -448,7 +448,7 @@
             <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
             <div class="schedMeta">
               <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
-              <div><span class="lbl">장소</span><span class="val">행복수업협동조합(관악구)</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울 관악구 봉천로31길 3 1층</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -460,7 +460,7 @@
             <div class="tit">꿈요가 — 현대인 스트레스 완화 및 마음챙김</div>
             <div class="schedMeta">
               <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
-              <div><span class="lbl">장소</span><span class="val">행복수업협동조합(관악구)</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울 관악구 봉천로31길 3 1층</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -473,7 +473,7 @@
             <div class="tit">① 한의사 茶談 수행 ② 능행스님 독담(獨談)</div>
             <div class="schedMeta">
               <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울시 관악구 남현동 602-73</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울 관악구 승방10길 2(사당역 4번 출구)</span></div>
               <div><span class="lbl">통역</span><span class="val">① 자홍스님</span></div>
             </div>
           </div>
@@ -485,7 +485,7 @@
             <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠</div>
             <div class="schedMeta">
               <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울시 관악구 남현동 602-73</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울 관악구 승방10길 2(사당역 4번 출구)</span></div>
               <div><span class="lbl">통역</span><span class="val">양지애</span></div>
             </div>
           </div>
@@ -825,6 +825,13 @@ function applyOverrides(cfg) {
       p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
       p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
     }
+  });
+  // 장소를 도로명주소로 통일 (시트 원문이 주소로 바뀌면 자동 무력화)
+  (cfg.programs || []).forEach(function (p) {
+    p.place = String(p.place || '')
+      .replace('행복수업협동조합(관악구)', '서울 관악구 봉천로31길 3 1층')
+      .replace('아나빠나사띠명상요가 3층(사당역 4번 출구)', '서울 관악구 승방10길 2 3층(사당역 4번 출구)')
+      .replace(/^대원사\s?\(전남 보성\)$/, '대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)');
   });
   // 카드 설명: 줄 끝 마침표 제거, 번호(①②…) 없는 줄은 앞에 하이픈
   (cfg.programs || []).forEach(function (p) {
