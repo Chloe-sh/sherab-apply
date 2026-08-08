@@ -1509,7 +1509,11 @@ function submit() {
   var onFail = function (e) {
     btn.disabled = false;
     btn.textContent = '신청하기';
-    errEl.textContent = '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.\n(계속 실패하면 문의처로 연락 바랍니다)';
+    // 서버가 안내 문구를 보내준 경우(중복 접수, 새로고침 필요 등)에는 그대로 보여준다.
+    errEl.textContent = (typeof e === 'string' && e)
+      ? e
+      : '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.\n(계속 실패하면 문의처로 연락 바랍니다)';
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
   if (IS_APPS_SCRIPT) {

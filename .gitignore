@@ -1,0 +1,5 @@
+# Apps Script 백엔드 원본. 이 저장소는 public이므로 커밋 금지.
+Code.gs
+# clasp 로그인 정보 / 프로젝트 ID
+.clasp.json
+.clasprc.json

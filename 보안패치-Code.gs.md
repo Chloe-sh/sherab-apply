@@ -1,187 +1,67 @@
-# Code.gs 보안 패치 (붙여넣기용)
+# Code.gs 보안 패치 — 적용 기록 및 배포 방법
 
-> 이 저장소는 public이라 Code.gs 원본은 들어 있지 않습니다.
-> 마스터 시트 → **확장 프로그램 → Apps Script** 를 열고 아래 내용을 반영하세요.
-> 반영 후 반드시 **배포 → 배포 관리 → 새 버전** 으로 다시 배포해야 적용됩니다.
+**상태: 코드 반영 완료 (2026-08-08). 아직 Apps Script에 붙여넣고 재배포하는 일이 남았습니다.**
 
-## 왜 필요한가
+> `Code.gs` 원본은 이 저장소가 public이라 `.gitignore`로 제외되어 있습니다.
+> 실제 원본은 **마스터 시트 → 확장 프로그램 → Apps Script** 안에만 있습니다.
 
-| # | 위험 | 이 패치가 막는 것 |
+---
+
+## 🔴 배포 순서를 반드시 지킬 것
+
+**`index.html`을 먼저 push한 뒤에 Code.gs를 배포해야 합니다.** 순서가 바뀌면 신청이 **전부 실패**합니다.
+
+새 Code.gs는 신청서에 `동의 여부`, `페이지 체류 시간`, `허니팟` 값이 들어 있기를 요구하는데, 이 값들은 **새 `index.html`만 보냅니다.** 이전 페이지가 살아 있는 상태에서 Code.gs만 먼저 배포하면 모든 신청이 거부됩니다.
+
+```
+① git push          (새 index.html 배포, 12~72초 소요)
+② Apps Script 붙여넣기 → 저장
+③ 배포 → 배포 관리 → 새 버전
+```
+
+브라우저에 이전 페이지가 캐시되어 있는 신청자를 위해, 그런 요청은 오류 대신
+**"신청 페이지가 이전 버전입니다. 새로고침 후 다시 신청해 주세요."** 라는 안내가 나가도록 해두었습니다.
+(`REJECT_MESSAGES['legacy-page']`)
+
+---
+
+## 무엇이 반영되었나
+
+| # | 위험 | 처리 |
 |---|---|---|
-| 1 | **스프레드시트 수식 인젝션** | 신청자가 이름·건강상태·기타문의에 `=IMPORTXML(...)` 을 넣으면 담당자가 시트를 여는 순간 실행되어 옆 셀의 신청자 개인정보가 외부 서버로 전송됨 |
-| 2 | 누구나 호출 가능한 공개 API | `curl` 한 줄로 시트에 무제한 행 삽입 (스팸·데이터 오염) |
-| 3 | 프로그램 코드 미검증 | 클라이언트가 보낸 임의 코드가 그대로 시트에 기록됨 |
-| 4 | 입력 길이 무제한 | 수십 KB 텍스트로 시트 오염 |
+| 1 | **스프레드시트 수식 인젝션** | `safeCell` / `safeDeep`. 시트에 쓰기 직전 `setValues` 앞에서 한 번 더 적용 (이중 방어) |
+| 2 | 누구나 호출 가능한 공개 API | `screenSubmission` — 허니팟, 체류시간, 중복 제출, 시간당 유량 제한 |
+| 3 | 프로그램 코드 미검증 | 형식 검사 + 기존 `feeMap` 대조 |
+| 4 | 입력 길이 무제한 | 문자열 2000자로 절단, 답변 50개·프로그램 20개 상한 |
+| 5 | 동의 여부를 클라이언트만 검사 | 서버에서 `privacyConsent` / `healthConsent` 재검증 |
+| 6 | 내부 오류 메시지 노출 | `doPost`가 시트 구조가 드러나는 메시지 대신 일반 문구 반환 |
+
+### 동시 접수 관련해 같이 고친 것
+
+- `submitApplication`이 이미 잡고 있는 스크립트 락을 `screenSubmission`이 다시 잡고 풀어 버리는 문제를 제거했습니다. 그대로 뒀다면 **동시 접수 시 두 신청이 같은 행에 덮어써질 수 있었습니다.**
+- 락 대기를 `waitLock(20초)` → `tryLock(45초)` 로 바꿔, 접수가 몰려 대기가 길어져도 예외가 아니라 안내 문구가 나가도록 했습니다.
+- `getConfig()`에 60초 캐시를 넣었습니다. 여러 명이 동시에 페이지를 열 때 시트 읽기가 몰리는 것을 막습니다.
 
 ---
 
-## STEP 1 — 헬퍼 함수 추가
+## ⚠️ 앞으로 코드를 고칠 때 지킬 것
 
-Code.gs 아무 곳(맨 아래 권장)에 **그대로 붙여넣기**:
+**`screenSubmission` 안에서 `LockService`를 쓰지 마세요.** `submitApplication`이 이미 스크립트 락을 잡은 채로 호출합니다. 여기서 `releaseLock()`을 하면 바깥 락까지 풀려서, 인수인계서 6장이 경고하는 *"A열 첫 빈 행 찾아 setValues"* 로직이 동시 접수에서 깨집니다. 함수 주석에도 같은 경고를 달아뒀습니다.
 
-```javascript
-// ─────────────────────────────────────────────
-//  보안 헬퍼 (2026-08 추가)
-// ─────────────────────────────────────────────
+**`설정` 탭에 비공개 정보를 넣지 마세요.** `?action=config` 는 인증 없는 공개 API이고, `설정` 탭 전체를 그대로 JSON으로 내보냅니다. 이 탭에 추가하는 모든 행은 인터넷에 공개된다고 생각하셔야 합니다.
 
-/** 시트에 유효한 프로그램 코드. 프로그램이 늘어나면 여기에 추가하세요. */
-var VALID_PROGRAM_CODES = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-/** 시간당 전체 접수 허용 건수. 초과하면 접수를 거부합니다. */
-var MAX_SUBMITS_PER_HOUR = 60;
-
-/** 봇 판별 기준 : 페이지 진입 후 이 시간(ms) 안에 제출되면 거부 */
-var MIN_FILL_MS = 5000;
-
-/**
- * 수식 인젝션 방어 + 길이 제한.
- * 시트에 값을 넣기 전 모든 문자열은 반드시 이 함수를 통과시킬 것.
- * = + - @ 나 탭/개행으로 시작하면 앞에 작은따옴표를 붙여 '텍스트'로 강제한다.
- */
-function safeCell(v, maxLen) {
-  var s = (v === null || v === undefined) ? '' : String(v);
-  s = s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ''); // 제어문자 제거
-  s = s.slice(0, maxLen || 2000);
-  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
-  return s;
-}
-
-/** 객체/배열 안의 모든 문자열에 safeCell 적용 (재귀) */
-function safeDeep(v, maxLen) {
-  if (Array.isArray(v)) return v.map(function (x) { return safeDeep(x, maxLen); });
-  if (v && typeof v === 'object') {
-    var out = {};
-    Object.keys(v).forEach(function (k) { out[k] = safeDeep(v[k], maxLen); });
-    return out;
-  }
-  if (typeof v === 'string') return safeCell(v, maxLen);
-  return v;
-}
-
-/**
- * 제출 요청이 정상인지 검사. 문제가 있으면 사유 문자열을, 정상이면 null을 반환.
- */
-function screenSubmission(data) {
-  // (1) 허니팟 : 사람에게 보이지 않는 필드가 채워졌다면 봇
-  if (data.website) return 'bot:honeypot';
-
-  // (2) 체류시간 : 페이지 열자마자 제출된 요청은 봇
-  var elapsed = Number(data.elapsedMs);
-  if (!isFinite(elapsed) || elapsed < MIN_FILL_MS) return 'bot:too-fast';
-
-  // (3) 필수값 형식 검사
-  var name = String(data.name || '').trim();
-  var phone = String(data.phone || '').trim();
-  if (!name || name.length > 40) return 'invalid:name';
-  if (!/^01[016789][-\s]?\d{3,4}[-\s]?\d{4}$/.test(phone)) return 'invalid:phone';
-  var age = Number(data.age);
-  if (!isFinite(age) || age < 1 || age > 120) return 'invalid:age';
-
-  // (4) 동의 검사 (클라이언트 우회 방지)
-  if (data.privacyConsent !== '동의함') return 'invalid:privacy-consent';
-  if (data.healthConsent !== '동의함') return 'invalid:health-consent';
-
-  // (5) 프로그램 코드 화이트리스트
-  var programs = data.programs || [];
-  if (!programs.length || programs.length > VALID_PROGRAM_CODES.length) return 'invalid:programs';
-  for (var i = 0; i < programs.length; i++) {
-    if (VALID_PROGRAM_CODES.indexOf(String(programs[i].code)) === -1) return 'invalid:code';
-  }
-
-  var cache = CacheService.getScriptCache();
-
-  // (6) 중복 제출 : 같은 번호로 3분 안에 재제출 차단
-  var dupKey = 'dup_' + phone.replace(/\D/g, '');
-  if (cache.get(dupKey)) return 'duplicate';
-  cache.put(dupKey, '1', 180);
-
-  // (7) 전체 유량 제한 : 시간당 MAX_SUBMITS_PER_HOUR 건
-  var lock = LockService.getScriptLock();
-  try {
-    lock.waitLock(5000);
-    var n = Number(cache.get('rate_hour') || 0) + 1;
-    cache.put('rate_hour', String(n), 3600);
-    if (n > MAX_SUBMITS_PER_HOUR) return 'rate-limited';
-  } catch (e) {
-    // 락 획득 실패는 통과시킴 (정상 사용자를 막지 않기 위해)
-  } finally {
-    try { lock.releaseLock(); } catch (e2) {}
-  }
-
-  return null;
-}
-```
+**`설정` 탭을 고쳤는데 페이지가 안 바뀌면** 60초 캐시 때문입니다. 기다리거나, Apps Script에서 `clearConfigCache` 함수를 실행하면 즉시 반영됩니다.
 
 ---
 
-## STEP 2 — `submitApplication` 안에 3줄 끼워넣기
+## 배포 방법
 
-`submitApplication(payloadJson)` 함수에서 **JSON을 파싱한 직후**, 시트에 쓰기 전에:
-
-```javascript
-function submitApplication(payloadJson) {
-  var data = JSON.parse(payloadJson);
-
-  // ★ 추가 ①  요청 선별
-  var reject = screenSubmission(data);
-  if (reject) {
-    Logger.log('접수 거부: ' + reject);
-    return JSON.stringify({ ok: false, error: '접수 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.' });
-  }
-
-  // ★ 추가 ②  이후 시트에 기록되는 모든 값을 텍스트로 무해화
-  data = safeDeep(data, 2000);
-
-  // ... 기존 코드 (접수번호 발급, setValues 등) 그대로 ...
-}
-```
-
-> **주의** — `safeDeep` 을 통과시킨 뒤에는 `data` 안의 값이 전부 문자열입니다.
-> 기존 코드에서 `data.age` 를 숫자로 쓰고 있다면 `Number(data.age)` 로 감싸 주세요.
-
----
-
-## STEP 3 — setValues 직전 최종 방어 (권장)
-
-`sheet.getRange(...).setValues([row])` 형태로 쓰는 부분이 있다면, 그 직전에:
-
-```javascript
-row = row.map(function (v) {
-  return (typeof v === 'string') ? safeCell(v) : v;
-});
-sheet.getRange(...).setValues([row]);
-```
-
-STEP 2에서 이미 걸렀더라도, 나중에 누군가 새 필드를 추가했을 때를 대비한 이중 방어입니다.
-
----
-
-## STEP 4 — 이상 징후 알림 (선택)
-
-`screenSubmission` 이 `rate-limited` 를 반환할 때 담당자에게 메일이 가도록:
-
-```javascript
-if (n > MAX_SUBMITS_PER_HOUR) {
-  var alerted = cache.get('rate_alerted');
-  if (!alerted) {
-    cache.put('rate_alerted', '1', 3600);
-    MailApp.sendEmail(
-      Session.getEffectiveUser().getEmail(),
-      '[약사여래 신청] 비정상 접수 감지',
-      '최근 1시간 접수 시도가 ' + n + '건을 넘어 접수를 차단했습니다. 시트를 확인해 주세요.'
-    );
-  }
-  return 'rate-limited';
-}
-```
-
----
-
-## STEP 5 — 배포
-
-1. Apps Script 편집기에서 **저장**
-2. 우측 상단 **배포 → 배포 관리 → (연필 아이콘) → 버전: 새 버전 → 배포**
-3. 배포 URL은 그대로 유지됩니다. (index.html의 `API_URL` 수정 불필요)
+1. `index.html`을 먼저 push했는지 확인 (위 "배포 순서" 참고)
+2. 시트 → **확장 프로그램 → Apps Script**
+3. `Code.gs` 전체 선택(`Ctrl+A`) → 새 내용 붙여넣기 → `Ctrl+S`
+4. 우측 상단 **배포 → 배포 관리 → (연필 아이콘) → 버전: 새 버전 → 배포**
+   - ⚠️ **"새 배포"를 누르면 URL이 바뀌어 기존 링크가 죽습니다.** 반드시 "배포 관리"로 들어가세요.
+5. 배포 URL은 그대로 유지됩니다. `index.html`의 `API_URL` 은 수정 불필요.
 
 ---
 
@@ -191,13 +71,15 @@ if (n > MAX_SUBMITS_PER_HOUR) {
 |---|---|---|
 | 정상 접수 | 신청 페이지에서 평소처럼 제출 | 접수번호 정상 발급 |
 | 수식 인젝션 방어 | 이름에 `=1+1` 을 넣고 제출 | 시트에 `2` 가 아니라 `=1+1` 이라는 **글자**로 보임 |
-| 봇 차단 | `curl -X POST '<API_URL>' -d '{"name":"봇"}'` | `ok:false` 응답, 시트에 행 추가 안 됨 |
-| 중복 차단 | 같은 번호로 연속 2회 제출 | 두 번째는 실패 |
+| 봇 차단 | `curl -X POST '<API_URL>' -d '{"name":"봇","phone":"010-1111-2222","programs":[{"code":"A"}]}'` | `ok:false` 응답, 시트에 행 추가 안 됨 |
+| 중복 차단 | 같은 번호로 연속 2회 제출 | 두 번째는 "잠시 후 다시" 안내 |
+| 오류 로그 | Apps Script → 실행 기록 | 거부된 요청이 `접수 거부: <사유>` 로 남음 |
 
 ---
 
 ## 이 패치로도 남는 위험
 
-- **마스터 시트 공유 설정** — 시트를 "링크가 있는 모든 사용자"로 바꾸는 순간 전체 신청자 명단이 공개됩니다. 담당자 공유는 반드시 **이메일 지정 공유**로 하세요.
+- **마스터 시트 공유 설정** — "링크가 있는 모든 사용자"로 바꾸는 순간 전체 신청자 명단이 공개됩니다. 담당자 공유는 반드시 **이메일 지정 공유**로 하세요.
 - **git 히스토리** — 이전 커밋에 마스터 시트 주소가 남아 있습니다. 저장소를 계속 public으로 둘 거라면 시트 공유 설정을 비공개로 유지하는 것이 유일한 방어선입니다.
-- **CSV 내보내기** — 시트를 CSV로 받아 Excel에서 열면 Excel 자체의 DDE 경고가 뜰 수 있습니다. STEP 1의 `safeCell` 이 이것도 함께 막아 줍니다.
+- **Code.gs 백업이 구글 계정 안에만 있음** — `.gitignore`로 제외했기 때문에 이 저장소에는 백업이 없습니다. 별도 **비공개** 저장소나 로컬에 사본을 두시는 것을 권합니다.
+- **접수번호 중복 가능성(낮음)** — `yyMMdd-HHmmss` 형식이라 같은 초에 두 건이 접수되면 번호가 겹칩니다. 락 때문에 접수가 직렬화되고 한 건당 수 초가 걸려서 현실적으로는 거의 발생하지 않지만, 완전히 0은 아닙니다.
