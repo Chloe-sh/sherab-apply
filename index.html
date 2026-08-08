@@ -119,18 +119,21 @@
   /* 아기 사진: 우측에 띄우고 텍스트가 사진을 타고 자연스럽게 흘러내리는 구조 */
   .letterPhoto {
     float: right; width: min(230px, 44%);
-    margin: 3.4rem -5mm .6rem 1.3rem;  /* 아래로 내리고(상단여백) 오른쪽으로 5mm 이동 */
+    margin: .3rem -5mm .6rem 1.3rem;   /* 본문 상단부터 우측에 배치 */
     filter: saturate(70%);             /* 채도 30% 감소 (모양 변화 없음) */
   }
   #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; font-weight: 700; }
 
   /* 쉐랍 소개 */
   #sherab .photo { width: min(300px, 70vw); float: none; margin: 0 auto 1.2rem; display: block; border-radius: 10px; }
-  #sherab .bio { white-space: pre-line; font-size: .98rem; color: #3d3d3d; }
+  #sherab .bio {
+    white-space: pre-line; font-size: .98rem; color: #3d3d3d;
+    text-align: justify; word-break: normal; /* 양끝 맞춤 + 끝선에서 글자 단위 개행 */
+  }
 
   /* 혜봉 선생님 소개 */
   #hyebong .bio { font-size: .98rem; color: #3d3d3d; }
-  #hyebong .bio p { text-align: left; overflow-wrap: break-word; margin-bottom: .9rem; }
+  #hyebong .bio p { text-align: justify; word-break: normal; overflow-wrap: break-word; margin-bottom: .9rem; }
   #hyebong .bio p:last-child { margin-bottom: 0; }
 
   /* 수행 안내 배너 */
@@ -390,8 +393,8 @@
         </div>
         <h2 class="letterHead" id="inviteLetterTitle">현대인을 위한 약사여래 체험 수행</h2>
         <div class="letterBody" id="inviteLetterBody">
-          <p>溫故而知新 — 옛것을 익혀 새로운 깨달음을 얻듯, 수행은 지혜를 배워 오늘을 새롭게 살아가는 일입니다. 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
           <img class="letterPhoto" src="images/baby.png" alt="합장하는 아기">
+          <p>溫故而知新 — 옛것을 익혀 새로운 깨달음을 얻듯, 수행은 지혜를 배워 오늘을 새롭게 살아가는 일입니다. 기술 혁명의 시대에도 인간의 마음은 여전히 외로움과 불안 속에서 길을 찾고 있습니다.</p>
           <p>과거는 배움으로 남기고, 현재는 수행으로 살아가며, 미래는 서원으로 맞이합니다.</p>
           <p>혜봉 선생님과의 소중한 인연으로 이어진 쉐랍 텐진 선생님의 방한 — 티베트 수행 전통과 약사여래 부처님의 가르침으로 몸과 마음을 정화하고, 자신과 공동체, 인류를 향한 자비심을 키워 가는 여정입니다.</p>
           <p>다음 세대로 이어지는 지혜로운 공동체를 서원하며, 약사여래의 깨달음의 길에 여러분을 소중히 초대합니다.</p>
@@ -470,11 +473,11 @@
           <div class="date"><b>9.&nbsp;1&nbsp;~ 9.&nbsp;2</b><span class="dow">화 · 수</span></div>
           <div class="main">
             <span class="badge fill">안거 3</span>
-            <div class="tit">① 한의사 茶談 수행 ② 능행스님 독담(獨談)</div>
+            <div class="tit">한의사 茶談 수행</div>
             <div class="schedMeta">
               <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
               <div><span class="lbl">장소</span><span class="val">서울 관악구 승방10길 2(사당역 4번 출구)</span></div>
-              <div><span class="lbl">통역</span><span class="val">① 자홍스님</span></div>
+              <div><span class="lbl">통역</span><span class="val">자홍스님</span></div>
             </div>
           </div>
         </div>
