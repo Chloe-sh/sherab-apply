@@ -1069,6 +1069,19 @@ function $(id) { return document.getElementById(id); }
 function won(n) { return Number(n).toLocaleString('ko-KR') + '원'; }
 // 참가비 표기: 0원인 수행(한의사 차담)은 금액 대신 자율보시로 표시 (시트 기록은 0원 그대로)
 function feeText(p) { return Number(p.fee) === 0 ? '자율보시' : won(p.fee); }
+// D 아나빠나 부분 참가(2026-08-08): 개별 날짜만 고르면 일수 × 9만 원, 전일 참가·미선택이면 기본 참가비
+function effectiveFee(p) {
+  if (p.code !== 'D') return Number(p.fee) || 0;
+  var d = document.querySelector('#subformList .subform[data-code="D"]');
+  if (!d) return Number(p.fee) || 0;
+  var all = false, days = 0;
+  Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox]:checked'), function (c) {
+    if (c.value === '전일 참가') all = true;
+    else if (/^9월 \d+일/.test(c.value)) days++;
+  });
+  return (all || !days) ? (Number(p.fee) || 0) : days * 90000;
+}
+function effectiveFeeText(p) { return Number(p.fee) === 0 ? '자율보시' : won(effectiveFee(p)); }
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -1525,6 +1538,8 @@ function renderSubforms() {
       sync();
     });
 
+    // 참가 일정 변경 시 참가비 계산서 즉시 갱신 (D 부분 참가 일수 계산)
+    d.addEventListener('change', function () { renderFees(); });
     // '전일 참가'를 체크하면 같은 그룹의 개별 날짜 체크는 해제·비활성화
     Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox][value="전일 참가"]'), function (allBox) {
       var group = d.querySelectorAll('input[type=checkbox][name="' + allBox.name + '"]');
@@ -1579,8 +1594,8 @@ function renderFees() {
   var total = 0;
   CONFIG.programs.forEach(function (p) {
     if (!selected[p.code]) return;
-    total += p.fee;
-    rows += '<tr><td>' + esc(p.name) + '</td><td class="amount">' + feeText(p) + '</td></tr>';
+    total += effectiveFee(p);
+    rows += '<tr><td>' + esc(p.name) + '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
   });
   if (!rows) {
     body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
@@ -1713,8 +1728,8 @@ function showDone(receiptNo, payload) {
   var total = 0;
   var lines = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
-    total += p ? p.fee : 0;
-    return esc(p ? p.name : '') + ' — ' + (p ? feeText(p) : won(0));
+    total += p ? effectiveFee(p) : 0;
+    return esc(p ? p.name : '') + ' — ' + (p ? effectiveFeeText(p) : won(0));
   });
   $('doneReceipt').innerHTML =
     '<b>' + esc(payload.name) + '</b> 님 (접수번호 ' + esc(receiptNo) + ')<br>' +
