@@ -350,17 +350,16 @@
     display: flex; align-items: center; justify-content: space-between;
     gap: .7rem; min-height: 1.7rem;
   }
+  /* 카테고리: 시니어 가독성을 위해 도트 → 색 채움 알약 (통역은 테두리 알약이라 역할 구분됨) */
   .schedCard .cat {
-    display: flex; align-items: center; gap: .45rem;
-    font-size: .85rem; font-weight: 600; color: #4E5968; white-space: nowrap;
+    display: inline-flex; align-items: center;
+    font-size: .82rem; font-weight: 600; white-space: nowrap;
+    padding: .22rem .7rem; border-radius: 999px;
+    background: #E8EDF5; color: #33415C;
   }
-  .schedCard .cat::before {
-    content: ''; width: 8px; height: 8px; border-radius: 50%; flex: none;
-    background: var(--navy);
-  }
-  .schedCard .cat.cat-official::before { background: #7F77DD; }
-  .schedCard .cat.cat-lecture::before { background: #1D9E75; }
-  .schedCard .cat.cat-retreat::before { background: #D85A30; }
+  .schedCard .cat.cat-official { background: #EEEDFE; color: #3C3489; }
+  .schedCard .cat.cat-lecture { background: #E1F5EE; color: #085041; }
+  .schedCard .cat.cat-retreat { background: #FAECE7; color: #712B13; }
   .schedCard .interp {
     font-size: .78rem; font-weight: 500; padding: .2rem .65rem;
     border-radius: 999px; background: #F7F9FC; border: 1px solid var(--line);
@@ -920,32 +919,28 @@ function applyOverrides(cfg) {
         p.desc = '';
       }
     }
-    if (p.code === 'E') {
-      p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
-      if (p.schedule.indexOf('/') < 0) {
-        p.schedule += '/한의사 茶談 수행 - ' + String(p.desc || '').trim();
-        p.desc = '';
-      }
-    }
-    if (p.code === 'F') {
-      p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
-      if (p.schedule.indexOf('/') < 0) {
-        p.schedule += '/약사여래 수행 - ' + String(p.desc || '').trim();
-        p.desc = '';
-      }
-    }
-    // 시간·연도 표기 통일 (시트 원문이 고쳐지면 자동 무력화)
+    // ── E·F 공통 규칙: "표기 통일 → 문구 개정 → 미니카드 접기" 순서 고정 ──
+    // 접기(fold)는 desc를 일정 문자열로 흡수하고 비우므로, desc를 고치는 보정은 반드시 접기보다 먼저 와야 한다.
+    // (2026-08-08 실사고: E 블록이 두 개로 갈라져 접기가 먼저 돌면서 개정 문구가 유실됐음 — 블록을 쪼개지 말 것)
     if (p.code === 'E') {
       p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
       p.desc = String(p.desc || '').replace(
         '한의사, 동서양 또는 대체 의학, 치료·웰니스 분야 전문가를 위한 티베트 수행 및 학술 교류',
         '한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다'
       );
+      if (p.schedule.indexOf('/') < 0) {
+        p.schedule += '/한의사 茶談 수행 - ' + String(p.desc || '').trim();
+        p.desc = '';
+      }
     }
     if (p.code === 'F') {
       p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ').replace(/9\. 13\(일\)$/, '9. 13(일) · 숙박');
       p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
       if (!p.account || p.account === '계좌 추후 안내') p.account = '농협 302-1813-2303-91 (박서현)';
+      if (p.schedule.indexOf('/') < 0) {
+        p.schedule += '/약사여래 수행 - ' + String(p.desc || '').trim();
+        p.desc = '';
+      }
     }
   });
   // 장소를 도로명주소로 통일 (시트 원문이 주소로 바뀌면 자동 무력화)
@@ -1069,7 +1064,7 @@ function feeNote(p) {
 function sessionsOf(schedule) {
   var lines = String(schedule || '').trim().split(/\n+/);
   // 이미 "날짜/수행명" 꼴인 한 줄은 사전 분할 없이 그대로 파싱 (날짜의 "26."에서 잘못 쪼개지는 것 방지)
-  if (lines.length === 1 && !/^[0-9.():~\-\s월화수목금토일]+\//.test(lines[0])) {
+  if (lines.length === 1 && !/^[0-9.():~\-\s월화수목금토일·숙박]+\//.test(lines[0])) {
     var parts = lines[0].split(/\.\s+(?=\d{1,2}\.\s*\d{1,2}\s*\()/);
     if (parts.length > 1) {
       lines = parts.map(function (t, i) { return i < parts.length - 1 ? t + '.' : t; });
@@ -1079,7 +1074,7 @@ function sessionsOf(schedule) {
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].trim();
     if (!line) continue;
-    var m = line.match(/^([0-9.():~\-\s월화수목금토일]+)\/(.+)$/);
+    var m = line.match(/^([0-9.():~\-\s월화수목금토일·숙박]+)\/(.+)$/);
     if (!m) return null;                      // 하나라도 다른 꼴이면 기존 방식으로
     var rest = m[2], at = rest.indexOf(' - ');
     out.push({
@@ -1103,7 +1098,7 @@ function metaHtml(p, brief) {
       what = what.replace(/\(참가비 문의\)$/, '').trim();
       why = why ? why + ' · 참가비 문의' : '참가비 문의';
     }
-    var wm = s.when.match(/^(.*\))\s+(\S.*)$/);
+    var wm = s.when.match(/^(.*\))\s+(\d\S*.*)$/);
     var whenHtml = wm ? esc(wm[1]) + ' <span class="t">' + esc(wm[2]) + '</span>' : esc(s.when);
     var whyHtml = esc(why).replace('참가비 문의', '<span style="white-space:nowrap;">참가비 문의</span>');
     return '<div class="sess"><div class="what">' + esc(what) + '</div>' +
