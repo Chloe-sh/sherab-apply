@@ -968,7 +968,7 @@
       <div class="infoBox" id="paymentInfo"></div>
       <div class="infoBox"><b>환불 규정</b><br><span id="refundInfo"></span></div>
       <label class="q">참가비 입금자명</label>
-      <div class="hint">신청자명과 입금자명이 다른 경우만 적어 주세요. 입금 시 "신청자명+수행"으로 입금해 주시면 확인이 빠릅니다.</div>
+      <div class="hint">신청자명과 입금자명이 다른 경우만 적어 주세요.<br>입금 시 "신청자명+신청하신 수행명"으로 입금해 주시면 확인이 빠릅니다.</div>
       <input type="text" id="fDepositor" maxlength="20">
     </section>
 
@@ -1150,8 +1150,8 @@ function applyOverrides(cfg) {
   if (!s['참가비메모D'] || s['참가비메모D'] === '5일') s['참가비메모D'] = '5일 기준, 1일 참여 시 9만 원';
   // 선택 안내에서 중복 선택 안내 문장 제거
   if (s['선택안내']) s['선택안내'] = s['선택안내'].replace(/\s*여러 개를 함께 선택할 수 있습니다\.?/, '').trim();
-  // 표기 통일(2026-08-08 컨펌): 환불규정 물결 앞뒤 띄움
-  if (s['환불규정']) s['환불규정'] = s['환불규정'].replace('3일~6일', '3일 ~ 6일').replace('2일 전~당일', '2일 전 ~ 당일');
+  // 표기 통일(2026-08-08 컨펌): 환불규정 물결 앞뒤 띄움, 환불 문의 줄 앞 ※
+  if (s['환불규정']) s['환불규정'] = s['환불규정'].replace('3일~6일', '3일 ~ 6일').replace('2일 전~당일', '2일 전 ~ 당일').replace(/(^|\n)환불 문의는/, '$1※ 환불 문의는');
   (cfg.programs || []).forEach(function (p) {
     // 각 줄 끝의 불필요한 공백 제거
     if (p.schedule) p.schedule = String(p.schedule).replace(/[ \t]+$/gm, '');
