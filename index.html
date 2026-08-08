@@ -75,6 +75,15 @@
   @media (prefers-reduced-motion: reduce) {
     .tashiText tspan { animation: none; stroke-dashoffset: 0; fill-opacity: 1; }
   }
+  /* 게이트 문구: 따시델렉 획이 다 그려진 뒤에 은은하게 떠오름 (즉시 떠 있으면 붓글씨와 겉돎) */
+  #gate p#gateText {
+    opacity: 0; transform: translateY(10px);
+    animation: gateTextIn 1.4s ease-out 4s forwards;
+  }
+  @keyframes gateTextIn { to { opacity: .92; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #gate p#gateText { animation: none; opacity: .92; transform: none; }
+  }
   #gateTo {
     font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
     font-size: 1.15rem; letter-spacing: .3em; text-indent: .3em;
@@ -1087,7 +1096,7 @@ var DEFAULT_CONFIG = {
     '입금계좌': '국민은행 084-21-0710-611 (김정수)',
     '문의처': '010-9028-8929 / 010-3293-1634',
     '환불규정': '7일 전 취소 : 100% 환불\n3일~6일 전 취소 : 50% 환불\n2일 전~당일 취소 : 환불 불가\n환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.',
-    '완료메시지': '신청이 접수되었습니다.\n참가비 입금 후 확인 문자를 보내드립니다. 감사합니다.'
+    '완료메시지': '약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.'
   },
   programs: [
     // 2026-08-08: 라이브 시트 값과 동일하게 동기화(참가비 확정본). applyOverrides가 라이브와 같은 보정을 거친다.
@@ -1181,6 +1190,10 @@ function applyPersonal() {
 // 나중에 시트 쪽을 직접 고치면 여기 보정은 자동으로 무력화된다.
 function applyOverrides(cfg) {
   var s = cfg.settings || (cfg.settings = {});
+  // 완료 메시지·입금 안내: 2026-08-08 사용자 확정 문구 — 시트 설정 탭 B12·B16이 클립보드 사고로 훼손되어
+  // 이 두 항목만 예외적으로 코드가 정본(무조건 덮어씀). 문구 수정은 여기서 할 것.
+  s['완료메시지'] = '약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.';
+  s['입금안내'] = '아래 계좌로 입금 바랍니다.(선착순 마감)\n경제적 배려가 필요한 분들은 연락 바랍니다.';
   // 참가비 옆 보조 표기: 2026-08-08 확정(기준 기간 + 1일 참여 금액) — 시트가 옛 표기('1일'/'5일')이거나 빈 동안만 보정
   if (!s['참가비메모C'] || s['참가비메모C'] === '1일') s['참가비메모C'] = '2일 기준, 1일 참여 시 9만 원';
   if (!s['참가비메모D'] || s['참가비메모D'] === '5일') s['참가비메모D'] = '5일 기준, 1일 참여 시 9만 원';
@@ -1808,7 +1821,7 @@ function showDone(receiptNo, payload) {
   $('main').classList.add('hidden');
   $('done').classList.remove('hidden');
   window.scrollTo(0, 0);
-  $('doneMsg').textContent = s['완료메시지'] || '신청이 접수되었습니다.';
+  $('doneMsg').textContent = s['완료메시지'] || '약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.';
   var total = 0;
   var rows = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
