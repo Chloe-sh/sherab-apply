@@ -136,25 +136,36 @@
   #hyebong .bio p { text-align: justify; word-break: normal; overflow-wrap: break-word; margin-bottom: .9rem; }
   #hyebong .bio p:last-child { margin-bottom: 0; }
 
-  /* 수행 안내 배너 */
-  .pgGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; margin-top: .8rem; }
-  .pgCard {
-    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 1.3rem 1rem 1.1rem;
-    text-align: center; display: flex; flex-direction: column;
-    align-items: center; justify-content: space-between; gap: .7rem;
+  /* 수행 안내: 쉐랍 배너 + 토스풍 리스트 (제목 · 설명 · 보기 버튼) */
+  .pgList { margin-top: .3rem; }
+  .pgRow {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.05rem .35rem; border-bottom: 1px solid #EFF3F9;
+    border-radius: 10px; cursor: pointer; transition: background .12s;
   }
-  .pgCard h3 { color: var(--navy); font-size: 1.08rem; font-weight: 700; line-height: 1.4; }
-  .pgCard p { font-size: .86rem; color: #333; line-height: 1.55; }
-  .pgCard button {
-    font: inherit; font-size: .92rem; font-weight: 600;
+  .pgRow:hover { background: #F7F9FC; }
+  .pgRow:last-child { border-bottom: none; }
+  .pgRow h3 { flex: none; width: 9.6rem; font-size: 1rem; font-weight: 700; color: #191F28; line-height: 1.45; }
+  .pgRow p { flex: 1; min-width: 0; font-size: .9rem; color: #6B7684; line-height: 1.5; }
+  .pgRow button {
+    flex: none; font: inherit; font-size: .88rem; font-weight: 600;
     background: #E2EBFC; color: var(--navy); border: none; border-radius: 10px;
-    padding: .6rem 1.2rem; cursor: pointer;
+    padding: .5rem 1rem; cursor: pointer; white-space: nowrap;
   }
-  .pgCard.active { outline: 3px solid var(--navy); }
-  /* 쉐랍 사진: 그리드 상단 풀폭 배너 — 사진 좌측 + 타이틀 우측 */
+  /* 모바일: 제목 아래 설명 2단, 버튼은 우측 끝 세로 중앙 고정 */
+  @media (max-width: 560px) {
+    .pgRow {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "tit btn" "desc btn"; gap: .15rem .9rem;
+    }
+    .pgRow h3 { grid-area: tit; width: auto; }
+    .pgRow p { grid-area: desc; }
+    .pgRow button { grid-area: btn; align-self: center; justify-self: end; }
+  }
+  /* 쉐랍 사진: 상단 풀폭 배너 — 사진 좌측 + 타이틀 우측 */
   .pgPhoto {
-    grid-column: 1 / -1; padding: 1rem 1.2rem;
-    background: #EEF3FB; border: none;
+    display: flex; margin-top: .8rem; padding: 1rem 1.2rem;
+    background: #EEF3FB; border: none; border-radius: 16px;
     flex-direction: row; align-items: center; justify-content: center; gap: 1.2rem;
   }
   .pgPhoto img { width: 44%; max-width: 230px; max-height: 250px; object-fit: contain; transform: scaleX(-1); }
@@ -568,56 +579,56 @@
 
     <section class="card" id="practiceGuide">
       <h2 class="sec"><span class="num">4</span>수행 안내</h2>
-      <p class="hint">각 배너의 <b>자세히 보기</b>를 누르면 자세한 설명 창이 열립니다.</p>
-      <div class="pgGrid" id="pgGrid">
-        <div class="pgCard pgPhoto">
-          <img id="pgPhotoImg" src="images/sherab-banner.png" alt="쉐랍 텐진 선생님"
-               onerror="this.onerror=null; this.src=(CONFIG && CONFIG.settings['쉐랍사진URL']) || '';">
-          <div class="bannerText">
-            <div class="tib">བཀྲ་ཤིས་བདེ་ལེགས།</div>
-            <div class="line"></div>
-            <h3>약사여래 수행 안내</h3>
-          </div>
+      <p class="hint">각 항목의 <b>보기</b>를 누르면 자세한 설명 창이 열립니다.</p>
+      <div class="pgPhoto">
+        <img id="pgPhotoImg" src="images/sherab-banner.png" alt="쉐랍 텐진 선생님"
+             onerror="this.onerror=null; this.src=(CONFIG && CONFIG.settings['쉐랍사진URL']) || '';">
+        <div class="bannerText">
+          <div class="tib">བཀྲ་ཤིས་བདེ་ལེགས།</div>
+          <div class="line"></div>
+          <h3>약사여래 수행 안내</h3>
         </div>
-        <div class="pgCard" data-pg="prana">
+      </div>
+      <div class="pgList" id="pgGrid">
+        <div class="pgRow" data-pg="prana">
           <h3>프라나</h3>
-          <p>Prana는 모든 물질 진화의 근원,<br>물체의 원시 에너지</p>
-          <button type="button">자세히 보기</button>
+          <p>Prana는 모든 물질 진화의 근원, 물체의 원시 에너지</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="lung5">
+        <div class="pgRow" data-pg="lung5">
           <h3>다섯 룽</h3>
-          <p>정수리·목·심장·배꼽·비밀 차크라,<br>정서적 막힘 해소</p>
-          <button type="button">자세히 보기</button>
+          <p>정수리·목·심장·배꼽·비밀 차크라, 정서적 막힘 해소</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="breath9">
+        <div class="pgRow" data-pg="breath9">
           <h3>아홉 정화 호흡</h3>
-          <p>세 개의 주요 채널,<br>아홉 번의 호흡</p>
-          <button type="button">자세히 보기</button>
+          <p>세 개의 주요 채널, 아홉 번의 호흡</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="ukjong">
+        <div class="pgRow" data-pg="ukjong">
           <h3>욱죵</h3>
-          <p>차(채널)와 룽(바람)을<br>다루는 정화 수행</p>
-          <button type="button">자세히 보기</button>
+          <p>차(채널)와 룽(바람)을 다루는 정화 수행</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="dream">
+        <div class="pgRow" data-pg="dream">
           <h3>꿈요가</h3>
-          <p>Dream Yoga는 삶과 꿈과 죽음을<br>하나의 여정으로 통합</p>
-          <button type="button">자세히 보기</button>
+          <p>Dream Yoga는 삶과 꿈과 죽음을 하나의 여정으로 통합</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="lungjung">
+        <div class="pgRow" data-pg="lungjung">
           <h3>룽즁쥭 쌍악쑤 닥빠</h3>
-          <p>룽(바람), 즁(날숨), 쥭(들숨)<br>신성한 만트라로 몸과 호흡 여행</p>
-          <button type="button">자세히 보기</button>
+          <p>룽(바람), 즁(날숨), 쥭(들숨) 신성한 만트라로 몸과 호흡 여행</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="naropa">
+        <div class="pgRow" data-pg="naropa">
           <h3>나로파 육법</h3>
-          <p>여섯 가지<br>완성차제 수행.</p>
-          <button type="button">자세히 보기</button>
+          <p>여섯 가지 완성차제 수행</p>
+          <button type="button">보기</button>
         </div>
-        <div class="pgCard" data-pg="bhaisajya">
+        <div class="pgRow" data-pg="bhaisajya">
           <h3>약사여래 수행</h3>
-          <p>12서원의 치유 부처님,<br>무드라와 법구 사용법</p>
-          <button type="button">자세히 보기</button>
+          <p>12서원의 치유 부처님, 무드라와 법구 사용법</p>
+          <button type="button">보기</button>
         </div>
       </div>
       <div id="pgOverlay" class="hidden">
@@ -829,9 +840,9 @@ function applyPersonal() {
 // 나중에 시트 쪽을 직접 고치면 여기 보정은 자동으로 무력화된다.
 function applyOverrides(cfg) {
   var s = cfg.settings || (cfg.settings = {});
-  // 참가비 옆 보조 표기 (기간)
-  if (!s['참가비메모C']) s['참가비메모C'] = '1일';
-  if (!s['참가비메모D']) s['참가비메모D'] = '5일';
+  // 참가비 옆 보조 표기: 2026-08-08 확정(기준 기간 + 1일 참여 금액) — 시트가 옛 표기('1일'/'5일')이거나 빈 동안만 보정
+  if (!s['참가비메모C'] || s['참가비메모C'] === '1일') s['참가비메모C'] = '2일 기준, 1일 참여 시 9만 원';
+  if (!s['참가비메모D'] || s['참가비메모D'] === '5일') s['참가비메모D'] = '5일 기준, 1일 참여 시 9만 원';
   // 선택 안내에서 중복 선택 안내 문장 제거
   if (s['선택안내']) s['선택안내'] = s['선택안내'].replace(/\s*여러 개를 함께 선택할 수 있습니다\.?/, '').trim();
   // 표기 통일(2026-08-08 컨펌): 환불규정 물결 앞뒤 띄움
@@ -839,9 +850,9 @@ function applyOverrides(cfg) {
   (cfg.programs || []).forEach(function (p) {
     // 각 줄 끝의 불필요한 공백 제거
     if (p.schedule) p.schedule = String(p.schedule).replace(/[ \t]+$/gm, '');
-    // 참가비 정정(2026-08-07): 시트 프로그램 탭이 옛 금액인 동안만 보정
+    // 참가비 정정(2026-08-08 확정): C 18만(2일 기준) — 시트가 옛 금액(30만/9만)인 동안만 보정
     // ※ 접수 기록의 '참가비(자동)' 열은 백엔드가 시트 값을 읽으므로 시트 셀도 수정해야 함
-    if (p.code === 'C' && Number(p.fee) === 300000) p.fee = 90000;
+    if (p.code === 'C' && (Number(p.fee) === 300000 || Number(p.fee) === 90000)) p.fee = 180000;
     if (p.code === 'F' && Number(p.fee) === 100000) p.fee = 360000;
     if (p.code === 'C') {
       p.schedule = String(p.schedule || '')
@@ -853,7 +864,7 @@ function applyOverrides(cfg) {
         .replace('30(일)/', '30(일) 9:00~18:00/');
       // 설명을 각 회차 블록 아래에 결합하고 별도 설명 목록은 제거
       p.schedule = p.schedule
-        .replace('꿈요가(1일 9만 원, 2일 18만 원)', '꿈요가(1일 9만 원, 2일 18만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지')
+        .replace('꿈요가(1일 9만 원, 2일 18만 원)', '꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지')
         .replace('닥빠(참가비 문의)', '닥빠(참가비 문의) - 혜봉 선생님 인연을 위한 호흡 수행');
       p.desc = '';
     }
@@ -1414,7 +1425,7 @@ function closePgDetail() {
   document.body.style.overflow = '';
 }
 
-document.querySelectorAll('.pgCard[data-pg]').forEach(function (card) {
+document.querySelectorAll('.pgRow[data-pg]').forEach(function (card) {
   card.addEventListener('click', function () { openPgDetail(card.dataset.pg); });
 });
 $('pgDetailClose').addEventListener('click', closePgDetail);
