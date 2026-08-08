@@ -280,10 +280,11 @@
   .schedLine { white-space: pre-line; }
   /* 일정이 "날짜/프로그램 - 설명" 꼴이면 회차별 미니카드로 구조화해서 표시 (수행 선택 카드·신청서 공용) */
   .sessGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .7rem; margin-top: .85rem; }
-  .sess { background: #F7F9FC; border-radius: 12px; padding: .85rem .95rem; }
+  .sess { background: #F7F9FC; border-radius: 12px; padding: .85rem .95rem; display: flex; flex-direction: column; }
   .sess .what { font-weight: 700; color: #111; font-size: .98rem; }
   .sess .why { color: #6B7684; font-size: .85rem; margin-top: .2rem; line-height: 1.5; }
-  .sess .when { color: var(--navy); font-weight: 700; font-size: .9rem; margin-top: .55rem; font-variant-numeric: tabular-nums; }
+  /* 날짜·시간은 카드 하단 고정: 좌우 카드의 설명 줄 수가 달라도 같은 높이에 정렬 */
+  .sess .when { color: var(--navy); font-weight: 700; font-size: .9rem; margin-top: auto; padding-top: .55rem; font-variant-numeric: tabular-nums; }
   .sess .when .t { font-weight: 400; color: #555; display: block; margin-top: .1rem; }
   /* 모바일: 참가비 기준 문구는 금액 아래 줄로 */
   @media (max-width: 640px) {
@@ -335,6 +336,8 @@
   .radios { display: flex; gap: 1.2rem; flex-wrap: wrap; }
   .radios label { display: flex; align-items: center; gap: .4rem; font-size: .98rem; cursor: pointer; }
   .radios label.dimmed { color: #B0B8C1; cursor: default; }
+  .radios .optNote { margin-left: .15rem; font-size: .82rem; font-weight: 500; color: #8B95A1; }
+  .radios label.dimmed .optNote { color: #C4CBD4; }
   .radios input { width: 1.15rem; height: 1.15rem; accent-color: var(--navy); }
   /* 부가 옵션 (한 단계 들여쓴 하위 선택지) */
   .subOption {
@@ -1198,8 +1201,8 @@ function applyOverrides(cfg) {
   cfg.questions = cfg.questions || {};
   cfg.questions.C = [
     { label: '2일 18만 원 / 1일 9만 원 (부분 참가 가능, 전일 수행 권장) · 도시형 수행(비숙박)', type: '안내', hint: '' },
-    { label: '수행 유/무', type: '유무' },
-    { label: '행복수업협동조합 수행 유/무', type: '하위유무' },
+    { label: '수행 참여 경험 유/무', type: '유무' },
+    { label: '혜봉 선생님 수행 참여 유/무', type: '하위유무' },
     { label: '참여한 경험이 있는 프로그램을 1개 이상 적어 주세요.', type: '장문' }
   ];
   // 한의사 차담(E): 참가 형태·숙박 질문 없음 (빈 배열 = 기본 질문도 쓰지 않음)
@@ -1484,8 +1487,12 @@ function renderSubforms() {
       } else if (q.type === '복수선택') {
         var oldSet = old.split(', ');
         html += '<div class="radios" style="flex-direction:column; gap:.45rem;">' + q.options.map(function (o) {
+          // 참가 일정 옵션 옆 금액 보조 표기(2026-08-08): 전일 40만 원, 개별 날짜 +9만 원
+          var note = '';
+          if (o === '전일 참가') note = '<span class="optNote">40만 원</span>';
+          else if (/^9월 \d+일/.test(o)) note = '<span class="optNote">+9만 원</span>';
           return '<label><input type="checkbox" name="q-' + esc(qid) + '" value="' + esc(o) + '"' +
-            (oldSet.indexOf(o) >= 0 ? ' checked' : '') + '>' + esc(o) + '</label>';
+            (oldSet.indexOf(o) >= 0 ? ' checked' : '') + '>' + esc(o) + note + '</label>';
         }).join('') + '</div>';
       } else if (q.type === '장문') {
         html += '<textarea name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" maxlength="500">' + esc(old) + '</textarea>';
