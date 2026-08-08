@@ -202,20 +202,12 @@
     background: #fff;
   }
   .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); }
-  .prog .head { display: flex; gap: 1rem; padding: 1rem; align-items: flex-start; }
-  .prog .thumb {
-    width: 92px; height: 115px; flex: none; border-radius: 8px; object-fit: cover; background: var(--navy);
+  .prog .nameBanner {
+    background: var(--navy); color: var(--gold-soft);
+    text-align: center; font-weight: 700; font-size: 1.15rem; letter-spacing: .05em;
+    padding: 1.15rem 1rem; border-radius: 10px; margin: 1rem 1rem 0;
   }
-  .prog .thumb.fallback {
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold-soft); font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size: 1.6rem;
-  }
-  .prog .tit { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; }
-  .prog .code {
-    background: var(--gold); color: #fff; font-weight: 700; border-radius: 6px;
-    padding: 0 .5rem; font-size: .9rem;
-  }
-  .prog h3 { font-size: 1.08rem; color: var(--navy); font-weight: 700; }
+  .prog .cardBody { padding: 1rem; }
   .prog .fee { color: var(--gold); font-weight: 700; font-size: 1.02rem; margin-top: .15rem; }
   .prog .meta { font-size: .88rem; color: #666; margin-top: .3rem; white-space: pre-line; }
   .schedLine { white-space: pre-line; }
@@ -224,12 +216,6 @@
   .prog .sess .when { color: var(--navy); font-weight: 700; font-size: .92rem; }
   .prog .sess .what { font-weight: 600; color: #333; font-size: .92rem; }
   .prog .sess .why { color: #6E6E6E; font-size: .87rem; margin-top: .1rem; }
-  /* 모바일: 이미지를 위에 꽉 차게, 텍스트는 그 아래로 */
-  @media (max-width: 640px) {
-    .prog .head { flex-direction: column; gap: .8rem; }
-    .prog .thumb { width: 100%; height: 180px; object-fit: cover; }
-    .prog .thumb.fallback { height: 90px; font-size: 2.2rem; }
-  }
   .prog .desc { font-size: .9rem; color: #555; margin-top: .4rem; white-space: pre-line; }
   .prog .checkline {
     background: #EEF1F7; padding: .6rem 1rem; font-weight: 700; color: var(--navy);
@@ -313,8 +299,8 @@
   .badge.line { background: #F3F4F6; color: #374151; }
   .schedCard .tit { font-weight: 700; font-size: 1.05rem; color: #111; line-height: 1.55; }
   .schedMeta {
-    display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-    gap: .2rem 1.6rem; margin-top: .7rem; max-width: 36rem;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, .65fr);
+    gap: .2rem 1.4rem; margin-top: .7rem; max-width: 42rem;
   }
   /* 모바일: 날짜를 카드 상단 한 줄로 빼고, 본문이 전체 폭 사용 */
   @media (max-width: 640px) {
@@ -417,10 +403,8 @@
     <section class="card" id="hyebong">
       <h2 class="sec"><span class="num">1</span>혜봉 선생님의 명상 생애</h2>
       <div class="bio">
-        <p>혜봉(1956년 경북 영양 출생)은 동국대학교 불교학과를 졸업하고, 1985년 법륜스님과 함께 '정토회'를 설립하시며 대중 수행 지도에 첫발을 내디뎠습니다.</p>
-        <p>1990년대부터 2000년대 중반까지 동사섭·간화선·위빠사나를 거쳐, 2004~2006년에는 인도 다람살라에서 티베트 로종 명상을 공부하셨습니다. 이 인연으로 해외 선지식들을 국내에 초청해 금강승 수행과 티베트 명상을 알리는 데 크게 기여하셨습니다.</p>
-        <p>이후 명상아카데미 설립(1998년), (사)밝은세상 설립(2000년)을 비롯해 명상수행학교 행복수업과 한산명상수행학교를 운영하시고, 한국과 미국을 오가며 현대인을 위한 명상 프로그램을 지도·교육하셨습니다.</p>
-        <p>2017년부터 2023년 입적 전까지는 행복수업협동조합을 설립해 초기·대승·금강승·선불교를 통합한 코칭 수행 체계(알아차림→보리심→다르마→대화·까르마 명상 4단계)를 완성하셨으며, 담마·멘토·선재 스쿨 프로그램을 통해 평화의 리더를 양성하셨습니다.</p>
+        <p>혜봉 선생님은 동국대학교 불교학과를 졸업하고, 1985년 법륜스님과 '정토회'를 설립, 대중 수행 지도에 첫발을 내디뎠습니다. 1990년대부터 동사섭·간화선·위빠사나를 거쳐, 2004년부터는 인도 다람살라에서 티베트 로종 명상을 공부하셨고, 이 인연으로 해외 선지식들을 국내에 초청하여 금강승 수행과 티베트 명상을 전하는 데 기여하셨습니다.</p>
+        <p>이후 명상아카데미와 (사)밝은세상 설립(2000년)을 비롯해 명상수행학교 행복수업과 한산명상수행학교를 운영하시고, 외국에서도 현대인을 위한 명상 프로그램을 교육하셨습니다. 2023년 입적 전까지는 행복수업협동조합을 설립해 초기·대승·금강승·선불교를 통합한 코칭 수행 체계를 완성하셨으며, 담마·멘토·선재 스쿨 프로그램을 통해 평화의 리더를 양성하셨습니다.</p>
       </div>
     </section>
 
@@ -440,7 +424,8 @@
             <span class="badge line">공식행사</span>
             <div class="tit">선명상엑스포 메인 섹션</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">학여울역 세텍 · 동국대 종학연구소</span></div>
+              <div><span class="lbl">주관</span><span class="val">동국대 종학연구소</span></div>
+              <div><span class="lbl">장소</span><span class="val">학여울역 세텍</span></div>
             </div>
           </div>
         </div>
@@ -450,7 +435,8 @@
             <span class="badge line">특강</span>
             <div class="tit">삶에 지친 시민을 만나는 정치인의 자세와 자기수행</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">서울시의회 더불어민주당 간담회장 3층</span></div>
+              <div><span class="lbl">주관</span><span class="val">서울시의회 더불어민주당</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울시의회 더불어민주당 간담회장(3층)</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -461,7 +447,8 @@
             <span class="badge fill">안거 1</span>
             <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">행복수업협동조합</span></div>
+              <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
+              <div><span class="lbl">장소</span><span class="val">행복수업협동조합(관악구)</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -472,7 +459,8 @@
             <span class="badge fill">안거 2</span>
             <div class="tit">꿈요가 — 현대인 스트레스 완화 및 마음챙김</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">행복수업협동조합</span></div>
+              <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
+              <div><span class="lbl">장소</span><span class="val">행복수업협동조합(관악구)</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -484,7 +472,8 @@
             <span class="badge fill">안거 3</span>
             <div class="tit">① 한의사 茶談 수행 ② 능행스님 독담(獨談)</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">아나빠나사띠명상요가</span></div>
+              <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울시 관악구 남현동 602-73</span></div>
               <div><span class="lbl">통역</span><span class="val">① 자홍스님</span></div>
             </div>
           </div>
@@ -495,7 +484,8 @@
             <span class="badge fill">안거 4</span>
             <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">아나빠나사띠명상요가</span></div>
+              <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
+              <div><span class="lbl">장소</span><span class="val">서울시 관악구 남현동 602-73</span></div>
               <div><span class="lbl">통역</span><span class="val">양지애</span></div>
             </div>
           </div>
@@ -504,9 +494,10 @@
           <div class="date"><b>9. 5</b><span class="dow">토</span></div>
           <div class="main">
             <span class="badge line">특강</span>
-            <div class="tit">서울시 요가대회 — 프라나 나디 요가</div>
+            <div class="tit">서울시 요가대회 : 프라나 나디 요가</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">광진어린이공연장 · 서울시 요가회</span></div>
+              <div><span class="lbl">주관</span><span class="val">서울시 요가회</span></div>
+              <div><span class="lbl">장소</span><span class="val">광진어린이공연장</span></div>
             </div>
           </div>
         </div>
@@ -516,7 +507,8 @@
             <span class="badge line">탐방안거</span>
             <div class="tit">법주사 탐방·안거 후 대원사 이동</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">법주사(보은) · 아나빠나사띠명상요가</span></div>
+              <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
+              <div><span class="lbl">장소</span><span class="val">법주사(보은)</span></div>
             </div>
           </div>
         </div>
@@ -526,7 +518,8 @@
             <span class="badge fill">안거 5</span>
             <div class="tit">약사여래 수행</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">대원사(전남 보성) · 혜봉추모기념사업회</span></div>
+              <div><span class="lbl">주관</span><span class="val">혜봉추모기념사업회</span></div>
+              <div><span class="lbl">장소</span><span class="val">대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -833,6 +826,16 @@ function applyOverrides(cfg) {
       p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
     }
   });
+  // 카드 설명: 줄 끝 마침표 제거, 번호(①②…) 없는 줄은 앞에 하이픈
+  (cfg.programs || []).forEach(function (p) {
+    if (!p.desc) return;
+    p.desc = String(p.desc).split('\n').map(function (line) {
+      var t = line.trim().replace(/\.+$/, '');
+      if (!t) return '';
+      if (/^[①②③④⑤⑥⑦⑧⑨⑩\-]/.test(t)) return t;
+      return '- ' + t;
+    }).filter(Boolean).join('\n');
+  });
   // 질문 힌트의 "예)" → "예 : " 통일
   Object.keys(cfg.questions || {}).forEach(function (k) {
     (cfg.questions[k] || []).forEach(function (q) {
@@ -1012,16 +1015,11 @@ function renderPrograms() {
     div.className = 'prog';
     div.id = 'prog-' + p.code;
     div.innerHTML =
-      '<div class="head">' +
-        (p.image
-          ? '<img class="thumb" src="' + esc(p.image) + '" alt="" onerror="this.outerHTML=\'<div class=&quot;thumb fallback&quot;>' + esc(String(p.name || '').charAt(0)) + '</div>\'">'
-          : '<div class="thumb fallback">' + esc(String(p.name || '').charAt(0)) + '</div>') +
-        '<div>' +
-          '<div class="tit"><h3>' + esc(p.name) + '</h3></div>' +
-          '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
-          metaHtml(p) +
-          '<div class="desc">' + esc(p.desc) + '</div>' +
-        '</div>' +
+      '<div class="nameBanner">' + esc(p.name) + '</div>' +
+      '<div class="cardBody">' +
+        '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
+        metaHtml(p) +
+        '<div class="desc">' + esc(p.desc) + '</div>' +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
     div.addEventListener('click', function (e) {
