@@ -408,8 +408,17 @@
   }
   .schedNote { font-size: .9rem; color: #6E6E6E; margin-top: 1.1rem; }
 
-  /* 숙박형 약사여래 수행(안거 5) 세부 일정: 모바일은 날짜별 세로 타임라인, PC는 3단 */
-  .dsBlock { background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; margin-top: 1.1rem; }
+  /* 숙박형 약사여래 수행(안거 5) 세부 일정: 기본 접힘(버튼으로 펼침), 모바일은 날짜별 세로, PC는 통합 타임테이블 */
+  .dsCardBtn {
+    display: block; width: 100%; margin-top: .9rem;
+    font: inherit; font-size: .92rem; font-weight: 600; color: var(--navy);
+    background: #E2EBFC; border: none; border-radius: 10px;
+    padding: .62rem; cursor: pointer; text-align: center;
+    transition: background .12s;
+  }
+  .dsCardBtn:hover { background: #D3E1FA; }
+  .dsBlock { display: none; background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; margin-top: .8rem; }
+  .dsBlock.open { display: block; }
   .dsTitle { background: var(--navy); color: #FBF8F2; padding: 1.1rem 1.3rem; }
   .dsTitle .t { font-weight: 700; font-size: 1.05rem; }
   .dsTitle .s { font-size: .85rem; opacity: .88; margin-top: .2rem; font-variant-numeric: tabular-nums; }
@@ -430,8 +439,23 @@
   .dsList .tm { flex: none; width: 7.2em; color: var(--navy); font-weight: 600; font-size: .88rem; font-variant-numeric: tabular-nums; }
   .dsList .ac { color: #333; word-break: keep-all; }
   .dsNote { font-size: .85rem; color: #6E6E6E; padding: 0 1.3rem 1.1rem; }
+  /* PC 통합 타임테이블: 시간대 한 열 + 날짜별 프로그램 열 (모바일에서는 숨김) */
+  .dsTable { display: none; }
   @media (min-width: 700px) {
-    .dsDays { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 1.7rem; align-items: start; padding-bottom: 1.2rem; }
+    .dsDays { display: none; }
+    .dsTable { display: table; width: calc(100% - 2.6rem); margin: 1rem 1.3rem 1.2rem; border-collapse: collapse; }
+    .dsTable th, .dsTable td {
+      border-bottom: 1px solid #EDF1F7; padding: .55rem .6rem;
+      font-size: .92rem; text-align: left; vertical-align: top; color: #333; word-break: keep-all;
+    }
+    .dsTable thead th { color: var(--navy); font-weight: 700; border-bottom: 2px solid var(--line); white-space: nowrap; }
+    .dsTable thead th .tag {
+      display: block; width: fit-content; margin: .3rem 0 0;
+      font-size: .74rem; font-weight: 600; padding: .14rem .55rem;
+      border-radius: 999px; background: #8E1A3D; color: #fff; white-space: nowrap;
+    }
+    .dsTable td.tm { color: var(--navy); font-weight: 600; font-size: .88rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .dsTable tbody tr:last-child td { border-bottom: none; }
   }
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
@@ -651,8 +675,74 @@
               <span class="when">9.&nbsp;10&nbsp;~ 9.&nbsp;13<span class="dow">목 ~ 일</span></span>
               <span class="place">대원사 · 전남 보성군 문덕면 <span>죽산길 506-8</span></span>
             </div>
+            <button type="button" class="dsCardBtn" onclick="var b=document.getElementById('dsDetail'); var o=b.classList.toggle('open'); this.textContent = o ? '세부 일정 접기 ▴' : '세부 일정 보기 ▾'; if (o) b.scrollIntoView({behavior:'smooth', block:'nearest'});">세부 일정 보기 ▾</button>
           </div>
         </div>
+
+        <div class="dsBlock" id="dsDetail">
+          <div class="dsTitle">
+            <div class="t">숙박형 약사여래 수행 세부 일정</div>
+            <div class="s">2026. 9. 10(목) ~ 9. 13(일) · 보성 대원사</div>
+          </div>
+          <table class="dsTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>9. 10 (목)<span class="tag">첫날 · 입재</span></th>
+                <th>9. 11 ~ 12 (금 · 토)<span class="tag">수행일</span></th>
+                <th>9. 13 (일)<span class="tag">마지막날 · 회향</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="tm">06:00~07:00</td><td></td><td>아침명상</td><td>아침명상</td></tr>
+              <tr><td class="tm">07:00~09:30</td><td></td><td>아침식사 및 휴식</td><td>아침식사 및 휴식</td></tr>
+              <tr><td class="tm">09:30~12:00</td><td></td><td>오전법문</td><td>뿌자와 회향식</td></tr>
+              <tr><td class="tm">12:00~14:00</td><td></td><td>점심식사</td><td>점심식사</td></tr>
+              <tr><td class="tm">14:00~16:00</td><td>접수</td><td rowspan="2">오후 수련</td><td rowspan="5">집으로 (14:00~)</td></tr>
+              <tr><td class="tm">16:00~18:00</td><td>안내와 인사</td></tr>
+              <tr><td class="tm">18:00~19:30</td><td>저녁식사</td><td>저녁식사</td></tr>
+              <tr><td class="tm">19:30~21:30</td><td>저녁수련</td><td>저녁수련</td></tr>
+              <tr><td class="tm">21:30~</td><td>취침</td><td>취침</td></tr>
+            </tbody>
+          </table>
+          <div class="dsDays">
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">9. 10<em>목</em></span><span class="tag">첫날 · 입재</span></div>
+              <ul class="dsList">
+                <li><span class="tm">14:00~16:00</span><span class="ac">접수</span></li>
+                <li><span class="tm">16:00~18:00</span><span class="ac">안내와 인사</span></li>
+                <li><span class="tm">18:00~19:30</span><span class="ac">저녁식사</span></li>
+                <li><span class="tm">19:30~21:30</span><span class="ac">저녁수련</span></li>
+                <li><span class="tm">21:30~</span><span class="ac">취침</span></li>
+              </ul>
+            </div>
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">9. 11 ~ 12<em>금 · 토</em></span><span class="tag">수행일</span></div>
+              <ul class="dsList">
+                <li><span class="tm">06:00~07:00</span><span class="ac">아침명상</span></li>
+                <li><span class="tm">07:00~09:30</span><span class="ac">아침식사 및 휴식</span></li>
+                <li><span class="tm">09:30~12:00</span><span class="ac">오전법문</span></li>
+                <li><span class="tm">12:00~14:00</span><span class="ac">점심식사</span></li>
+                <li><span class="tm">14:00~18:00</span><span class="ac">오후 수련</span></li>
+                <li><span class="tm">18:00~19:30</span><span class="ac">저녁식사</span></li>
+                <li><span class="tm">19:30~21:30</span><span class="ac">저녁수련</span></li>
+                <li><span class="tm">21:30~</span><span class="ac">취침</span></li>
+              </ul>
+            </div>
+            <div class="dsDay">
+              <div class="dsDayHead"><span class="d">9. 13<em>일</em></span><span class="tag">마지막날 · 회향</span></div>
+              <ul class="dsList">
+                <li><span class="tm">06:00~07:00</span><span class="ac">아침명상</span></li>
+                <li><span class="tm">07:00~09:30</span><span class="ac">아침식사 및 휴식</span></li>
+                <li><span class="tm">09:30~12:00</span><span class="ac">뿌자와 회향식</span></li>
+                <li><span class="tm">12:00~14:00</span><span class="ac">점심식사</span></li>
+                <li><span class="tm">14:00~</span><span class="ac">집으로</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
+        </div>
+
         <div class="schedNote">* 모든 일정을 알림대로 준수하겠으나 예기치 못한 경우는 변경될 수도 있습니다.</div>
       </div>
     </section>
