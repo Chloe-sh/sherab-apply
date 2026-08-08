@@ -1078,50 +1078,233 @@
 
 <script>
 // ══════════════════════════════════════════════
-// 로컬 미리보기용 기본 데이터 (실서비스에서는 구글 시트 '설정'/'프로그램' 탭 값 사용)
+// 사이트 데이터 (정본) — 2026-08-08 구글 시트 로드 제거. 문구·참가비·질문 수정은 아래에서 직접.
+// (구글 시트는 접수 저장에만 사용. 아래는 제거 시점의 시트 값 + 코드 보정을 합친 최종본)
 // ══════════════════════════════════════════════
-var DEFAULT_CONFIG = {
-  settings: {
-    '사이트제목': '2026 약사여래 수행 통합 신청',
-    '게이트제목': 'བཀྲ་ཤིས་བདེ་ལེགས།',
-    '게이트문구': '2026 쉐랍 텐진과 함께하는 약사여래 체험 수행',
-    '게이트버튼': '약사여래 체험 수행 로드맵 보기',
-    '게이트이미지URL': '',
-    '초대장이미지URL': '',
-    '쉐랍소개제목': '쉐랍 텐진 (Dr. Sherab Tenzin)',
-    '쉐랍소개': "쉐랍 텐진은 2,500년 전통의 티베트 전통의학 소와 릭빠의 정식 학위(멘 람파)를 지닌 의사이며, 트로가와 린포체로부터 '유톡닝틱' 법맥을 계승한 수행자입니다. 부탄 왕실 주치의로 활동했으며, 내셔널 지오그래픽 및 세계자연기금과 협력하여 히말라야의 멸종위기 약용식물을 보존하는 연구에 참여하셨습니다. 현재 네팔의 파르핑에 퓨어 비전 '소와 릭빠 힐링 센터'를 설립하여 국제적 진료와 교육 활동을 이어오고 계십니다. 한국과는 4년 전부터 매년 약사여래 수행을 통해 한국 수행자를 위한 티베트 불교 전통 수행법과 건강법을 전하고 계십니다.",
-    '쉐랍사진URL': 'images/sherab.jpg',
-    '선택안내': '참가하실 수행을 선택해 주세요. 여러 개를 함께 선택할 수 있습니다.',
-    '입금안내': '참가 신청 후 아래 계좌로 입금 바랍니다. (입금 선착순 마감)\n경제적 배려가 필요한 분들은 연락 바랍니다.',
-    '입금계좌': '국민은행 084-21-0710-611 (김정수)',
-    '문의처': '010-9028-8929 / 010-3293-1634',
-    '환불규정': '7일 전 취소 : 100% 환불\n3일~6일 전 취소 : 50% 환불\n2일 전~당일 취소 : 환불 불가\n환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.',
-    '완료메시지': '약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.'
+var CONFIG_DATA = {
+  "settings": {
+    "사이트제목": "2026 약사여래 수행 통합 신청",
+    "게이트제목": "བཀྲ་ཤིས་བདེ་ལེགས།",
+    "게이트문구": "2026 쉐랍 텐진과 함께하는 약사여래 체험 수행",
+    "게이트버튼": "약사여래 체험 수행 로드맵 보기",
+    "게이트이미지URL": "",
+    "초대장이미지URL": "",
+    "쉐랍소개제목": "쉐랍 텐진 (Dr. Sherab Tenzin)",
+    "쉐랍소개": "쉐랍 텐진은 2,500년 전통의 티베트 전통의학 소와 릭빠의 정식 학위(멘 람파)를 지닌 의사이며, 트로가와 린포체로부터 '유톡닝틱' 법맥을 계승한 수행자입니다. 부탄 왕실 주치의로 활동했으며, 내셔널 지오그래픽 및 세계자연기금과 협력하여 히말라야의 멸종위기 약용식물을 보존하는 연구에 참여하셨습니다. 현재 네팔의 파르핑에 퓨어 비전 '소와 릭빠 힐링 센터'를 설립하여 국제적 진료와 교육 활동을 이어오고 계십니다. 한국과는 4년 전부터 매년 약사여래 수행을 통해 한국 수행자를 위한 티베트 불교 전통 수행법과 건강법을 전하고 계십니다.",
+    "쉐랍사진URL": "https://docs.google.com/forms-images-rt/AI1QifjygdJygRAUxrGCNbFobXyi8cVVFw3oPgux8kboolhq8GxwYvbXCRnN3NMMZmkLP0H00rjZsEMSwpQvJTmXZ_pRTWsFkZVsedSSE_tUo8s7BYluXx8M19suBO_JkmBlXDxpB_RGeNP0utRxwbvKCody7WPNKV5lsrG47u2dn7VNODGrX0BXjkn0NUIHkbbnUcN-UZDL5P-UFA=w850",
+    "선택안내": "참가하실 수행을 선택해 주세요.",
+    "입금안내": "아래 계좌로 입금 바랍니다.(선착순 마감)\n경제적 배려가 필요한 분들은 연락 바랍니다.",
+    "입금계좌": "국민은행 084-21-0710-611 (김정수)",
+    "문의처": "010-9028-8929 / 010-3293-1634",
+    "환불규정": "7일 전 취소 : 100% 환불\n3일 ~ 6일 전 취소 : 50% 환불\n2일 전 ~ 당일 취소 : 환불 불가\n※ 환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.",
+    "완료메시지": "약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.",
+    "참가비메모C": "2일 기준, 1일 참여 시 9만 원",
+    "참가비메모D": "5일 기준, 1일 참여 시 9만 원"
   },
-  programs: [
-    // 2026-08-08: 라이브 시트 값과 동일하게 동기화(참가비 확정본). applyOverrides가 라이브와 같은 보정을 거친다.
-    { code: 'C', name: '행복수업협동조합', fee: 90000, schedule: '26. 8. 26(수) ~ 27(목)/① 꿈요가(1일 9만 원, 2일 18만 원)\n26. 8. 29(토) ~ 30(일)/② 룽즁쥭 쌍악쑤 닥빠(참가비 문의)', place: '행복수업협동조합(관악구)', desc: '① 잠든 상태에서도 깨어 있는 알아차림 유지.\n② 혜봉님 인연을 위한 호흡 수행.', account: '계좌 추후 안내', image: 'images/card3.jpg' },
-    { code: 'D', name: '아나빠나사띠명상요가', fee: 400000, schedule: '26. 9. 4(금) ~ 9. 8(화) 9:00~17:30', place: '아나빠나사띠명상요가 3층(사당역 4번 출구)', desc: '욱죵/룽즁쥭 쌍악쑤 닥빠/꿈요가 5일 수행\n수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.', account: '국민은행 084-21-0710-611 (김정수)', image: 'images/card4.jpg' },
-    { code: 'E', name: '한의사 茶談 수행', fee: 0, schedule: '26. 9. 1(화) ~ 9. 2(수) PM 8시~PM10시', place: '아나빠나사띠명상요가 3층(사당역 4번 출구)', desc: '한의사, 동서양 또는 대체 의학, 치료·웰니스 분야 전문가를 위한 티베트 수행 및 학술 교류', account: '계좌 추후 안내', image: 'images/card5.jpg' },
-    { code: 'F', name: '혜봉추모기념사업회', fee: 360000, schedule: '2026. 9. 10(목) ~ 9. 13(일)', place: '대원사 (전남 보성)', desc: '혜봉 선생님의 수행 정신과 가르침을 기리며, 모든 중생이 질병과 고통에서 벗어나기를 서원한 약사여래의 지혜와 자비를 함께 닦는 수행입니다.', account: '계좌 추후 안내', image: 'images/card5.jpg' },
+  "programs": [
+    {
+      "code": "C",
+      "name": "행복수업협동조합",
+      "fee": 180000,
+      "schedule": "26. 8. 26(수) ~ 27(목) 9:00~18:00/룽즁쥭 쌍악쑤 닥빠(참가비 문의) - 혜봉 선생님 인연을 위한 호흡 수행\n26. 8. 29(토) ~ 30(일) 9:00~18:00/꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지",
+      "place": "서울 관악구 봉천로31길 3 1층",
+      "desc": "",
+      "image": "https://docs.google.com/forms-images-rt/AI1QifjhSrwNroLGPVkG0ZKfWN9bd-90hdNjM6fS8X5oe6HB3p9hBuO9eau4JLFpaE5MUhjYCovMoEnHSW75CSSI4nSyeD1kLzlnCIpi7ZQI8fn_J0ySnMFapKx4p7nbVoXJjGT0hY8f1HvzBEB_hYCxKok9EJPcRkfnwc6JV7E3E2QLybbBz8O3JIICZprMHMaoGjA1zqEVtD-txg=w520",
+      "account": "계좌 추후 안내",
+      "phone": "010-6685-6957"
+    },
+    {
+      "code": "D",
+      "name": "아나빠나사띠명상요가",
+      "fee": 400000,
+      "schedule": "26. 9. 4(금) ~ 9. 8(화) 9:00~18:00/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.",
+      "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
+      "desc": "",
+      "image": "https://docs.google.com/forms-images-rt/AI1Qifja51QTn_zjxy1TyKy1Z1Y6IC9CrBXkScq7OsnbyDS-a5X3AoIpJHJpMo7Zr3uAq1Ezv612_Rhysh-x5kRTZpN861INAeZ_Daz_w4it3tGxPE_M_6pL2nFLJYwNMUAbQGxjIvzyP9rtFtX3QoISRTJXWxFhGFGb_krus6GORkX8v5wDhAsLjTyEzXJHtWz6Foi4W5wlNH2rgg=w520",
+      "account": "국민은행 084-21-0710-611 (김정수)",
+      "phone": "010-6313-9189"
+    },
+    {
+      "code": "E",
+      "name": "한의사 茶談 수행",
+      "fee": 0,
+      "schedule": "26. 9. 1(화) ~ 9. 2(수) 20:00~22:00/한의사 茶談 수행 - 한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.",
+      "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
+      "desc": "",
+      "image": "",
+      "account": "국민은행 084-21-0710-611 (김정수)",
+      "phone": "010-6313-9189"
+    },
+    {
+      "code": "F",
+      "name": "혜봉추모기념사업회",
+      "fee": 360000,
+      "schedule": "26. 9. 10(목) ~ 9. 13(일) · 숙박/약사여래 수행 - 혜봉 선생님의 수행 정신과 가르침을 기리며, 모든 중생이 질병과 고통에서 벗어나기를 서원한 약사여래의 지혜와 자비를 함께 닦는 수행입니다.",
+      "place": "대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)",
+      "desc": "",
+      "image": "https://docs.google.com/forms-images-rt/AI1Qifhv4Ruy4-1UWStDensVPVjK6PMX0czRJ3dOr2VEza-6I64QFQTYx0WuElxI2lnKyGJ89G4MyVJGYJHksIV8L9lN5uDlirhu_0hj5D__aWSIS_vAzGzEWjsDcg4ZkYPvdLNsSKKxJsnHMg6JxlLDBRDIl41ReeIEba0uMhY6700fp98OpZ6PZY8g2_stEAyNQAhPTKNOObBlsQ=w520",
+      "account": "농협 302-1813-2303-91 (박서현)",
+      "phone": "010-3007-6631"
+    }
   ],
-  // 프로그램별 신청서 질문 (실서비스에서는 시트의 '질문' 탭에서 관리)
-  questions: {
-    'C': [
-      { order: 1, label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
-      { order: 2, label: '부분 참가 시 참가 가능 시간', type: '단답', options: [], required: false, hint: '' },
-      { order: 3, label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
+  "questions": {
+    "A": [
+      {
+        "order": 1,
+        "label": "참가 일정",
+        "type": "복수선택",
+        "options": [
+          "전일 참가",
+          "9월 4일(금)",
+          "9월 5일(토)",
+          "9월 6일(일)",
+          "9월 7일(월)",
+          "9월 8일(화)"
+        ],
+        "required": true,
+        "hint": "전일 참가를 권장하나 부분 참가도 가능합니다."
+      },
+      {
+        "order": 2,
+        "label": "부분 참가 시 참가 가능 시간",
+        "type": "단답",
+        "options": [],
+        "required": false,
+        "hint": "예 : 9/5(토) 오후 수업부터 참가 가능합니다."
+      },
+      {
+        "order": 3,
+        "label": "숙박 필요 여부",
+        "type": "선택",
+        "options": [
+          "필요",
+          "불필요"
+        ],
+        "required": true,
+        "hint": "공간이 한정되어 있으니 필요하신 분은 미리 신청 바랍니다."
+      }
     ],
-    'D': [
-      { order: 1, label: '참가 일정', type: '복수선택', options: ['전일 참가', '9월 4일(금)', '9월 5일(토)', '9월 6일(일)', '9월 7일(월)', '9월 8일(화)'], required: true, hint: '전일 참가를 권장하나 부득이한 경우 부분 참가도 가능합니다.' },
-      { order: 2, label: '부분 참가 시 참가 가능 시간과 식사 여부', type: '단답', options: [], required: false, hint: '예) 9/5(토) 오후 수업부터 참가 가능합니다.' },
-      { order: 3, label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '공간이 한정되어 있습니다.' }
+    "B": [
+      {
+        "order": 1,
+        "label": "참가 형태",
+        "type": "선택",
+        "options": [
+          "전일 참가",
+          "부분 참가"
+        ],
+        "required": true,
+        "hint": ""
+      },
+      {
+        "order": 2,
+        "label": "부분 참가 시 참가 가능 시간",
+        "type": "단답",
+        "options": [],
+        "required": false,
+        "hint": ""
+      },
+      {
+        "order": 3,
+        "label": "숙박 필요 여부",
+        "type": "선택",
+        "options": [
+          "필요",
+          "불필요"
+        ],
+        "required": true,
+        "hint": ""
+      }
     ],
-    'E': [
-      { order: 1, label: '참가 형태', type: '선택', options: ['전일 참가', '부분 참가'], required: true, hint: '' },
-      { order: 2, label: '부분 참가 시 참가 가능 시간', type: '단답', options: [], required: false, hint: '' },
-      { order: 3, label: '숙박 필요 여부', type: '선택', options: ['필요', '불필요'], required: true, hint: '' }
-    ]
+    "C": [
+      {
+        "label": "2일 18만 원 / 1일 9만 원 (부분 참가 가능, 전일 수행 권장) · 도시형 수행(비숙박)",
+        "type": "안내",
+        "hint": ""
+      },
+      {
+        "label": "수행 참여 경험 유/무",
+        "type": "유무"
+      },
+      {
+        "label": "혜봉 선생님 수행 참여 유/무",
+        "type": "하위유무"
+      },
+      {
+        "label": "참여하셨던 혜봉 선생님 프로그램을 1개 이상 적어 주세요.",
+        "type": "장문",
+        "hint": "(혜봉 선생님 수행 참여 '유' 선택하신 분만 해당)"
+      }
+    ],
+    "D": [
+      {
+        "order": 1,
+        "label": "참가 일정",
+        "type": "복수선택",
+        "options": [
+          "전일 참가",
+          "9월 4일(금)",
+          "9월 5일(토)",
+          "9월 6일(일)",
+          "9월 7일(월)",
+          "9월 8일(화)"
+        ],
+        "required": true,
+        "hint": "전일 참가를 권장하나 부득이한 경우 부분 참가도 가능합니다."
+      },
+      {
+        "order": 2,
+        "label": "부분 참가 시 참가 가능 시간",
+        "type": "단답",
+        "options": [],
+        "required": false,
+        "hint": "예 : 9/5(토) 오후 수업부터 참가 가능합니다."
+      },
+      {
+        "order": 3,
+        "label": "숙박 필요 여부",
+        "type": "선택",
+        "options": [
+          "필요",
+          "불필요"
+        ],
+        "required": true,
+        "hint": "공간이 한정되어 있습니다."
+      }
+    ],
+    "F": [
+      {
+        "order": 1,
+        "label": "참가 형태",
+        "type": "선택",
+        "options": [
+          "전일 참가",
+          "부분 참가"
+        ],
+        "required": true,
+        "hint": ""
+      },
+      {
+        "order": 2,
+        "label": "부분 참가 시 참가 가능 시간",
+        "type": "단답",
+        "options": [],
+        "required": false,
+        "hint": ""
+      },
+      {
+        "order": 3,
+        "label": "숙박 필요 여부",
+        "type": "선택",
+        "options": [
+          "필요",
+          "불필요"
+        ],
+        "required": true,
+        "hint": ""
+      }
+    ],
+    "E": []
   }
 };
 
@@ -1184,137 +1367,10 @@ function applyPersonal() {
   if (f && !f.value) f.value = PERSONAL_NAME;
 }
 
-// ── 시트 미반영분 코드 보정 ──
-// 시트에 직접 넣지 못한 수정을 코드에서 적용.
-// 문자열 치환은 시트 원문이 패턴과 일치할 때만 동작하므로,
-// 나중에 시트 쪽을 직접 고치면 여기 보정은 자동으로 무력화된다.
-function applyOverrides(cfg) {
-  var s = cfg.settings || (cfg.settings = {});
-  // 완료 메시지·입금 안내: 2026-08-08 사용자 확정 문구 — 시트 설정 탭 B12·B16이 클립보드 사고로 훼손되어
-  // 이 두 항목만 예외적으로 코드가 정본(무조건 덮어씀). 문구 수정은 여기서 할 것.
-  s['완료메시지'] = '약사여래 수행과 연결되었습니다.\n참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.';
-  s['입금안내'] = '아래 계좌로 입금 바랍니다.(선착순 마감)\n경제적 배려가 필요한 분들은 연락 바랍니다.';
-  // 참가비 옆 보조 표기: 2026-08-08 확정(기준 기간 + 1일 참여 금액) — 시트가 옛 표기('1일'/'5일')이거나 빈 동안만 보정
-  if (!s['참가비메모C'] || s['참가비메모C'] === '1일') s['참가비메모C'] = '2일 기준, 1일 참여 시 9만 원';
-  if (!s['참가비메모D'] || s['참가비메모D'] === '5일') s['참가비메모D'] = '5일 기준, 1일 참여 시 9만 원';
-  // 선택 안내에서 중복 선택 안내 문장 제거
-  if (s['선택안내']) s['선택안내'] = s['선택안내'].replace(/\s*여러 개를 함께 선택할 수 있습니다\.?/, '').trim();
-  // 표기 통일(2026-08-08 컨펌): 환불규정 물결 앞뒤 띄움, 환불 문의 줄 앞 ※
-  if (s['환불규정']) s['환불규정'] = s['환불규정'].replace('3일~6일', '3일 ~ 6일').replace('2일 전~당일', '2일 전 ~ 당일').replace(/(^|\n)환불 문의는/, '$1※ 환불 문의는');
-  (cfg.programs || []).forEach(function (p) {
-    // 각 줄 끝의 불필요한 공백 제거
-    if (p.schedule) p.schedule = String(p.schedule).replace(/[ \t]+$/gm, '');
-    // 참가비 정정(2026-08-08 확정): C 18만(2일 기준) — 시트가 옛 금액(30만/9만)인 동안만 보정
-    // ※ 접수 기록의 '참가비(자동)' 열은 백엔드가 시트 값을 읽으므로 시트 셀도 수정해야 함
-    if (p.code === 'C' && (Number(p.fee) === 300000 || Number(p.fee) === 90000)) p.fee = 180000;
-    if (p.code === 'F' && Number(p.fee) === 100000) p.fee = 360000;
-    // 기관별 문의 전화(2026-08-08 사용자 제공) — 시트에 열이 없어 코드로 주입. E(차담)는 아나빠나(D)와 동일
-    var PHONE = { C: '010-6685-6957', D: '010-6313-9189', E: '010-6313-9189', F: '010-3007-6631' };
-    if (!p.phone && PHONE[p.code]) p.phone = PHONE[p.code];
-    if (p.code === 'C') {
-      p.schedule = String(p.schedule || '')
-        .replace('26.8.26(수)~27(목)', '26. 8. 26(수) ~ 27(목)')
-        .replace(/\n8\.\s*29\(토\)~30\(일\)/, '\n26. 8. 29(토) ~ 30(일)')
-        .replace(/(② ?룽즁쥭 쌍악쑤 닥빠)$/, '$1(참가비 문의)')
-        .replace(/[①②]\s?/g, '')
-        .replace('27(목)/', '27(목) 9:00~18:00/')
-        .replace('30(일)/', '30(일) 9:00~18:00/');
-      // 설명을 각 회차 블록 아래에 결합하고 별도 설명 목록은 제거
-      p.schedule = p.schedule
-        .replace('꿈요가(1일 9만 원, 2일 18만 원)', '꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지')
-        .replace('닥빠(참가비 문의)', '닥빠(참가비 문의) - 혜봉 선생님 인연을 위한 호흡 수행');
-      p.desc = '';
-    }
-    if (p.code === 'D') {
-      p.schedule = String(p.schedule || '')
-        .replace('4(금)~9.', '4(금) ~ 9.')
-        .replace('9:00~17:30', '9:00~18:00');
-      // 회차 미니카드 템플릿(날짜/수행명 - 설명)으로 변환 — 시트에 이미 '/'가 있으면 건드리지 않음
-      if (p.schedule.indexOf('/') < 0) {
-        p.schedule += '/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.';
-        p.desc = '';
-      }
-    }
-    // ── E·F 공통 규칙: "표기 통일 → 문구 개정 → 미니카드 접기" 순서 고정 ──
-    // 접기(fold)는 desc를 일정 문자열로 흡수하고 비우므로, desc를 고치는 보정은 반드시 접기보다 먼저 와야 한다.
-    // (2026-08-08 실사고: E 블록이 두 개로 갈라져 접기가 먼저 돌면서 개정 문구가 유실됐음 — 블록을 쪼개지 말 것)
-    if (p.code === 'E') {
-      // 장소·문의·계좌는 아나빠나사띠(D)와 동일 (2026-08-08 사용자 확정)
-      if (!p.account || p.account === '계좌 추후 안내') p.account = '국민은행 084-21-0710-611 (김정수)';
-      p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
-      p.desc = String(p.desc || '').replace(
-        '한의사, 동서양 또는 대체 의학, 치료·웰니스 분야 전문가를 위한 티베트 수행 및 학술 교류',
-        '한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.'
-      );
-      if (p.schedule.indexOf('/') < 0) {
-        p.schedule += '/한의사 茶談 수행 - ' + String(p.desc || '').trim();
-        p.desc = '';
-      }
-    }
-    if (p.code === 'F') {
-      p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ').replace(/9\. 13\(일\)$/, '9. 13(일) · 숙박');
-      p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
-      if (!p.account || p.account === '계좌 추후 안내') p.account = '농협 302-1813-2303-91 (박서현)';
-      if (p.schedule.indexOf('/') < 0) {
-        p.schedule += '/약사여래 수행 - ' + String(p.desc || '').trim();
-        p.desc = '';
-      }
-    }
-  });
-  // 장소를 도로명주소로 통일 (시트 원문이 주소로 바뀌면 자동 무력화)
-  (cfg.programs || []).forEach(function (p) {
-    p.place = String(p.place || '')
-      .replace('행복수업협동조합(관악구)', '서울 관악구 봉천로31길 3 1층')
-      .replace('아나빠나사띠명상요가 3층(사당역 4번 출구)', '서울 관악구 승방10길 2 3층(사당역 4번 출구)')
-      .replace(/^대원사\s?\(전남 보성\)$/, '대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)');
-  });
-  // 카드 설명: 줄 끝 마침표 제거. 두 줄 이상 목록일 때만 앞에 하이픈
-  (cfg.programs || []).forEach(function (p) {
-    if (!p.desc) return;
-    var lines = String(p.desc).split('\n').map(function (line) {
-      return line.trim().replace(/\.+$/, '');
-    }).filter(Boolean);
-    p.desc = lines.map(function (t) {
-      if (lines.length < 2) return t;
-      if (/^[①②③④⑤⑥⑦⑧⑨⑩\-]/.test(t)) return t;
-      return '- ' + t;
-    }).join('\n');
-  });
-  // 질문 힌트의 "예)" → "예 : " 통일
-  Object.keys(cfg.questions || {}).forEach(function (k) {
-    (cfg.questions[k] || []).forEach(function (q) {
-      if (q.hint) q.hint = String(q.hint).replace(/^예\)\s*/, '예 : ');
-    });
-  });
-  // 행복수업(C) 신청서: 2026-08-07 지시 내용으로 교체
-  cfg.questions = cfg.questions || {};
-  cfg.questions.C = [
-    { label: '2일 18만 원 / 1일 9만 원 (부분 참가 가능, 전일 수행 권장) · 도시형 수행(비숙박)', type: '안내', hint: '' },
-    { label: '수행 참여 경험 유/무', type: '유무' },
-    { label: '혜봉 선생님 수행 참여 유/무', type: '하위유무' },
-    { label: '참여하셨던 혜봉 선생님 프로그램을 1개 이상 적어 주세요.', type: '장문', hint: '(혜봉 선생님 수행 참여 \'유\' 선택하신 분만 해당)' }
-  ];
-  // 한의사 차담(E): 참가 형태·숙박 질문 없음 (빈 배열 = 기본 질문도 쓰지 않음)
-  cfg.questions.E = [];
-  return cfg;
-}
-
-// ── 설정 불러오기 ──
+// ── 설정 적용 (구글 시트 로드 없음 — CONFIG_DATA가 정본) ──
 function loadConfig() {
-  if (IS_APPS_SCRIPT) {
-    google.script.run
-      .withSuccessHandler(function (json) { CONFIG = applyOverrides(JSON.parse(json)); render(); })
-      .withFailureHandler(function () { CONFIG = applyOverrides(DEFAULT_CONFIG); render(); })
-      .getConfig();
-  } else if (IS_API_MODE) {
-    fetch(API_URL + '?action=config')
-      .then(function (r) { return r.json(); })
-      .then(function (cfg) { CONFIG = applyOverrides(cfg); render(); })
-      .catch(function () { CONFIG = applyOverrides(DEFAULT_CONFIG); render(); });
-  } else {
-    CONFIG = applyOverrides(DEFAULT_CONFIG);
-    render();
-  }
+  CONFIG = CONFIG_DATA;
+  render();
 }
 
 function render() {
