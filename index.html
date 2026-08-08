@@ -817,9 +817,11 @@ function applyOverrides(cfg) {
         .replace(/[①②]\s?/g, '')
         .replace('27(목)/', '27(목) 9:00~18:00/')
         .replace('30(일)/', '30(일) 9:00~18:00/');
-      p.desc = String(p.desc || '')
-        .replace('호흡 수행(참가비 문의)', '호흡 수행')
-        .replace('혜봉님 인연', '혜봉 선생님 인연');
+      // 설명을 각 회차 블록 아래에 결합하고 별도 설명 목록은 제거
+      p.schedule = p.schedule
+        .replace('꿈요가(1일 9만 원, 2일 18만 원)', '꿈요가(1일 9만 원, 2일 18만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지')
+        .replace('닥빠(참가비 문의)', '닥빠(참가비 문의) - 혜봉 선생님 인연을 위한 호흡 수행');
+      p.desc = '';
     }
     if (p.code === 'D') {
       p.schedule = String(p.schedule || '')
@@ -1052,7 +1054,7 @@ function renderPrograms() {
       '<div class="cardBody">' +
         '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
         metaHtml(p) +
-        '<div class="desc">' + descHtml + '</div>' +
+        (descHtml ? '<div class="desc">' + descHtml + '</div>' : '') +
         (p.place ? '<div class="meta">' + esc(p.place) + '</div>' : '') +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
