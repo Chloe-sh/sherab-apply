@@ -1604,7 +1604,7 @@ function metaHtml(p, brief) {
     var wm = s.when.match(/^(.*\))\s+(\d\S*.*)$/);
     var whenHtml = wm ? esc(wm[1]) + ' <span class="t">' + esc(wm[2]) + '</span>' : esc(s.when);
     var whyHtml = feeAsk
-      ? '<span class="feeAsk">' + esc((why ? why + ' ' : '') + '참가비 문의') + '</span>'
+      ? '<span class="feeAsk">' + esc(why) + (why ? '<br>' : '') + '참가비 문의</span>'
       : esc(why);
     return '<div class="sess"><div class="what">' + esc(what) + '</div>' +
       (!brief && (why || feeAsk) ? '<div class="why">' + whyHtml + '</div>' : '') +
