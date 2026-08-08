@@ -850,15 +850,17 @@ function applyOverrides(cfg) {
       .replace('아나빠나사띠명상요가 3층(사당역 4번 출구)', '서울 관악구 승방10길 2 3층(사당역 4번 출구)')
       .replace(/^대원사\s?\(전남 보성\)$/, '대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)');
   });
-  // 카드 설명: 줄 끝 마침표 제거, 번호(①②…) 없는 줄은 앞에 하이픈
+  // 카드 설명: 줄 끝 마침표 제거. 두 줄 이상 목록일 때만 앞에 하이픈
   (cfg.programs || []).forEach(function (p) {
     if (!p.desc) return;
-    p.desc = String(p.desc).split('\n').map(function (line) {
-      var t = line.trim().replace(/\.+$/, '');
-      if (!t) return '';
+    var lines = String(p.desc).split('\n').map(function (line) {
+      return line.trim().replace(/\.+$/, '');
+    }).filter(Boolean);
+    p.desc = lines.map(function (t) {
+      if (lines.length < 2) return t;
       if (/^[①②③④⑤⑥⑦⑧⑨⑩\-]/.test(t)) return t;
       return '- ' + t;
-    }).filter(Boolean).join('\n');
+    }).join('\n');
   });
   // 질문 힌트의 "예)" → "예 : " 통일
   Object.keys(cfg.questions || {}).forEach(function (k) {
