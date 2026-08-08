@@ -294,6 +294,7 @@
   .sess { background: #F7F9FC; border-radius: 12px; padding: .85rem .95rem; display: flex; flex-direction: column; }
   .sess .what { font-weight: 700; color: #111; font-size: .98rem; }
   .sess .why { color: #6B7684; font-size: .85rem; margin-top: .2rem; line-height: 1.5; }
+  .sess .feeAsk { background: #FFF3BF; color: #5C4A00; padding: .05rem .4rem; border-radius: 4px; white-space: nowrap; }
   /* 날짜·시간은 카드 하단 고정: 좌우 카드의 설명 줄 수가 달라도 같은 높이에 정렬 */
   .sess .when { color: var(--navy); font-weight: 700; font-size: .9rem; margin-top: auto; padding-top: .55rem; font-variant-numeric: tabular-nums; }
   .sess .when .t { font-weight: 400; color: #555; display: block; margin-top: .1rem; }
@@ -486,7 +487,6 @@
   .dsList li:last-child { border-bottom: none; }
   .dsList .tm { flex: none; width: 7.2em; color: var(--navy); font-weight: 600; font-size: .88rem; font-variant-numeric: tabular-nums; }
   .dsList .ac { color: #333; word-break: keep-all; }
-  .dsNote { font-size: .85rem; color: #6E6E6E; padding: 0 1.3rem 1.1rem; }
   /* PC 통합 타임테이블: 시간대 한 열 + 날짜별 프로그램 열 (모바일에서는 숨김) */
   .dsTable { display: none; }
   @media (min-width: 700px) {
@@ -735,7 +735,6 @@
               </ul>
             </div>
           </div>
-          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
         </div>
         <div class="dsBlock" id="ds2">
           <div class="dsTitle">
@@ -777,7 +776,6 @@
               </ul>
             </div>
           </div>
-          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
         </div>
 
         <div class="schedMonth">2026년 9월</div>
@@ -852,7 +850,7 @@
         <div class="dsBlock" id="ds4">
           <div class="dsTitle">
             <div class="t">욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 세부 일정</div>
-            <div class="s">2026. 9. 4(금) ~ 9. 8(화) · 아나빠나사띠명상요가</div>
+            <div class="s">2026. 9. 4(금) ~ 9. 8(화) · 아나빠나사띠명상요가 · 5일 수행</div>
           </div>
           <table class="dsTable">
             <thead>
@@ -903,7 +901,6 @@
               </ul>
             </div>
           </div>
-          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
         </div>
 
         <div class="dsBlock" id="dsDetail">
@@ -967,7 +964,6 @@
               </ul>
             </div>
           </div>
-          <div class="dsNote">* 위의 일정은 부득이할 경우 유동적일 수 있음을 이해 바랍니다.</div>
         </div>
 
         <div class="schedNote">* 모든 일정을 알림대로 준수하겠으나 예기치 못한 경우는 변경될 수도 있습니다.</div>
@@ -1579,18 +1575,19 @@ function metaHtml(p, brief) {
   var sess = sessionsOf(p.schedule);
   if (!sess) return '<div class="metaWhen">' + esc(String(p.schedule || '').replace(/\)\s+(\d{1,2}:\d{2})/, ') · $1')) + '</div>';
   return '<div class="sessGrid">' + sess.map(function (s) {
-    // 카드 상단 참가비와 중복되는 금액 괄호는 지우고, '참가비 문의'는 설명 줄로 이동
+    // 카드 상단 참가비와 중복되는 금액 괄호는 지우고, '참가비 문의'는 설명 줄 끝의 연노랑 하이라이트로
     var what = s.what.replace('(2일 18만 원, 1일 9만 원)', '').trim();
     var why = s.why || '';
+    var feeAsk = false;
     if (/\(참가비 문의\)$/.test(what)) {
       what = what.replace(/\(참가비 문의\)$/, '').trim();
-      why = why ? why + ' · 참가비 문의' : '참가비 문의';
+      feeAsk = true;
     }
     var wm = s.when.match(/^(.*\))\s+(\d\S*.*)$/);
     var whenHtml = wm ? esc(wm[1]) + ' <span class="t">' + esc(wm[2]) + '</span>' : esc(s.when);
-    var whyHtml = esc(why).replace('참가비 문의', '<span style="white-space:nowrap;">참가비 문의</span>');
+    var whyHtml = esc(why) + (feeAsk ? (why ? ' ' : '') + '<span class="feeAsk">참가비 문의</span>' : '');
     return '<div class="sess"><div class="what">' + esc(what) + '</div>' +
-      (!brief && why ? '<div class="why">' + whyHtml + '</div>' : '') +
+      (!brief && (why || feeAsk) ? '<div class="why">' + whyHtml + '</div>' : '') +
       '<div class="when">' + whenHtml + '</div></div>';
   }).join('') + '</div>';
 }
@@ -2025,7 +2022,7 @@ var PG_DATA = {
   ukjong: { t: '욱죵', b: '티베트에서 뚬모는 요가에 의해 발생시키는 특수한 몸의 열, 심신의 상관성의 온기(溫氣)를 말합니다. 무한한 자연의 기(氣, 프라나)를 채취하여 체내에 축적한 뒤 그것을 사용해 정액을 신비한 불의 에너지로 바꾸어 신경 계통의 통로로 움직이게 합니다. 욱죵은 티베트 전통에서 \'차(채널)\'와 \'룽(바람, 프라나)\'을 다루는 정화 수행입니다. 몸속 미세한 통로를 따라 흐르는 바람에는 지혜의 바람과 업의 바람 두 갈래가 있다고 설명하며, 욱죵은 호흡과 함께 이 흐름을 다루어 막힌 통로를 열어주는 역할을 합니다.\n전통적으로는 정수리·목·심장·배꼽·비밀 차크라 다섯 지점을 중심으로 지·수·화·풍·공 다섯 원소에 상응하는 다섯 갈래의 수행으로 구성되어 전승된 티베트 수행입니다.\n\'몸·말·마음, 세 개의 문\' 틀 전체를 다룹니다. 몸 수행은 "아홉 프라나" 개념과 만트라를 통해 수행이 진행됩니다. 다섯 룽 동작과 아홉 정화 호흡의 구체적인 수행으로 이보다 더 깊은 단계로 나아가게 할 수행입니다.' },
   dream: { t: '꿈요가 (Dream Yoga)', b: '우리의 각성과 몽환의 양극의 의식으로부터 깨어있음으로 잠들어 꿈꾸는 동안에도 깨어 있는 자각을 잃지 않는 것을 목표로 하는 수행입니다.\n낮 동안의 의도 세우기와 구루요가 같은 기초 수행에서 시작해, 꿈 속에서 지금이 꿈임을 알아차리는 단계, 나아가 꿈의 내용을 자유롭게 바꾸고 변형하는 단계로 나아갑니다.\n삶에서든 중유(中有, 중음)의 상태이든 윤회적으로(또는 카르마) 된 모든 체험은 꿈임을 체험하는 수행입니다.\n결국 꿈 수행에서 얻은 자각을 깊은 잠(수면요가·정광명)과 죽음 이후의 중음(바르도) 상태까지 이어, 삶과 꿈과 죽음을 하나의 수행 여정으로 통합하는 것을 돕습니다.' },
   lungjung: { t: '룽즁쥭 쌍악쑤 닥빠', b: '룽(바람)·즁(날숨)·쥭(들숨)의 흐름을 따라 신성한 만트라(쌍악쑤 닥빠)를 몸과 호흡에 새기는 수행입니다.\n호흡과 명상 기법을 통해 미세한 바람을 중앙 채널로 이끌어 모으고 머무르게 하는 것이 이 수행의 핵심 원리로 전해집니다. 룽즁쥭 쌍악쑤 닥빠는 티베트 밀교 전통에서 \'금강 염송(rdo rje bzlas pa)\'이라 불리는 호흡-만트라 결합 수행입니다.\n들숨-머묾-날숨 세 단계에 씨앗 만트라(옴-아-훔)를 붙여 마음으로 새기며, 좌우로 흩어진 바람을 중앙 채널로 모아들이는 것이 핵심 원리로 전해집니다. 형태와 소리와 색깔과 진리의 비밀스런 상관관계를 통해 자신을 발달시킵니다. 침묵 만트라와 사마타와 호흡을 함께 세 채널과 다섯 차크라를 정화하며, 정수리·목·심장·배꼽·비밀 차크라에 대응하는 몸과 호흡과 결합해 수행합니다. 외적(몸동작)·내적(에너지)·비밀(마음) 세 층위로 심화되며, 슬픔이 놓이면 기쁨이, 분노가 놓이면 사랑이 드러난다는 식으로 각 정서적 막힘의 해소를 체험할 수 있습니다. 인간의 의식을 윤회계의 한 존재 상태에서 다른 존재 상태로 전이시키는 수행을 제공합니다.' },
-  naropa: { t: '나로파 육법(六法)이란', b: '인도의 성취자 틸로파의 가르침을 제자 나로파가 체계화한 6가지 완성차제 수행입니다.\n* 4개의 탄트라 : 진여(眞如), 또는 궁극적 진리, 밀교, 요기(샥띠) 탄트라, 칼라차크라 탄트라\n1. 생멸열(內火, 뚬모)요가 — 호흡과 관상으로 몸속 바람을 중맥·심장 차크라로 모아 내적인 열과 정광명을 여는 수행. 나머지 다섯 수행의 토대가 됩니다.\n2. 환신(幻身) 요가 — 모든 현상이 실체 없는 환영과 같음을 몸으로 체득하는 수행\n3. 몽환(夢幻, 꿈요가) 요가 — 꿈 속에서 깨어 있는 자각을 유지하는 수행\n4. 정광명(淨光明)요가 — 가장 미세한 마음의 본성인 맑은 빛을 직접 체험하는 수행\n5. 중음(中陰, 바르도) 요가 — 죽음과 삶 사이의 상태를 수행의 여정으로 전환하는 수행\n6. 의식전이(포와) 요가 — 임종의 순간 의식을 정토로 옮기는 수행' },
+  naropa: { t: '나로파 육법(六法)이란', b: '인도의 성취자 틸로파의 가르침을 제자 나로파가 체계화한 6가지 완성차제 수행입니다.\n* 4개의 탄트라 : 진여(眞如), 또는 궁극적 진리, 밀교, 요기(샥띠) 탄트라, 칼라차크라 탄트라\n1. 생멸열(內火, 뚬모)요가 — 호흡과 관상으로 몸속 바람을 중맥·심장 차크라로 모아 내적인 열과 정광명을 여는 수행. 나머지 다섯 수행의 토대가 됩니다.\n2. 환신(幻身) 요가 — 모든 현상이 실체 없는 환영과 같음을 몸으로 체득하는 수행\n3. 몽환(夢幻, 꿈요가) 요가 — 꿈 속에서 깨어 있는 자각을 유지하는 수행\n4. 정광명(淨光明)요가 — 가장 미세한 마음의 본성인 맑은 빛을 직접 체험하는 수행\n5. 중음(中陰, 바르도) 요가 — 죽음과 삶 사이의 상태를 수행의 여정으로 전환하는 수행\n6. 의식전이 요가 — 임종의 순간 의식을 정토로 옮기는 수행' },
   bhaisajya: { t: '약사여래 수행', b: '모든 중생이 질병과 고통에서 벗어나 건강하고 평화로운 삶을 살아가기를 서원하신 12서원의 부처님.\n치유의 부처님 수행, 법본을 바탕으로 약사여래 수행의 의미를 새기고, 다양한 무드라와 법구 사용법을 익힐 예정입니다.' }
 };
 
