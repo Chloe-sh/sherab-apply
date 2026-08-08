@@ -289,43 +289,58 @@
   }
   .schedMonth:first-child { margin-top: .2rem; }
   .schedMonth::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-  .schedCard {
-    background: #F7F9FC; border: none; border-radius: 16px;
-    margin-bottom: .8rem; padding: 1.15rem 1.2rem;
-    display: flex; gap: 1.15rem; align-items: flex-start;
+  .schedGrid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: .9rem; margin-bottom: .5rem;
   }
-  .schedCard .date {
-    flex: none; width: 4.9rem; text-align: left;
-    color: var(--navy); line-height: 1.45; padding-top: .1rem;
+  .schedCard {
+    background: #F7F9FC; border: none; border-radius: 20px;
+    padding: 1.3rem 1.4rem; min-height: 200px;
+    display: flex; flex-direction: column;
+  }
+  .schedCard .top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: .7rem; min-height: 1.7rem;
+  }
+  .schedCard .cat {
+    display: flex; align-items: center; gap: .45rem;
+    font-size: .85rem; font-weight: 600; color: #4E5968; white-space: nowrap;
+  }
+  .schedCard .cat::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%; flex: none;
+    background: var(--navy);
+  }
+  .schedCard .cat.cat-official::before { background: #7F77DD; }
+  .schedCard .cat.cat-lecture::before { background: #1D9E75; }
+  .schedCard .cat.cat-retreat::before { background: #D85A30; }
+  .schedCard .interp {
+    font-size: .78rem; font-weight: 500; padding: .2rem .65rem;
+    border-radius: 999px; background: #fff; border: 1px solid var(--line);
+    color: #4E5968; white-space: nowrap;
+  }
+  .schedCard .tit {
+    font-weight: 700; font-size: 1.15rem; color: #111;
+    line-height: 1.5; margin-top: .7rem; word-break: keep-all;
+  }
+  .schedCard .host { font-size: .85rem; color: #6E6E6E; margin-top: .35rem; }
+  .schedCard .sp { flex: 1; min-height: 1.1rem; }
+  .schedCard .btm {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: .4rem .9rem; flex-wrap: wrap;
+  }
+  .schedCard .when {
+    font-weight: 700; color: var(--navy); white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
-  .schedCard .date b { font-weight: 700; font-size: 1.1rem; }
-  .schedCard .date .dow { display: block; font-weight: 400; font-size: .9rem; color: #555; margin-top: .25rem; }
-  .schedCard .main { flex: 1; min-width: 0; }
-  .badge {
-    display: inline-block; font-size: .82rem; font-weight: 600; letter-spacing: .03em;
-    border-radius: 6px; padding: .18rem .55rem; margin-bottom: .45rem; white-space: nowrap;
+  .schedCard .when .dow { font-weight: 400; font-size: .85rem; color: #555; margin-left: .4rem; }
+  .schedCard .place {
+    font-size: .85rem; color: #4E5968; text-align: right;
+    line-height: 1.5; min-width: 0; word-break: keep-all; margin-left: auto;
   }
-  .badge.fill { background: #E2EBFC; color: var(--navy); }
-  .badge.line { background: #fff; color: #4E5968; }
-  .schedCard .tit { font-weight: 700; font-size: 1.05rem; color: #111; line-height: 1.55; }
-  .schedMeta {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, .65fr);
-    gap: .2rem 1.4rem; margin-top: .7rem; max-width: 42rem;
-  }
-  /* 모바일: 날짜를 카드 상단 한 줄로 빼고, 본문이 전체 폭 사용 */
   @media (max-width: 640px) {
-    .schedCard { display: block; }
-    .schedCard .date {
-      display: flex; align-items: baseline; gap: .6rem;
-      width: auto; padding-top: 0; margin-bottom: .6rem;
-    }
-    .schedCard .date .dow { margin-top: 0; }
-    .schedMeta { grid-template-columns: 1fr; gap: .55rem; }
+    .schedCard { min-height: 0; padding: 1.15rem 1.2rem; }
+    .schedCard .sp { min-height: .9rem; }
   }
-  .schedMeta > div { min-width: 0; }
-  .schedMeta .lbl { display: block; font-size: .82rem; color: #6E6E6E; margin-bottom: .12rem; }
-  .schedMeta .val { font-size: .98rem; color: #333; line-height: 1.5; }
   .schedNote { font-size: .9rem; color: #6E6E6E; margin-top: 1.1rem; }
 
   /* 아래로 내려가세요 안내 (수행 선택 → 기본 정보 사이) */
@@ -428,109 +443,122 @@
       <h2 class="sec"><span class="num">3</span>일정표</h2>
       <div id="scheduleBody">
         <div class="schedMonth">2026년 8월</div>
-        <div class="schedCard">
-          <div class="date"><b>8.&nbsp;22&nbsp;~ 8.&nbsp;23</b><span class="dow">토 · 일</span></div>
-          <div class="main">
-            <span class="badge line">공식행사</span>
+        <div class="schedGrid">
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-official">공식행사</span>
+            </div>
             <div class="tit">서울국제명상엑스포</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">동국대 종학연구소</span></div>
-              <div><span class="lbl">장소</span><span class="val">학여울역 SETEC 2전시실</span></div>
+            <div class="host">동국대 종학연구소</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">8.&nbsp;22&nbsp;~ 8.&nbsp;23<span class="dow">토 · 일</span></span>
+              <span class="place">학여울역 SETEC 2전시실</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>8. 24</b><span class="dow">월</span></div>
-          <div class="main">
-            <span class="badge line">특강</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-lecture">특강</span>
+              <span class="interp">통역 지덕스님</span>
+            </div>
             <div class="tit">삶에 지친 시민을 만나는 정치인의 자세와 자기수행</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">서울시의회 더불어민주당</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울시의회 더불어민주당 간담회장(3층)</span></div>
-              <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
+            <div class="host">서울시의회 더불어민주당</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">8. 24<span class="dow">월</span></span>
+              <span class="place">서울시의회 더불어민주당 간담회장(3층)</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>8.&nbsp;26&nbsp;~ 8.&nbsp;27</b><span class="dow">수 · 목</span></div>
-          <div class="main">
-            <span class="badge fill">안거 1</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-retreat">안거 1</span>
+              <span class="interp">통역 지덕스님</span>
+            </div>
             <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울 관악구 봉천로31길 3 1층</span></div>
-              <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
+            <div class="host">행복수업협동조합</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">8.&nbsp;26&nbsp;~ 8.&nbsp;27<span class="dow">수 · 목</span></span>
+              <span class="place">서울 관악구 봉천로31길 3 1층</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>8.&nbsp;29&nbsp;~ 8.&nbsp;30</b><span class="dow">토 · 일</span></div>
-          <div class="main">
-            <span class="badge fill">안거 2</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-retreat">안거 2</span>
+              <span class="interp">통역 지덕스님</span>
+            </div>
             <div class="tit">꿈요가 — 현대인 스트레스 해소 및 마음챙김</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">행복수업협동조합</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울 관악구 봉천로31길 3 1층</span></div>
-              <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
+            <div class="host">행복수업협동조합</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">8.&nbsp;29&nbsp;~ 8.&nbsp;30<span class="dow">토 · 일</span></span>
+              <span class="place">서울 관악구 봉천로31길 3 1층</span>
             </div>
           </div>
         </div>
         <div class="schedMonth">2026년 9월</div>
-        <div class="schedCard">
-          <div class="date"><b>9.&nbsp;1&nbsp;~ 9.&nbsp;2</b><span class="dow">화 · 수</span></div>
-          <div class="main">
-            <span class="badge fill">안거 3</span>
+        <div class="schedGrid">
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-retreat">안거 3</span>
+              <span class="interp">통역 자홍스님</span>
+            </div>
             <div class="tit">한의사 茶談 수행</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울 관악구 승방10길 2(사당역 4번 출구)</span></div>
-              <div><span class="lbl">통역</span><span class="val">자홍스님</span></div>
+            <div class="host">아나빠나사띠명상요가</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">9.&nbsp;1&nbsp;~ 9.&nbsp;2<span class="dow">화 · 수</span></span>
+              <span class="place">서울 관악구 승방10길 2(사당역 4번 출구)</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>9.&nbsp;4&nbsp;~ 9.&nbsp;8</b><span class="dow">금 ~ 화</span></div>
-          <div class="main">
-            <span class="badge fill">안거 4</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-retreat">안거 4</span>
+              <span class="interp">통역 양지애</span>
+            </div>
             <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
-              <div><span class="lbl">장소</span><span class="val">서울 관악구 승방10길 2(사당역 4번 출구)</span></div>
-              <div><span class="lbl">통역</span><span class="val">양지애</span></div>
+            <div class="host">아나빠나사띠명상요가</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">9.&nbsp;4&nbsp;~ 9.&nbsp;8<span class="dow">금 ~ 화</span></span>
+              <span class="place">서울 관악구 승방10길 2(사당역 4번 출구)</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>9. 5</b><span class="dow">토</span></div>
-          <div class="main">
-            <span class="badge line">특강</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-lecture">특강</span>
+            </div>
             <div class="tit">서울시 요가대회 : 프라나 나디 요가</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">서울시 요가회</span></div>
-              <div><span class="lbl">장소</span><span class="val">광진어린이공연장</span></div>
+            <div class="host">서울시 요가회</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">9. 5<span class="dow">토</span></span>
+              <span class="place">광진어린이공연장</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>9.&nbsp;9&nbsp;~ 9.&nbsp;10</b><span class="dow">수 · 목</span></div>
-          <div class="main">
-            <span class="badge line">탐방안거</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-retreat">탐방안거</span>
+            </div>
             <div class="tit">법주사 탐방·안거 후 대원사 이동</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">아나빠나사띠명상요가</span></div>
-              <div><span class="lbl">장소</span><span class="val">법주사(보은)</span></div>
+            <div class="host">아나빠나사띠명상요가</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">9.&nbsp;9&nbsp;~ 9.&nbsp;10<span class="dow">수 · 목</span></span>
+              <span class="place">법주사(보은)</span>
             </div>
           </div>
-        </div>
-        <div class="schedCard">
-          <div class="date"><b>9.&nbsp;10&nbsp;~ 9.&nbsp;13</b><span class="dow">목 ~ 일</span></div>
-          <div class="main">
-            <span class="badge fill">안거 5</span>
+          <div class="schedCard">
+            <div class="top">
+              <span class="cat cat-retreat">안거 5</span>
+              <span class="interp">통역 지덕스님</span>
+            </div>
             <div class="tit">약사여래 수행</div>
-            <div class="schedMeta">
-              <div><span class="lbl">주관</span><span class="val">혜봉추모기념사업회</span></div>
-              <div><span class="lbl">장소</span><span class="val">대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)</span></div>
-              <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
+            <div class="host">혜봉추모기념사업회</div>
+            <div class="sp"></div>
+            <div class="btm">
+              <span class="when">9.&nbsp;10&nbsp;~ 9.&nbsp;13<span class="dow">목 ~ 일</span></span>
+              <span class="place">대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)</span>
             </div>
           </div>
         </div>
