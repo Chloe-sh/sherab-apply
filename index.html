@@ -210,27 +210,34 @@
     padding: .9rem; cursor: pointer;
   }
 
-  /* 프로그램 카드 */
+  /* 프로그램 카드 (2026-08-08 B안: 흰 카드 + 회차 미니카드 그리드) */
   .prog {
-    border: 2px solid #E3E9F4; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
     margin-bottom: 1rem; cursor: pointer; transition: border-color .15s, box-shadow .15s;
     background: #fff;
   }
   .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); }
   .prog .nameBanner {
-    color: var(--navy);
-    text-align: left; font-weight: 700; font-size: 1.2rem; letter-spacing: .02em;
-    padding: 1.1rem 1rem 0;
+    color: #111;
+    text-align: left; font-weight: 700; font-size: 1.18rem; letter-spacing: .01em;
+    padding: 1.15rem 1.2rem 0;
   }
-  .prog .cardBody { padding: .45rem 1rem 1rem; }
-  .prog .fee { color: var(--gold); font-weight: 700; font-size: 1.02rem; margin-top: .15rem; }
+  .prog .cardBody { padding: .35rem 1.2rem 1.05rem; }
+  .prog .feeLine { margin-top: .3rem; }
+  .prog .feeAmt { color: var(--navy); font-weight: 700; font-size: 1rem; }
+  .prog .feeSub { font-size: .84rem; color: #6B7684; margin-left: .45rem; }
   .prog .meta { font-size: .88rem; color: #6B7684; margin-top: .3rem; white-space: pre-line; }
   .schedLine { white-space: pre-line; }
-  /* 일정이 "날짜/프로그램 - 설명" 꼴이면 회차별 블록으로 구조화해서 표시 */
-  .prog .sess { margin-top: .55rem; padding-left: .65rem; border-left: 3px solid var(--line); }
-  .prog .sess .when { color: var(--navy); font-weight: 700; font-size: .92rem; }
-  .prog .sess .what { font-weight: 600; color: #333; font-size: .92rem; }
-  .prog .sess .why { color: #6E6E6E; font-size: .87rem; margin-top: .1rem; }
+  /* 일정이 "날짜/프로그램 - 설명" 꼴이면 회차별 미니카드로 구조화해서 표시 (수행 선택 카드·신청서 공용) */
+  .sessGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .7rem; margin-top: .85rem; }
+  .sess { background: #F7F9FC; border-radius: 12px; padding: .85rem .95rem; }
+  .sess .what { font-weight: 700; color: #111; font-size: .98rem; }
+  .sess .why { color: #6B7684; font-size: .85rem; margin-top: .2rem; line-height: 1.5; }
+  .sess .when { color: var(--navy); font-weight: 700; font-size: .9rem; margin-top: .55rem; font-variant-numeric: tabular-nums; }
+  .sess .when .t { font-weight: 400; color: #555; }
+  .metaWhen { color: var(--navy); font-weight: 500; font-size: .95rem; margin-top: .8rem; white-space: pre-line; }
+  .infoLine { font-size: .87rem; color: #6B7684; margin-top: .75rem; }
+  .infoLine + .infoLine { margin-top: .2rem; }
   .prog .desc { font-size: .9rem; color: #555; margin-top: .45rem; }
   .prog .checkline {
     background: #F4F7FB; border-top: 1px solid #E9EEF6;
@@ -265,6 +272,7 @@
   textarea { min-height: 4.5rem; resize: vertical; }
   .radios { display: flex; gap: 1.2rem; flex-wrap: wrap; }
   .radios label { display: flex; align-items: center; gap: .4rem; font-size: .98rem; cursor: pointer; }
+  .radios label.dimmed { color: #B0B8C1; cursor: default; }
   .radios input { width: 1.15rem; height: 1.15rem; accent-color: var(--navy); }
   /* 부가 옵션 (한 단계 들여쓴 하위 선택지) */
   .subOption {
@@ -283,6 +291,19 @@
   .accTable th:last-child { text-align: right; }
   .accTable td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .accTable td.empty { text-align: center; color: #767676; }
+  /* 모바일: 3열 표를 기관별 스택형 블록으로 (기관명 → 계좌 → 참가비) */
+  @media (max-width: 560px) {
+    .accTable, .accTable tbody, .accTable tr, .accTable td { display: block; width: 100%; box-sizing: border-box; }
+    .accTable thead { display: none; }
+    .accTable tr { padding: .8rem 0; border-bottom: 1px solid #DFE5EE; }
+    .accTable tr:last-child { border-bottom: none; }
+    .accTable td { border: none; padding: .12rem 0; }
+    .accTable td:first-child { font-weight: 700; color: #111; }
+    .accTable td:first-child br { display: none; }
+    .accTable td.amount { text-align: left; color: var(--navy); font-weight: 700; }
+    .accTable td.amount::before { content: '참가비 '; font-weight: 500; color: #6B7684; font-size: .85rem; }
+    .accTable td.empty { text-align: left; }
+  }
 
   /* 참가비 요약 */
   table.feeTable { width: 100%; border-collapse: collapse; margin-top: .4rem; }
@@ -678,7 +699,6 @@
       <label class="subOption disabled" id="expSherabWrap">
         <input type="checkbox" id="fExpSherab" disabled>
         <span>쉐랍 텐진 수행 경험 있음</span>
-        <span class="subHint">'유' 선택 시 체크할 수 있어요</span>
       </label>
       <label class="q">참가 동기 <span class="req">*</span></label>
       <div class="hint">수행을 통해 원하시는 것이나 기대를 짧게 적어 주세요.</div>
@@ -856,6 +876,9 @@ function applyOverrides(cfg) {
     // ※ 접수 기록의 '참가비(자동)' 열은 백엔드가 시트 값을 읽으므로 시트 셀도 수정해야 함
     if (p.code === 'C' && (Number(p.fee) === 300000 || Number(p.fee) === 90000)) p.fee = 180000;
     if (p.code === 'F' && Number(p.fee) === 100000) p.fee = 360000;
+    // 기관별 문의 전화(2026-08-08 사용자 제공) — 시트에 열이 없어 코드로 주입
+    var PHONE = { C: '010-6685-6957', D: '010-6313-9189', F: '010-3007-6631' };
+    if (!p.phone && PHONE[p.code]) p.phone = PHONE[p.code];
     if (p.code === 'C') {
       p.schedule = String(p.schedule || '')
         .replace('26.8.26(수)~27(목)', '26. 8. 26(수) ~ 27(목)')
@@ -918,7 +941,7 @@ function applyOverrides(cfg) {
   // 행복수업(C) 신청서: 2026-08-07 지시 내용으로 교체
   cfg.questions = cfg.questions || {};
   cfg.questions.C = [
-    { label: '2일 18만 원 / 1일 9만 원(부분 참가 가능, 전일 수행 권장)', type: '안내', hint: '도시형 수행(비숙박)' },
+    { label: '2일 18만 원 / 1일 9만 원 (부분 참가 가능, 전일 수행 권장) · 도시형 수행(비숙박)', type: '안내', hint: '' },
     { label: '수행 유/무', type: '유무' },
     { label: '행복수업협동조합 수행 유/무', type: '하위유무' },
     { label: '참여한 경험이 있는 프로그램을 1개 이상 적어 주세요.', type: '장문' }
@@ -1035,14 +1058,24 @@ function sessionsOf(schedule) {
 }
 
 // 프로그램 카드의 일정 표시 (회차 구조가 읽히면 블록형, 아니면 한 줄형 — 장소는 카드 상단에서 따로 표시)
-function metaHtml(p) {
+function metaHtml(p, brief) {
   var sess = sessionsOf(p.schedule);
-  if (!sess) return '<div class="meta">' + esc(p.schedule) + '</div>';
-  return sess.map(function (s) {
-    return '<div class="sess"><div class="when">' + esc(s.when) + '</div>' +
-      '<div class="what">' + esc(s.what) + '</div>' +
-      (s.why ? '<div class="why">' + esc(s.why) + '</div>' : '') + '</div>';
-  }).join('');
+  if (!sess) return '<div class="metaWhen">' + esc(String(p.schedule || '').replace(/\)\s+(\d{1,2}:\d{2})/, ') · $1')) + '</div>';
+  return '<div class="sessGrid">' + sess.map(function (s) {
+    // 카드 상단 참가비와 중복되는 금액 괄호는 지우고, '참가비 문의'는 설명 줄로 이동
+    var what = s.what.replace('(2일 18만 원, 1일 9만 원)', '').trim();
+    var why = s.why || '';
+    if (/\(참가비 문의\)$/.test(what)) {
+      what = what.replace(/\(참가비 문의\)$/, '').trim();
+      why = why ? why + ' · 참가비 문의' : '참가비 문의';
+    }
+    var wm = s.when.match(/^(.*\))\s+(\S.*)$/);
+    var whenHtml = wm ? esc(wm[1]) + ' <span class="t">' + esc(wm[2]) + '</span>' : esc(s.when);
+    var whyHtml = esc(why).replace('참가비 문의', '<span style="white-space:nowrap;">참가비 문의</span>');
+    return '<div class="sess"><div class="what">' + esc(what) + '</div>' +
+      (!brief && why ? '<div class="why">' + whyHtml + '</div>' : '') +
+      '<div class="when">' + whenHtml + '</div></div>';
+  }).join('') + '</div>';
 }
 
 // 일정 + 장소 한 줄. 일정이 여러 줄이면 장소도 줄을 바꿔서 표시
@@ -1098,13 +1131,16 @@ function renderPrograms() {
     var descHtml = String(p.desc || '').split('\n').map(function (l) {
       return l.trim() ? '<div>' + esc(l.trim()) + '</div>' : '';
     }).join('');
+    var feeSubTxt = String((CONFIG.settings['참가비메모' + p.code] || '')).trim().replace(', ', ' · ');
     div.innerHTML =
       '<div class="nameBanner">' + esc(p.name) + '</div>' +
       '<div class="cardBody">' +
-        '<div class="fee">참가비 ' + feeText(p) + feeNote(p) + '</div>' +
+        '<div class="feeLine"><span class="feeAmt">참가비 ' + feeText(p) + '</span>' +
+          (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</div>' +
         metaHtml(p) +
         (descHtml ? '<div class="desc">' + descHtml + '</div>' : '') +
-        (p.place ? '<div class="meta">' + esc(p.place) + '</div>' : '') +
+        (p.place ? '<div class="infoLine">장소 · ' + esc(p.place) + '</div>' : '') +
+        (p.phone ? '<div class="infoLine">문의 · ' + esc(p.phone) + '</div>' : '') +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
     div.addEventListener('click', function (e) {
@@ -1155,7 +1191,8 @@ function renderSubforms() {
     d.dataset.code = p.code;
     var html =
       '<h4>' + esc(p.name) + ' 신청서</h4>' +
-      '<div class="hint schedLine">' + schedulePlace(p) + '</div>';
+      metaHtml(p, true) +
+      (p.place ? '<div class="infoLine">장소 · ' + esc(p.place) + '</div>' : '');
 
     questionsFor(p.code).forEach(function (q, qi) {
       var qid = p.code + '-' + qi;
@@ -1177,8 +1214,7 @@ function renderSubforms() {
           '<span class="radios" style="gap:.9rem;">' + ['유', '무'].map(function (o) {
             return '<label><input type="radio" name="q-' + esc(qid) + '" value="' + o + '" disabled' +
               (old === o ? ' checked' : '') + '>' + o + '</label>';
-          }).join('') + '</span>' +
-          '<span class="subHint">위 항목에서 "유" 선택 시 답할 수 있어요</span></div>';
+          }).join('') + '</span></div>';
         return;
       }
       html += '<label class="q">' + esc(q.label) + (q.required ? ' <span class="req">*</span>' : '') + '</label>';
@@ -1224,6 +1260,21 @@ function renderSubforms() {
       };
       Array.prototype.forEach.call(groupRadios, function (r) { r.addEventListener('change', sync); });
       sync();
+    });
+
+    // '전일 참가'를 체크하면 같은 그룹의 개별 날짜 체크는 해제·비활성화
+    Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox][value="전일 참가"]'), function (allBox) {
+      var group = d.querySelectorAll('input[type=checkbox][name="' + allBox.name + '"]');
+      var syncAll = function () {
+        Array.prototype.forEach.call(group, function (c) {
+          if (c === allBox) return;
+          c.disabled = allBox.checked;
+          if (allBox.checked) c.checked = false;
+          if (c.closest('label')) c.closest('label').classList.toggle('dimmed', allBox.checked);
+        });
+      };
+      allBox.addEventListener('change', syncAll);
+      syncAll();
     });
 
     wrapEl.appendChild(d);
