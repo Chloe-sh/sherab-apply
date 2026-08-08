@@ -1222,10 +1222,23 @@ var CONFIG_DATA = {
   },
   "programs": [
     {
+      "code": "G",
+      "name": "룽즁쥭 쌍악쑤 닥빠",
+      "org": "행복수업협동조합",
+      "fee": 0,
+      "schedule": "26. 8. 26(수) ~ 27(목) 9:00~18:00/룽즁쥭 쌍악쑤 닥빠 - 혜봉 선생님 인연을 위한 호흡 수행",
+      "place": "서울 관악구 봉천로31길 3 1층",
+      "desc": "",
+      "image": "",
+      "account": "계좌 추후 안내",
+      "phone": "010-6685-6957"
+    },
+    {
       "code": "C",
-      "name": "행복수업협동조합",
+      "name": "꿈요가",
+      "org": "행복수업협동조합",
       "fee": 180000,
-      "schedule": "26. 8. 26(수) ~ 27(목) 9:00~18:00/룽즁쥭 쌍악쑤 닥빠(참가비 문의) - 혜봉 선생님 인연을 위한 호흡 수행\n26. 8. 29(토) ~ 30(일) 9:00~18:00/꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지",
+      "schedule": "26. 8. 29(토) ~ 30(일) 9:00~18:00/꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지",
       "place": "서울 관악구 봉천로31길 3 1층",
       "desc": "",
       "image": "https://docs.google.com/forms-images-rt/AI1QifjhSrwNroLGPVkG0ZKfWN9bd-90hdNjM6fS8X5oe6HB3p9hBuO9eau4JLFpaE5MUhjYCovMoEnHSW75CSSI4nSyeD1kLzlnCIpi7ZQI8fn_J0ySnMFapKx4p7nbVoXJjGT0hY8f1HvzBEB_hYCxKok9EJPcRkfnwc6JV7E3E2QLybbBz8O3JIICZprMHMaoGjA1zqEVtD-txg=w520",
@@ -1234,7 +1247,8 @@ var CONFIG_DATA = {
     },
     {
       "code": "D",
-      "name": "아나빠나사띠명상요가",
+      "name": "5일 수행",
+      "org": "아나빠나사띠명상요가",
       "fee": 400000,
       "schedule": "26. 9. 4(금) ~ 9. 8(화) 9:00~18:00/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
@@ -1246,6 +1260,7 @@ var CONFIG_DATA = {
     {
       "code": "E",
       "name": "한의사 茶談 수행",
+      "org": "아나빠나사띠명상요가",
       "fee": 0,
       "schedule": "26. 9. 1(화) ~ 9. 2(수) 20:00~22:00/한의사 茶談 수행 - 한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
@@ -1333,6 +1348,26 @@ var CONFIG_DATA = {
         ],
         "required": true,
         "hint": ""
+      }
+    ],
+    "G": [
+      {
+        "label": "자율보시 · 도시형 수행(비숙박)",
+        "type": "안내",
+        "hint": ""
+      },
+      {
+        "label": "수행 참여 경험 유/무",
+        "type": "유무"
+      },
+      {
+        "label": "혜봉 선생님 수행 참여 유/무",
+        "type": "하위유무"
+      },
+      {
+        "label": "참여하셨던 혜봉 선생님 프로그램을 1개 이상 적어 주세요.",
+        "type": "장문",
+        "hint": "(혜봉 선생님 수행 참여 '유' 선택하신 분만 해당)"
       }
     ],
     "C": [
@@ -1449,8 +1484,10 @@ var PERSONAL_NAME = '';   // 개인 초대 링크(?to=이름)로 들어온 경�
 
 function $(id) { return document.getElementById(id); }
 function won(n) { return Number(n).toLocaleString('ko-KR') + '원'; }
-// 참가비 표기: 0원인 수행(한의사 차담)은 금액 대신 자율보시로 표시 (시트 기록은 0원 그대로)
+// 참가비 표기: 0원인 수행(한의사 차담·룽즁쥭)은 금액 대신 자율보시로 표시 (시트 기록은 0원 그대로)
 function feeText(p) { return Number(p.fee) === 0 ? '자율보시' : won(p.fee); }
+// 카드 제목: "수행명 | 기관명" (org가 없으면 수행명만)
+function titleOf(p) { return p.org ? p.name + ' | ' + p.org : p.name; }
 // D 아나빠나 부분 참가(2026-08-08): 개별 날짜만 고르면 일수 × 9만 원, 전일 참가·미선택이면 기본 참가비
 function effectiveFee(p) {
   if (p.code !== 'D') return Number(p.fee) || 0;
@@ -1646,7 +1683,7 @@ function accountTable(programs) {
     var acc = isAccountPending(p.account)
       ? '<span class="accPending">확정 후 개별 안내</span>'
       : esc(p.account);
-    return '<tr><td>' + orgNameHtml(p.name) + '</td><td>' + acc + '</td><td class="amount">' + feeText(p) + '</td></tr>';
+    return '<tr><td>' + orgNameHtml(p.org || p.name) + '</td><td>' + acc + '</td><td class="amount">' + feeText(p) + '</td></tr>';
   }).join('');
 
   // 계좌 미확정 수행이 섞여 있으면, "아래 계좌로 입금 바랍니다"와 모순되지 않도록 따로 안내한다.
@@ -1654,7 +1691,7 @@ function accountTable(programs) {
   var note = '';
   if (pending.length) {
     note = '<div class="accNote"><b>입금 계좌가 아직 확정되지 않은 수행이 있습니다.</b><br>'
-         + esc(pending.map(function (p) { return p.name; }).join(', '))
+         + esc(pending.map(function (p) { return titleOf(p); }).join(', '))
          + ' — 계좌가 확정되는 대로 신청하신 연락처로 안내드립니다. 안내를 받으신 뒤에 입금해 주세요.</div>';
   }
   return head + body + '</tbody></table>' + note;
@@ -1688,7 +1725,7 @@ function renderPrograms() {
     }).join('');
     var feeSubTxt = String((CONFIG.settings['참가비메모' + p.code] || '')).trim().replace(', ', ' · ');
     div.innerHTML =
-      '<div class="nameBanner">' + esc(p.name) + '</div>' +
+      '<div class="nameBanner">' + esc(titleOf(p)) + '</div>' +
       '<div class="cardBody">' +
         '<div class="feeLine"><span class="feeAmt">참가비 ' + feeText(p) + '</span>' +
           (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</div>' +
@@ -1745,7 +1782,7 @@ function renderSubforms() {
     d.className = 'subform';
     d.dataset.code = p.code;
     var html =
-      '<h4>' + esc(p.name) + ' 신청서</h4>' +
+      '<h4>' + esc(titleOf(p)) + ' 신청서</h4>' +
       metaHtml(p, true) +
       (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '');
 
@@ -1878,7 +1915,7 @@ function renderFees() {
   CONFIG.programs.forEach(function (p) {
     if (!selected[p.code]) return;
     total += effectiveFee(p);
-    rows += '<tr><td>' + esc(p.name) + '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
+    rows += '<tr><td>' + esc(titleOf(p)) + '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
   });
   if (!rows) {
     body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
@@ -1914,7 +1951,7 @@ function validate() {
   var subs = collectSubforms();
   codes.forEach(function (c) {
     var p = CONFIG.programs.find(function (x) { return x.code === c; });
-    var name = p ? p.name : c;
+    var name = p ? titleOf(p) : c;
     (subs[c] || []).forEach(function (a) {
       if (a.required && !a.a) errs.push('[' + name + '] "' + a.q + '" 항목을 입력(선택)해 주세요.');
     });
@@ -2012,7 +2049,7 @@ function showDone(receiptNo, payload) {
   var rows = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
     total += p ? effectiveFee(p) : 0;
-    return '<div class="doneRow"><span class="n">' + esc(p ? p.name : '') + '</span>' +
+    return '<div class="doneRow"><span class="n">' + esc(p ? titleOf(p) : '') + '</span>' +
       '<span class="v">' + (p ? effectiveFeeText(p) : won(0)) + '</span></div>';
   });
   $('doneReceipt').innerHTML =
@@ -2028,7 +2065,7 @@ function showDone(receiptNo, payload) {
     '<h3>입금 안내</h3>' +
     '<p class="note">' + esc(s['입금안내']) + '</p>' +
     donePrograms.map(function (p) {
-      return '<div class="doneOrg"><div class="top"><span class="nm">' + esc(p.name) + '</span>' +
+      return '<div class="doneOrg"><div class="top"><span class="nm">' + esc(titleOf(p)) + '</span>' +
         '<span class="fee">' + effectiveFeeText(p) + '</span></div>' +
         '<div class="acc">' + esc(p.account || '계좌 추후 안내') + '</div></div>';
     }).join('');
