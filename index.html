@@ -281,7 +281,7 @@
   /* 프로그램 카드 (2026-08-08 B안: 흰 카드 + 회차 미니카드 그리드) */
   .prog {
     border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
-    margin-bottom: 1rem; cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    margin-bottom: 1rem; transition: border-color .15s, box-shadow .15s;
     background: #fff;
   }
   .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); }
@@ -320,6 +320,7 @@
     background: #F4F7FB; border-top: 1px solid #E9EEF6;
     padding: .6rem 1rem; font-weight: 700; color: var(--navy);
     display: flex; align-items: center; gap: .6rem; font-size: 1rem;
+    cursor: pointer;
   }
   .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
   .prog.selected .checkline { background: var(--navy); color: #fff; }
@@ -414,75 +415,67 @@
   .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #F4F7FB; font-size: 1.05rem; border-bottom: none; }
   .feeNote { font-size: .85rem; color: #6E6E6E; margin-top: .5rem; }
 
-  /* 일정표: 월별 그룹 카드 리스트 (흰 바탕 + 네이비 포인트) */
+  /* 일정표: 월별 그룹 구분선 리스트 — '안내' 톤 (선택 카드와 시각 무게 차별화) */
   .schedMonth {
     display: flex; align-items: center; gap: .7rem;
     font-weight: 700; color: var(--navy); font-size: 1.1rem;
-    margin: 1.6rem 0 .8rem;
+    margin: 1.6rem 0 .3rem;
   }
   .schedMonth:first-child { margin-top: .2rem; }
   .schedMonth::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-  .schedGrid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: .9rem; margin-bottom: .5rem;
+  .schedList { margin-bottom: .5rem; }
+  .schedRow {
+    display: flex; align-items: flex-start; gap: 1.1rem;
+    padding: 1.05rem .15rem; border-bottom: 1px solid #EDF1F7;
   }
-  .schedCard {
-    background: #fff; border: 1px solid var(--line); border-radius: 20px;
-    padding: 1.3rem 1.4rem; min-height: 200px;
-    display: flex; flex-direction: column;
+  .schedRow .when {
+    flex: none; width: 7.6em; padding-top: .12rem;
+    font-weight: 700; font-size: .95rem; color: var(--navy);
+    white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.45;
   }
-  .schedCard .top {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: .7rem; min-height: 1.7rem;
-  }
-  /* 카테고리: 시니어 가독성을 위해 도트 → 색 채움 알약 (통역은 테두리 알약이라 역할 구분됨) */
-  .schedCard .cat {
+  .schedRow .when .dow { display: block; font-weight: 400; font-size: .82rem; color: #555; }
+  .schedRow .main { flex: 1; min-width: 0; }
+  .schedRow .tags { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; margin-bottom: .35rem; }
+  /* 카테고리: 시니어 가독성을 위해 색 채움 알약 (통역은 테두리 알약이라 역할 구분됨) */
+  .schedRow .cat {
     display: inline-flex; align-items: center;
-    font-size: .82rem; font-weight: 600; white-space: nowrap;
-    padding: .22rem .7rem; border-radius: 999px;
+    font-size: .74rem; font-weight: 600; white-space: nowrap;
+    padding: .16rem .6rem; border-radius: 999px;
     background: #E8EDF5; color: #33415C;
   }
-  .schedCard .cat.cat-official { background: #E6F1FB; color: #0C447C; }
-  .schedCard .cat.cat-lecture { background: #E6F1FB; color: #0C447C; }
-  .schedCard .cat.cat-retreat { background: #8E1A3D; color: #fff; }
-  .schedCard .interp {
-    font-size: .78rem; font-weight: 500; padding: .2rem .65rem;
+  .schedRow .cat.cat-official { background: #E6F1FB; color: #0C447C; }
+  .schedRow .cat.cat-lecture { background: #E6F1FB; color: #0C447C; }
+  .schedRow .cat.cat-retreat { background: #8E1A3D; color: #fff; }
+  .schedRow .interp {
+    font-size: .72rem; font-weight: 500; padding: .14rem .55rem;
     border-radius: 999px; background: transparent; border: 1px solid var(--line);
     color: #4E5968; white-space: nowrap;
   }
-  .schedCard .tit {
-    font-weight: 700; font-size: 1.15rem; color: #111;
-    line-height: 1.5; margin-top: .7rem; word-break: keep-all;
+  .schedRow .tit {
+    font-weight: 600; font-size: 1.02rem; color: #111;
+    line-height: 1.5; word-break: keep-all;
   }
-  /* 제목·장소의 의미 단위 묶음: 단위 안에서는 줄바꿈 금지 */
-  .schedCard .tit span, .schedCard .place span { white-space: nowrap; }
-  .schedCard .host { font-size: .85rem; color: #6E6E6E; margin-top: .35rem; }
-  .schedCard .sp { flex: 1; min-height: 1.1rem; }
-  .schedCard .btm { display: block; }
-  .schedCard .when {
-    font-weight: 700; color: var(--navy); white-space: nowrap;
-    font-variant-numeric: tabular-nums;
+  /* 제목의 의미 단위 묶음: 단위 안에서는 줄바꿈 금지 */
+  .schedRow .tit span, .schedRow .meta span { white-space: nowrap; }
+  .schedRow .meta {
+    font-size: .85rem; color: #6E6E6E; margin-top: .3rem;
+    line-height: 1.5; word-break: keep-all;
   }
-  .schedCard .when .dow { font-weight: 400; font-size: .85rem; color: #555; margin-left: .4rem; }
-  .schedCard .place {
-    display: block; font-size: .85rem; color: #4E5968; text-align: left;
-    line-height: 1.5; word-break: keep-all; margin-top: .3rem;
-  }
-  @media (max-width: 640px) {
-    .schedCard { min-height: 0; padding: 1.15rem 1.2rem; }
-    .schedCard .sp { min-height: .9rem; }
+  #scheduleBody .dsBlock { margin: .9rem 0 1.1rem; }
+  @media (max-width: 480px) {
+    .schedRow { gap: .8rem; }
+    .schedRow .when { width: 6.9em; font-size: .9rem; }
   }
   .schedNote { font-size: .9rem; color: #6E6E6E; margin-top: 1.1rem; }
 
   /* 숙박형 약사여래 수행(안거 5) 세부 일정: 기본 접힘(버튼으로 펼침), 모바일은 날짜별 세로, PC는 통합 타임테이블 */
   .dsCardBtn {
-    display: block; width: 100%; margin-top: .9rem;
-    font: inherit; font-size: .92rem; font-weight: 600; color: var(--navy);
-    background: #E2EBFC; border: none; border-radius: 10px;
-    padding: .62rem; cursor: pointer; text-align: center;
-    transition: background .12s;
+    display: inline-block; margin-top: .45rem; padding: 0;
+    font: inherit; font-size: .9rem; font-weight: 500; color: var(--navy);
+    background: none; border: none; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 3px;
   }
-  .dsCardBtn:hover { background: #D3E1FA; }
+  .dsCardBtn:hover { color: #0C447C; }
   .dsBlock { display: none; background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; margin-top: .8rem; }
   .dsBlock.open { display: block; }
   .dsTitle { background: var(--navy); color: #FBF8F2; padding: 1.1rem 1.3rem; }
@@ -654,62 +647,41 @@
     </section>
 
     <section class="card" id="schedule">
-      <h2 class="sec"><span class="num">3</span>일정표</h2>
+      <h2 class="sec"><span class="num">3</span>2026 쉐랍 텐진 방한 일정표</h2>
       <div id="scheduleBody">
         <div class="schedMonth">2026년 8월</div>
-        <div class="schedGrid">
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-official">공식행사</span>
-            </div>
-            <div class="tit">서울국제명상엑스포</div>
-            <div class="host">동국대 종학연구소</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">8.&nbsp;22&nbsp;~ 8.&nbsp;23<span class="dow">토 ~ 일</span></span>
-              <span class="place">학여울역 SETEC 2전시실</span>
+        <div class="schedList">
+          <div class="schedRow">
+            <div class="when">8. 22 ~ 8. 23<span class="dow">토 ~ 일</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-official">공식행사</span></div>
+              <div class="tit">서울국제명상엑스포</div>
+              <div class="meta">동국대 종학연구소 · <span>학여울역 SETEC 2전시실</span></div>
             </div>
           </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-lecture">특강</span>
-              <span class="interp">통역 지덕스님</span>
-            </div>
-            <div class="tit"><span>삶에 지친 시민을 만나는</span> <span>정치인의 자세와 자기수행</span></div>
-            <div class="host">서울시의회 더불어민주당</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">8. 24<span class="dow">월</span></span>
-              <span class="place">서울시의회 더불어민주당 간담회장 3층</span>
+          <div class="schedRow">
+            <div class="when">8. 24<span class="dow">월</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-lecture">특강</span><span class="interp">통역 지덕스님</span></div>
+              <div class="tit"><span>삶에 지친 시민을 만나는</span> <span>정치인의 자세와 자기수행</span></div>
+              <div class="meta">서울시의회 더불어민주당 · <span>서울시의회 더불어민주당 간담회장 3층</span></div>
             </div>
           </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-retreat">안거 1</span>
-              <span class="interp">통역 지덕스님</span>
+          <div class="schedRow">
+            <div class="when">8. 26 ~ 8. 27<span class="dow">수 ~ 목</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-retreat">안거 1</span><span class="interp">통역 지덕스님</span></div>
+              <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
+              <div class="meta">행복수업협동조합 · <span>서울 관악구 봉천로31길 3 1층</span></div>
             </div>
-            <div class="tit">룽즁쥭 쌍악쑤 닥빠</div>
-            <div class="host">행복수업협동조합</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">8.&nbsp;26&nbsp;~ 8.&nbsp;27<span class="dow">수 ~ 목</span></span>
-              <span class="place">서울 관악구 봉천로31길 3 1층</span>
-            </div>
-            <button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="ds1" onclick="dsToggleBtn(this, 'ds1')">세부 일정 보기 ▾</button>
           </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-retreat">안거 2</span>
-              <span class="interp">통역 지덕스님</span>
+          <div class="schedRow">
+            <div class="when">8. 29 ~ 8. 30<span class="dow">토 ~ 일</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-retreat">안거 2</span><span class="interp">통역 지덕스님</span></div>
+              <div class="tit"><span>꿈요가 —</span> <span>현대인 스트레스 해소 및 마음챙김</span></div>
+              <div class="meta">행복수업협동조합 · <span>서울 관악구 봉천로31길 3 1층</span></div>
             </div>
-            <div class="tit"><span>꿈요가 —</span> <span>현대인 스트레스 해소 및 마음챙김</span></div>
-            <div class="host">행복수업협동조합</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">8.&nbsp;29&nbsp;~ 8.&nbsp;30<span class="dow">토 ~ 일</span></span>
-              <span class="place">서울 관악구 봉천로31길 3 1층</span>
-            </div>
-            <button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="ds2" onclick="dsToggleBtn(this, 'ds2')">세부 일정 보기 ▾</button>
           </div>
         </div>
         <div class="dsBlock" id="ds1">
@@ -796,71 +768,46 @@
         </div>
 
         <div class="schedMonth">2026년 9월</div>
-        <div class="schedGrid">
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-retreat">안거 3</span>
-              <span class="interp">통역 자홍스님</span>
-            </div>
-            <div class="tit">한의사<br>茶談 수행</div>
-            <div class="host">아나빠나사띠명상요가</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">9.&nbsp;1&nbsp;~ 9.&nbsp;2<span class="dow">화 ~ 수</span></span>
-              <span class="place">서울 관악구 승방10길 2</span>
+        <div class="schedList">
+          <div class="schedRow">
+            <div class="when">9. 1 ~ 9. 2<span class="dow">화 ~ 수</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-retreat">안거 3</span><span class="interp">통역 자홍스님</span></div>
+              <div class="tit">한의사 茶談 수행</div>
+              <div class="meta">아나빠나사띠명상요가 · <span>서울 관악구 승방10길 2</span></div>
             </div>
           </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-retreat">안거 4</span>
-              <span class="interp">통역 양지애</span>
-            </div>
-            <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가</div>
-            <div class="host">아나빠나사띠명상요가</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">9.&nbsp;4&nbsp;~ 9.&nbsp;8<span class="dow">금 ~ 화</span></span>
-              <span class="place">서울 관악구 승방10길 2</span>
-            </div>
-            <button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="ds4" onclick="dsToggleBtn(this, 'ds4')">세부 일정 보기 ▾</button>
-          </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-lecture">특강</span>
-            </div>
-            <div class="tit"><span>서울시 요가대회 :</span> <span>프라나 나디 요가</span></div>
-            <div class="host">서울시 요가회</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">9. 5<span class="dow">토</span></span>
-              <span class="place">광진어린이공연장</span>
+          <div class="schedRow">
+            <div class="when">9. 4 ~ 9. 8<span class="dow">금 ~ 화</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-retreat">안거 4</span><span class="interp">통역 양지애</span></div>
+              <div class="tit">욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가</div>
+              <div class="meta">아나빠나사띠명상요가 · <span>서울 관악구 승방10길 2</span></div>
             </div>
           </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-retreat">탐방안거</span>
-            </div>
-            <div class="tit">법주사 탐방,<br>안거 후 대원사 이동</div>
-            <div class="host">아나빠나사띠명상요가</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">9.&nbsp;9&nbsp;~ 9.&nbsp;10<span class="dow">수 ~ 목</span></span>
-              <span class="place">법주사(보은)</span>
+          <div class="schedRow">
+            <div class="when">9. 5<span class="dow">토</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-lecture">특강</span></div>
+              <div class="tit"><span>서울시 요가대회 :</span> <span>프라나 나디 요가</span></div>
+              <div class="meta">서울시 요가회 · <span>광진어린이공연장</span></div>
             </div>
           </div>
-          <div class="schedCard">
-            <div class="top">
-              <span class="cat cat-retreat">안거 5</span>
-              <span class="interp">통역 지덕스님</span>
+          <div class="schedRow">
+            <div class="when">9. 9 ~ 9. 10<span class="dow">수 ~ 목</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-retreat">탐방안거</span></div>
+              <div class="tit"><span>법주사 탐방,</span> <span>안거 후 대원사 이동</span></div>
+              <div class="meta">아나빠나사띠명상요가 · <span>법주사(보은)</span></div>
             </div>
-            <div class="tit">약사여래 수행</div>
-            <div class="host">혜봉추모기념사업회</div>
-            <div class="sp"></div>
-            <div class="btm">
-              <span class="when">9.&nbsp;10&nbsp;~ 9.&nbsp;13<span class="dow">목 ~ 일</span></span>
-              <span class="place">대원사 · 전남 보성군 문덕면 <span>죽산길 506-8</span></span>
+          </div>
+          <div class="schedRow">
+            <div class="when">9. 10 ~ 9. 13<span class="dow">목 ~ 일</span></div>
+            <div class="main">
+              <div class="tags"><span class="cat cat-retreat">안거 5</span><span class="interp">통역 지덕스님</span></div>
+              <div class="tit">약사여래 수행</div>
+              <div class="meta">혜봉추모기념사업회 · 대원사 · <span>전남 보성군 문덕면</span> <span>죽산길 506-8</span></div>
             </div>
-            <button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="dsDetail" onclick="dsToggleBtn(this, 'dsDetail')">세부 일정 보기 ▾</button>
           </div>
         </div>
 
@@ -987,37 +934,27 @@
       </div>
     </section>
     <script>
-    // 안거 카드 공용: 세부 일정 펼침/접기
+    // 수행 선택 카드 공용: 세부 일정 펼침/접기
     function dsToggleBtn(btn, id) {
       var b = document.getElementById(id);
       var o = b.classList.toggle('open');
-      btn.textContent = o ? '세부 일정 접기 ▴' : '세부 일정 보기 ▾';
+      btn.textContent = o ? '접기 ▴' : '일정 자세히 보기 ▾';
       btn.setAttribute('aria-expanded', o ? 'true' : 'false');
       var label = btn.getAttribute('data-label') || '';
-      btn.setAttribute('aria-label', label + (o ? ' 세부 일정 접기' : ' 세부 일정 보기'));
+      btn.setAttribute('aria-label', label + (o ? ' 일정 접기' : ' 일정 자세히 보기'));
       if (o) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    (function () {
-      // 접근성: 어떤 안거의 세부 일정인지 버튼 이름에 담는다 (BUG-05와 같은 취지)
-      document.querySelectorAll('.dsCardBtn').forEach(function (btn) {
-        var card = btn.closest('.schedCard');
-        var tit = card && card.querySelector('.tit');
-        var label = tit ? tit.textContent.trim().replace(/\s+/g, ' ') : '';
-        btn.setAttribute('data-label', label);
-        btn.setAttribute('aria-label', label + ' 세부 일정 보기');
-      });
-    })();
     </script>
 
     <section class="card" id="practiceGuide">
-      <h2 class="sec"><span class="num">4</span>수행 안내</h2>
+      <h2 class="sec"><span class="num">4</span>수행 사전</h2>
       <div class="pgPhoto">
         <img id="pgPhotoImg" src="images/sherab-banner.png" alt="쉐랍 텐진 선생님"
              onerror="this.onerror=null; this.src=(CONFIG && CONFIG.settings['쉐랍사진URL']) || '';">
         <div class="bannerText">
           <div class="tib">བཀྲ་ཤིས་བདེ་ལེགས།</div>
           <div class="line"></div>
-          <h3>약사여래 수행 안내</h3>
+          <h3>약사여래 수행 사전</h3>
         </div>
       </div>
       <div class="pgList" id="pgGrid">
@@ -1725,6 +1662,9 @@ function applyPreviewView() {
 }
 
 // ── 프로그램 카드 ──
+// 수행 코드 → 세부 일정 블록 id (일정표 섹션의 정적 HTML 블록을 카드 안으로 옮겨 씀)
+var DS_MAP = { G: 'ds1', C: 'ds2', D: 'ds4', F: 'dsDetail' };
+
 function renderPrograms() {
   var list = $('progList');
   list.innerHTML = '';
@@ -1736,18 +1676,30 @@ function renderPrograms() {
       return l.trim() ? '<div>' + esc(l.trim()) + '</div>' : '';
     }).join('');
     var feeSubTxt = String((CONFIG.settings['참가비메모' + p.code] || '')).trim().replace(', ', ' · ');
+    var dsId = DS_MAP[p.code];
+    var dsBtnHtml = dsId && document.getElementById(dsId)
+      ? '<button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="' + dsId +
+        '" data-label="' + esc(titleOf(p)) + '" aria-label="' + esc(titleOf(p)) + ' 일정 자세히 보기"' +
+        ' onclick="dsToggleBtn(this, \'' + dsId + '\')">일정 자세히 보기 ▾</button>'
+      : '';
     div.innerHTML =
       '<div class="nameBanner">' + esc(titleOf(p)) + '</div>' +
       '<div class="cardBody">' +
         '<div class="feeLine"><span class="feeAmt">참가비 ' + feeText(p) + '</span>' +
           (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</div>' +
         metaHtml(p) +
+        dsBtnHtml +
         (descHtml ? '<div class="desc">' + descHtml + '</div>' : '') +
         (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '') +
         (p.phone ? '<div class="infoLine">문의 : ' + esc(p.phone) + '</div>' : '') +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
-    div.addEventListener('click', function (e) {
+    if (dsBtnHtml) {
+      // 세부 일정 블록을 일정표 섹션에서 떼어 버튼 바로 아래로 이동
+      div.querySelector('.dsCardBtn').insertAdjacentElement('afterend', document.getElementById(dsId));
+    }
+    // 카드 아무 곳이나 눌러 선택되지 않도록, 체크 표시 줄에서만 신청 토글
+    div.querySelector('.checkline').addEventListener('click', function (e) {
       if (e.target.tagName === 'INPUT') return;
       toggle(p.code);
     });
