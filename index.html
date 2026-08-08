@@ -482,7 +482,7 @@
           <div class="date"><b>9.&nbsp;1&nbsp;~ 9.&nbsp;2</b><span class="dow">화 · 수</span></div>
           <div class="main">
             <span class="badge fill">안거 3</span>
-            <div class="tit">① 한의사 다담(茶談) 수행 ② 능행스님 독담(獨談)</div>
+            <div class="tit">① 한의사 茶談 수행 ② 능행스님 독담(獨談)</div>
             <div class="schedMeta">
               <div><span class="lbl">장소</span><span class="val">아나빠나사띠명상요가</span></div>
               <div><span class="lbl">통역</span><span class="val">① 자홍스님</span></div>
@@ -526,7 +526,7 @@
             <span class="badge fill">안거 5</span>
             <div class="tit">약사여래 수행</div>
             <div class="schedMeta">
-              <div><span class="lbl">장소</span><span class="val">대원사(전남 보성) · 혜봉추모사업회</span></div>
+              <div><span class="lbl">장소</span><span class="val">대원사(전남 보성) · 혜봉추모기념사업회</span></div>
               <div><span class="lbl">통역</span><span class="val">지덕스님</span></div>
             </div>
           </div>
@@ -621,7 +621,7 @@
         <label><input type="radio" name="fGender" value="남자">남자</label>
       </div>
       <label class="q">연락처(휴대폰 번호) <span class="req">*</span></label>
-      <div class="hint">예) 010-0000-0000</div>
+      <div class="hint">예 : 010-0000-0000</div>
       <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-">
       <label class="q">나이 <span class="req">*</span></label>
       <input type="number" id="fAge" min="1" max="120">
@@ -803,6 +803,8 @@ function applyOverrides(cfg) {
   if (!s['참가비메모D']) s['참가비메모D'] = '5일';
   // 선택 안내에서 중복 선택 안내 문장 제거
   if (s['선택안내']) s['선택안내'] = s['선택안내'].replace(/\s*여러 개를 함께 선택할 수 있습니다\.?/, '').trim();
+  // 표기 통일(2026-08-08 컨펌): 환불규정 물결 앞뒤 띄움
+  if (s['환불규정']) s['환불규정'] = s['환불규정'].replace('3일~6일', '3일 ~ 6일').replace('2일 전~당일', '2일 전 ~ 당일');
   (cfg.programs || []).forEach(function (p) {
     // 각 줄 끝의 불필요한 공백 제거
     if (p.schedule) p.schedule = String(p.schedule).replace(/[ \t]+$/gm, '');
@@ -815,7 +817,9 @@ function applyOverrides(cfg) {
         .replace('26.8.26(수)~27(목)', '26. 8. 26(수) ~ 27(목)')
         .replace(/\n8\.\s*29\(토\)~30\(일\)/, '\n26. 8. 29(토) ~ 30(일)')
         .replace(/(② ?룽즁쥭 쌍악쑤 닥빠)$/, '$1(참가비 문의)');
-      p.desc = String(p.desc || '').replace('호흡 수행(참가비 문의)', '호흡 수행');
+      p.desc = String(p.desc || '')
+        .replace('호흡 수행(참가비 문의)', '호흡 수행')
+        .replace('혜봉님 인연', '혜봉 선생님 인연');
     }
     if (p.code === 'D') {
       p.schedule = String(p.schedule || '').replace('4(금)~9.', '4(금) ~ 9.');
@@ -826,7 +830,14 @@ function applyOverrides(cfg) {
     }
     if (p.code === 'F') {
       p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
+      p.place = String(p.place || '').replace('대원사 (전남', '대원사(전남');
     }
+  });
+  // 질문 힌트의 "예)" → "예 : " 통일
+  Object.keys(cfg.questions || {}).forEach(function (k) {
+    (cfg.questions[k] || []).forEach(function (q) {
+      if (q.hint) q.hint = String(q.hint).replace(/^예\)\s*/, '예 : ');
+    });
   });
   // 행복수업(C) 신청서: 2026-08-07 지시 내용으로 교체
   cfg.questions = cfg.questions || {};
