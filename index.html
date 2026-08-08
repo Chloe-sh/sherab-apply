@@ -355,6 +355,13 @@
     box-shadow: 0 0 0 3px rgba(4,25,74,.12);
   }
   textarea { min-height: 4.5rem; resize: vertical; }
+  /* 휴대폰 번호: 010 고정 표시 + 뒤 8자리 입력 */
+  .phoneRow { display: flex; align-items: center; gap: .55rem; }
+  .phoneRow .phonePrefix {
+    flex: none; padding: .8rem .9rem; border-radius: 12px;
+    background: #E8ECF3; color: #333; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .phoneRow input { flex: 1; min-width: 0; font-variant-numeric: tabular-nums; }
   .radios { display: flex; gap: 1.2rem; flex-wrap: wrap; }
   .radios label { display: flex; align-items: center; gap: .4rem; font-size: .98rem; cursor: pointer; }
   .radios label.dimmed { color: #B0B8C1; cursor: default; }
@@ -1087,8 +1094,8 @@
         <label><input type="radio" name="fGender" value="남자">남자</label>
       </div>
       <label class="q">휴대폰 번호 <span class="req">*</span></label>
-      <div class="hint">예 : 010-0000-0000</div>
-      <input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel" placeholder="010-" maxlength="13">
+      <div class="hint">뒤 8자리만 입력해 주세요. (010은 자동으로 붙습니다)</div>
+      <div class="phoneRow"><span class="phonePrefix">010 -</span><input type="tel" id="fPhone" inputmode="numeric" autocomplete="tel-national" placeholder="0000-0000" maxlength="9"></div>
       <label class="q">나이 <span class="req">*</span></label>
       <!-- type="number"는 maxlength가 무시되므로 text + 숫자 키패드로 처리 (아래 JS가 숫자만 남김) -->
       <input type="text" id="fAge" inputmode="numeric" autocomplete="off" maxlength="3" data-digits>
@@ -1488,6 +1495,11 @@ function won(n) { return Number(n).toLocaleString('ko-KR') + '원'; }
 function feeText(p) { return Number(p.fee) === 0 ? '자율보시' : won(p.fee); }
 // 카드 제목: "수행명 | 기관명" (org가 없으면 수행명만)
 function titleOf(p) { return p.org ? p.name + ' | ' + p.org : p.name; }
+// 휴대폰: 화면에는 뒤 8자리만 입력받고, 저장 값은 '010-0000-0000'으로 조립
+function phoneValue() {
+  var d = $('fPhone').value.replace(/\D/g, '');
+  return d.length === 8 ? '010-' + d.slice(0, 4) + '-' + d.slice(4) : '';
+}
 // D 아나빠나 부분 참가(2026-08-08): 개별 날짜만 고르면 일수 × 9만 원, 전일 참가·미선택이면 기본 참가비
 function effectiveFee(p) {
   if (p.code !== 'D') return Number(p.fee) || 0;
@@ -1937,8 +1949,7 @@ function validate() {
   if (!codes.length) errs.push('참가하실 수행을 1개 이상 선택해 주세요.');
   if (!$('fName').value.trim()) errs.push('이름을 입력해 주세요.');
   if (!document.querySelector('input[name="fGender"]:checked')) errs.push('성별을 선택해 주세요.');
-  var phone = $('fPhone').value.trim();
-  if (!/^01[016789][-\s]?\d{3,4}[-\s]?\d{4}$/.test(phone)) errs.push('휴대폰 번호를 010-0000-0000 형식으로 입력해 주세요.');
+  if (!phoneValue()) errs.push('휴대폰 번호 뒤 8자리를 입력해 주세요.');
   var age = $('fAge').value.trim();
   if (!age) {
     errs.push('나이를 입력해 주세요.');
@@ -1981,7 +1992,7 @@ function submit() {
   var payload = {
     name: $('fName').value.trim(),
     gender: document.querySelector('input[name="fGender"]:checked').value,
-    phone: $('fPhone').value.trim(),
+    phone: phoneValue(),
     age: $('fAge').value.trim(),
     region: $('fRegion').value.trim(),
     experience: expValue,
@@ -2132,6 +2143,12 @@ document.querySelectorAll('input[data-digits]').forEach(function (el) {
     var only = el.value.replace(/\D/g, '');
     if (el.value !== only) el.value = only;
   });
+});
+
+// 휴대폰: 뒤 8자리만 입력받아 0000-0000으로 자동 표기 (010은 화면에 고정 표시)
+$('fPhone').addEventListener('input', function () {
+  var d = this.value.replace(/\D/g, '').slice(0, 8);
+  this.value = d.length > 4 ? d.slice(0, 4) + '-' + d.slice(4) : d;
 });
 
 document.querySelectorAll('input[name="fExp"]').forEach(function (r) {
