@@ -322,6 +322,8 @@
     font-weight: 700; font-size: 1.15rem; color: #111;
     line-height: 1.5; margin-top: .7rem; word-break: keep-all;
   }
+  /* 제목·장소의 의미 단위 묶음: 단위 안에서는 줄바꿈 금지 */
+  .schedCard .tit span, .schedCard .place span { white-space: nowrap; }
   .schedCard .host { font-size: .85rem; color: #6E6E6E; margin-top: .35rem; }
   .schedCard .sp { flex: 1; min-height: 1.1rem; }
   .schedCard .btm { display: block; }
@@ -458,7 +460,7 @@
               <span class="cat cat-lecture">특강</span>
               <span class="interp">통역 지덕스님</span>
             </div>
-            <div class="tit">삶에 지친 시민을 만나는 정치인의 자세와 자기수행</div>
+            <div class="tit"><span>삶에 지친 시민을 만나는</span> <span>정치인의 자세와 자기수행</span></div>
             <div class="host">서울시의회 더불어민주당</div>
             <div class="sp"></div>
             <div class="btm">
@@ -484,7 +486,7 @@
               <span class="cat cat-retreat">안거 2</span>
               <span class="interp">통역 지덕스님</span>
             </div>
-            <div class="tit">꿈요가 — 현대인 스트레스 해소 및 마음챙김</div>
+            <div class="tit"><span>꿈요가 —</span> <span>현대인 스트레스</span> <span>해소 및 마음챙김</span></div>
             <div class="host">행복수업협동조합</div>
             <div class="sp"></div>
             <div class="btm">
@@ -525,7 +527,7 @@
             <div class="top">
               <span class="cat cat-lecture">특강</span>
             </div>
-            <div class="tit">서울시 요가대회 : 프라나 나디 요가</div>
+            <div class="tit"><span>서울시 요가대회 :</span> <span>프라나 나디 요가</span></div>
             <div class="host">서울시 요가회</div>
             <div class="sp"></div>
             <div class="btm">
@@ -555,7 +557,7 @@
             <div class="sp"></div>
             <div class="btm">
               <span class="when">9.&nbsp;10&nbsp;~ 9.&nbsp;13<span class="dow">목 ~ 일</span></span>
-              <span class="place">대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)</span>
+              <span class="place">대원사 · 전남 보성군 문덕면 <span>죽산길 506-8</span><wbr><span>(보성역에서 차량 30분)</span></span>
             </div>
           </div>
         </div>
