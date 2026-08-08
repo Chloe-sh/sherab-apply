@@ -820,6 +820,10 @@ function applyOverrides(cfg) {
     // 시간·연도 표기 통일 (시트 원문이 고쳐지면 자동 무력화)
     if (p.code === 'E') {
       p.schedule = String(p.schedule || '').replace('PM 8시~PM10시', '20:00~22:00');
+      p.desc = String(p.desc || '').replace(
+        '한의사, 동서양 또는 대체 의학, 치료·웰니스 분야 전문가를 위한 티베트 수행 및 학술 교류',
+        '한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다'
+      );
     }
     if (p.code === 'F') {
       p.schedule = String(p.schedule || '').replace(/^2026\.\s*/, '26. ');
