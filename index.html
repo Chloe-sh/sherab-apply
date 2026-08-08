@@ -56,7 +56,7 @@
     color: var(--gold-soft); margin-bottom: 1.1rem;
   }
   /* 따시델렉 손글씨 효과: 음절별로 획 윤곽을 따라 그린 뒤(스트로크) 먹이 스미듯 채움 */
-  .tashiSvg { width: min(82vw, 470px); height: auto; overflow: visible; display: block; margin: 0 auto; }
+  .tashiSvg { width: min(62vw, 352px); height: auto; overflow: visible; display: block; margin: 0 auto; }
   .tashiText {
     font-family: 'Noto Serif Tibetan', serif; font-size: 72px; font-weight: 300; letter-spacing: .04em;
   }
@@ -96,6 +96,8 @@
     white-space: nowrap; margin: .25rem 0 0;
     font-size: clamp(.64rem, 2.6vw, .85rem); letter-spacing: .02em; opacity: 1;
   }
+  #gateHosts b { margin-right: 1.7rem; }
+  #gateHosts .bar { display: inline-block; margin: 0 .6rem; opacity: .55; font-weight: 300; }
 
   /* ───────── 본문 공통 ───────── */
   .wrap { max-width: 720px; margin: 0 auto; padding: 0 1.1rem 4rem; }
@@ -589,8 +591,8 @@
   <p id="gateText"></p>
   <button id="gateNext" type="button">약사여래 체험 수행 로드맵 보기</button>
   <div id="gateHosts">
-    <p><b>주최</b> 2026년쉐랍텐진방한위원회</p>
-    <p><b>주관</b> 행복수업협동조합 아나빠나사띠명상요가 혜봉추모기념사업회</p>
+    <p><b>주최</b><span class="orgs">2026년쉐랍텐진방한위원회</span></p>
+    <p><b>주관</b><span class="orgs">행복수업협동조합<span class="bar">|</span>아나빠나사띠명상요가<span class="bar">|</span>혜봉추모기념사업회</span></p>
   </div>
 </div>
 
