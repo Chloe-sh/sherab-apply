@@ -516,13 +516,42 @@
   #submitBtn:disabled { background: #9aa3b8; cursor: wait; }
   .errMsg { color: #c0392b; font-weight: 700; margin-top: .8rem; text-align: center; white-space: pre-line; }
 
-  /* 완료 화면 */
-  #done { text-align: center; padding-top: 3rem; color: var(--navy); background: var(--ivory); min-height: 100vh; }
-  #done .mark { font-size: 3rem; }
-  #done h2 { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 700; letter-spacing: .02em; color: var(--navy); margin: .8rem 0; }
-  #done .infoBox { color: var(--navy); }
-  #done .msg { white-space: pre-line; }
-  #done .receipt { margin: 1.2rem auto; display: inline-block; background: #F2F4F9; border: 1px solid #C9D2E4; border-radius: 10px; padding: 1rem 1.6rem; text-align: left; }
+  /* 완료 화면: 네이비 히어로 + 경계에 떠 있는 내역 카드 */
+  #done { background: var(--ivory); min-height: 100vh; padding-bottom: 3rem; }
+  .doneHero { background: var(--navy); color: #FBF8F2; text-align: center; padding: 3.4rem 1.3rem 4.4rem; }
+  .doneCheck { width: 54px; height: 54px; margin: 0 auto 1.1rem; display: block; }
+  .doneCheck circle { stroke: #FBF8F2; opacity: .35; }
+  .doneCheck path { stroke: #FBF8F2; }
+  .doneHero h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: .02em; color: #FBF8F2; margin: 0; }
+  .doneHero .msg { margin: .75rem 0 0; font-size: .92rem; line-height: 1.65; opacity: .78; white-space: pre-line; }
+  .doneBody { max-width: 460px; margin: 0 auto; padding: 0 1.15rem; }
+  .doneCard { margin-top: -2.6rem; background: #fff; border-radius: 20px; padding: 1.4rem 1.4rem 1.1rem; box-shadow: 0 10px 30px rgba(2,15,46,.16); }
+  .doneWho { display: flex; justify-content: space-between; align-items: center; gap: .8rem; }
+  .doneWho .nm { font-weight: 700; font-size: 1.05rem; color: #111; }
+  .doneWho .rno {
+    font-size: .76rem; color: var(--navy); background: #EDF2FB; padding: .3rem .65rem;
+    border-radius: 999px; letter-spacing: .03em; white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  .doneList { margin-top: 1rem; }
+  .doneRow { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; padding: .68rem 0; border-top: 1px solid #EDF1F7; font-size: .94rem; }
+  .doneRow .n { color: #333; }
+  .doneRow .v { color: #111; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .doneTotal {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin: .6rem -1.4rem -1.1rem; padding: 1rem 1.4rem 1.15rem;
+    background: #F0F4FC; border-radius: 0 0 20px 20px;
+  }
+  .doneTotal .t { font-size: .92rem; font-weight: 600; color: var(--navy); }
+  .doneTotal .v { font-size: 1.35rem; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .donePay { margin-top: 2rem; }
+  .donePay h3 { display: flex; align-items: center; gap: .55rem; font-size: 1rem; font-weight: 700; color: var(--navy); margin: 0; }
+  .donePay h3::before { content: ''; width: 4px; height: 1.05em; background: var(--navy); border-radius: 2px; }
+  .donePay .note { margin: .5rem 0 0; font-size: .87rem; color: #6B7684; line-height: 1.6; white-space: pre-line; }
+  .doneOrg { margin-top: .8rem; background: #fff; border-radius: 14px; padding: .95rem 1.15rem; }
+  .doneOrg .top { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; }
+  .doneOrg .nm { font-weight: 600; font-size: .93rem; color: #111; }
+  .doneOrg .fee { font-weight: 700; font-size: .95rem; color: var(--navy); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .doneOrg .acc { margin-top: .25rem; font-size: .87rem; color: #6B7684; font-variant-numeric: tabular-nums; }
 
   footer { text-align: center; font-size: .85rem; color: #767676; padding: 2rem 0 3rem; }
 
@@ -1022,12 +1051,17 @@
 
 <!-- ═══════════ 3. 완료 화면 ═══════════ -->
 <div id="done" class="hidden">
-  <div class="wrap">
-    <div class="mark">🙏</div>
+  <div class="doneHero">
+    <svg class="doneCheck" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+      <circle cx="26" cy="26" r="24.5" stroke-width="2"/>
+      <path d="M15.5 27l7.5 7.5 13.5-15" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
     <h2>신청 완료</h2>
     <p class="msg" id="doneMsg"></p>
-    <div class="receipt" id="doneReceipt"></div>
-    <div class="infoBox" id="donePayment" style="max-width:420px; margin:1rem auto; text-align:left;"></div>
+  </div>
+  <div class="doneBody">
+    <div class="doneCard" id="doneReceipt"></div>
+    <div class="donePay" id="donePayment"></div>
   </div>
 </div>
 
@@ -1432,6 +1466,7 @@ function applyPreviewView() {
     $('gate').classList.add('hidden');
     $('main').classList.remove('hidden');
   } else if (v === 'done') {
+    $('gate').classList.add('hidden');
     showDone('(미리보기)', {
       name: '홍길동',
       programs: CONFIG.programs.slice(0, 2).map(function (p) { return { code: p.code }; })
@@ -1773,19 +1808,29 @@ function showDone(receiptNo, payload) {
   window.scrollTo(0, 0);
   $('doneMsg').textContent = s['완료메시지'] || '신청이 접수되었습니다.';
   var total = 0;
-  var lines = payload.programs.map(function (sel) {
+  var rows = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
     total += p ? effectiveFee(p) : 0;
-    return esc(p ? p.name : '') + ' — ' + (p ? effectiveFeeText(p) : won(0));
+    return '<div class="doneRow"><span class="n">' + esc(p ? p.name : '') + '</span>' +
+      '<span class="v">' + (p ? effectiveFeeText(p) : won(0)) + '</span></div>';
   });
   $('doneReceipt').innerHTML =
-    '<b>' + esc(payload.name) + '</b> 님 (접수번호 ' + esc(receiptNo) + ')<br>' +
-    lines.join('<br>') +
-    '<br><b>참가비 합계 : ' + won(total) + '</b>';
+    '<div class="doneWho"><span class="nm">' + esc(payload.name) + ' 님</span>' +
+    '<span class="rno">접수번호 ' + esc(receiptNo) + '</span></div>' +
+    '<div class="doneList">' + rows.join('') + '</div>' +
+    '<div class="doneTotal"><span class="t">참가비 합계</span><span class="v">' + won(total) + '</span></div>';
   var donePrograms = payload.programs.map(function (sel) {
     return CONFIG.programs.find(function (x) { return x.code === sel.code; });
   }).filter(Boolean);
-  $('donePayment').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + accountTable(donePrograms);
+  // 입금 안내도 실결제 금액(effectiveFee) 기준 — 신청 내역과 금액이 어긋나지 않도록
+  $('donePayment').innerHTML =
+    '<h3>입금 안내</h3>' +
+    '<p class="note">' + esc(s['입금안내']) + '</p>' +
+    donePrograms.map(function (p) {
+      return '<div class="doneOrg"><div class="top"><span class="nm">' + esc(p.name) + '</span>' +
+        '<span class="fee">' + effectiveFeeText(p) + '</span></div>' +
+        '<div class="acc">' + esc(p.account || '계좌 추후 안내') + '</div></div>';
+    }).join('');
 }
 
 // ── 수행 안내: 배너 클릭 시 아래에 큰 글씨로 설명 펼침 ──
