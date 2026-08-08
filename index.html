@@ -121,6 +121,10 @@
     margin: .3rem -5mm .6rem 1.3rem;   /* 본문 상단부터 우측에 배치 */
     filter: saturate(70%);             /* 채도 30% 감소 (모양 변화 없음) */
   }
+  /* PC: 마지막 문단이 아기 발밑을 파고들지 않게 크기·여백 조정 */
+  @media (min-width: 641px) {
+    .letterPhoto { width: min(205px, 40%); margin: .2rem 0 1.6rem 1.5rem; }
+  }
   #siteTitle { margin-top: 1.2rem; color: var(--navy); font-size: 1.05rem; letter-spacing: .12em; font-weight: 700; }
 
   /* 쉐랍 소개 */
