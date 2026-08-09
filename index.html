@@ -1316,7 +1316,14 @@
     <section class="card" id="applyForm">
       <h2 class="sec"><span class="num">2</span>신청서 작성</h2>
       <div class="chosenBox" id="chosenList"></div>
-      <h3 class="subSec">신청자 기본 정보</h3>
+
+      <!-- 수행별 신청서가 먼저 (방금 선택한 수행이 맨 위), 공통 기본 정보는 그 아래 -->
+      <div id="subforms" style="display:none">
+        <h3 class="subSec">수행별 신청서</h3>
+        <div id="subformList"></div>
+      </div>
+
+      <h3 class="subSec" id="commonSecTitle">신청자 기본 정보</h3>
       <p class="hint">모든 수행 공통입니다. 한 번만 적으시면 됩니다.</p>
       <label class="q">이름 <span class="req">*</span></label>
       <input type="text" id="fName" autocomplete="name" maxlength="30">
@@ -1346,12 +1353,6 @@
       <label class="q">건강 상태 및 참고(배려) 사항 <span class="req">*</span></label>
       <div class="hint">주의해야 할 신체적/정신적 특이사항이 있으면 꼭 적어 주세요. (예 : 무릎/허리 통증, 임신, 질환 등 · 없으면 "없음")</div>
       <textarea id="fHealth" maxlength="1000"></textarea>
-
-      <!-- 수행별 추가 질문: 기본 정보와 같은 카드 안에서 이어짐 (수행 선택 시 나타남) -->
-      <div id="subforms" style="display:none">
-        <h3 class="subSec divided">수행별 추가 질문</h3>
-        <div id="subformList"></div>
-      </div>
     </section>
 
     <section class="card">
@@ -1855,6 +1856,7 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbzJYOwA6N-jJ4oMObPbxbCUll
 var IS_API_MODE = !IS_APPS_SCRIPT && /^https?:$/.test(window.location.protocol) && API_URL;
 var CONFIG = null;
 var selected = {};   // code → true
+var selOrder = [];    // 선택한 순서 (최근 선택이 맨 앞 — 신청서가 위에 뜨는 순서)
 var PERSONAL_NAME = '';   // 개인 초대 링크(?to=이름)로 들어온 경우의 이름
 
 function $(id) { return document.getElementById(id); }
@@ -2226,12 +2228,11 @@ function showProgIntro(code) {
   window.scrollTo(0, 0);
 }
 
-// 소개 화면 하단 CTA: 신청 화면으로 이동 + 해당 수행 자동 선택 + 카드로 스크롤 (pageF의 introApplyBtn과 동일 동작)
+// 소개 화면 하단 CTA: 신청 화면으로 이동 + 해당 수행 자동 선택 + 바로 신청서 작성으로 (카드 체크와 동일 동작)
 function progIntroApply(code) {
   showView('main');
   if (!selected[code]) toggle(code, true);
-  var card = $('prog-' + code);
-  if (card) setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+  setTimeout(scrollToApplyForm, 80);
 }
 
 // 신청서 작성 카드로 부드럽게 스크롤 (PC 상단 바에 가리지 않도록 여유를 둠)
@@ -2243,6 +2244,9 @@ function scrollToApplyForm() {
 
 function toggle(code, force) {
   selected[code] = (force !== undefined) ? force : !selected[code];
+  var oi = selOrder.indexOf(code);
+  if (oi >= 0) selOrder.splice(oi, 1);
+  if (selected[code]) selOrder.unshift(code);   // 방금 선택한 수행이 맨 앞
   var box = $('chk-' + code);
   if (box) box.checked = !!selected[code];
   var card = $('prog-' + code);
@@ -2263,8 +2267,13 @@ function questionsFor(code) {
 }
 
 function renderSubforms() {
-  var codes = CONFIG.programs.filter(function (p) { return selected[p.code]; });
+  // 선택한 순서(최근이 먼저)대로 신청서를 배치 — 방금 고른 수행을 바로 쓰게
+  var codes = selOrder.map(function (c) {
+    return CONFIG.programs.find(function (p) { return p.code === c; });
+  }).filter(function (p) { return p && selected[p.code]; });
   $('subforms').style.display = codes.length ? '' : 'none';
+  var commonTitle = $('commonSecTitle');
+  if (commonTitle) commonTitle.classList.toggle('divided', codes.length > 0);
 
   // 신청서 카드 상단: 지금 신청하는 수행 목록 (선택할 때마다 갱신) — 남색 배너 + 알약 칩
   var chosen = $('chosenList');
@@ -2295,7 +2304,6 @@ function renderSubforms() {
       '<div class="sfHead">' +
         (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
         '<div class="sfName">' + esc(p.name) + '</div>' +
-        '<div class="sfNote">위에서 이 수행을 선택하셔서 나온 추가 질문입니다.</div>' +
       '</div>' +
       '<div class="sfBody">' +
       metaHtml(p, true) +
@@ -2726,12 +2734,11 @@ document.querySelectorAll('[data-go]').forEach(function (b) {
   b.addEventListener('click', function () { showView(b.getAttribute('data-go')); });
 });
 $('gateNext').addEventListener('click', function () { showView('hub'); });
-// 안거 소개 화면 하단 CTA: 신청 화면으로 이동 + F 자동 선택 + 해당 카드로 스크롤
+// 안거 소개 화면 하단 CTA: 신청 화면으로 이동 + F 자동 선택 + 바로 신청서 작성으로 (카드 체크와 동일 동작)
 $('introApplyBtn').addEventListener('click', function () {
   showView('main');
   if (!selected['F']) toggle('F', true);
-  var card = $('prog-F');
-  if (card) setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+  setTimeout(scrollToApplyForm, 80);
 });
 $('submitBtn').addEventListener('click', submit);
 // 소개 글 더보기/접기 (혜봉·쉐랍)
