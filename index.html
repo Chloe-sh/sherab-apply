@@ -364,11 +364,21 @@
   .prog.selected .checkline { background: var(--navy); color: #fff; }
 
   /* 신청서 작성 카드: 상단 선택 수행 목록 + 소제목(기본 정보 / 수행별 추가 질문) */
+  /* 선택 수행 목록: 남색 배너 + 수행명 흰 알약 칩 — 한눈에 띄게 */
   .chosenBox {
-    background: #F4F7FB; border: 1px solid #E9EEF6; border-radius: 12px;
-    padding: .75rem .95rem; margin-top: .9rem; font-size: .95rem; color: #41537B; line-height: 1.6;
+    background: var(--navy); border-radius: 14px;
+    padding: .95rem 1.1rem 1rem; margin-top: .9rem; line-height: 1.6;
   }
-  .chosenBox b { color: var(--navy); font-weight: 700; }
+  .chosenBox .cbLabel { display: block; font-size: .88rem; color: #FBF8F2; opacity: .85; margin-bottom: .55rem; }
+  .chosenBox .cbChip {
+    display: inline-block; background: #fff; color: var(--navy);
+    font-weight: 700; font-size: 1.05rem; border-radius: 999px;
+    padding: .32rem .85rem; margin: .15rem .35rem .15rem 0;
+  }
+  .chosenBox.empty {
+    background: #F4F7FB; border: 1px dashed #B9C8E8;
+    font-size: .95rem; color: #41537B; padding: .75rem .95rem;
+  }
   .subSec { color: var(--navy); font-size: 1.05rem; font-weight: 700; margin-top: 1.5rem; }
   .subSec.divided { border-top: 1px solid #E9EEF6; padding-top: 1.5rem; margin-top: 1.8rem; }
 
@@ -2263,12 +2273,17 @@ function renderSubforms() {
   var codes = CONFIG.programs.filter(function (p) { return selected[p.code]; });
   $('subforms').style.display = codes.length ? '' : 'none';
 
-  // 신청서 카드 상단: 지금 신청하는 수행 목록 (선택할 때마다 갱신)
+  // 신청서 카드 상단: 지금 신청하는 수행 목록 (선택할 때마다 갱신) — 남색 배너 + 알약 칩
   var chosen = $('chosenList');
   if (chosen) {
-    chosen.innerHTML = codes.length
-      ? '신청하시는 수행 : ' + codes.map(function (p) { return '<b>' + esc(p.name) + '</b>'; }).join(' · ')
-      : '위 1번에서 수행을 선택하시면 여기에 표시됩니다.';
+    if (codes.length) {
+      chosen.className = 'chosenBox';
+      chosen.innerHTML = '<span class="cbLabel">신청하시는 수행</span>' +
+        codes.map(function (p) { return '<span class="cbChip">' + esc(p.name) + '</span>'; }).join('');
+    } else {
+      chosen.className = 'chosenBox empty';
+      chosen.textContent = '위 1번에서 수행을 선택하시면 여기에 표시됩니다.';
+    }
   }
   var wrapEl = $('subformList');
 
