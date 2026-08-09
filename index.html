@@ -650,7 +650,7 @@
   #tabBar .inner { max-width: 720px; margin: 0 auto; display: flex; }
   #tabBar button {
     flex: 1; background: none; border: none; cursor: pointer; font: inherit;
-    font-size: .78rem; color: #8B95A9; padding: .15rem 0;
+    font-size: .78rem; line-height: 1.25; color: #8B95A9; padding: .15rem 0;
     display: flex; flex-direction: column; align-items: center; gap: .2rem;
   }
   #tabBar button svg { width: 1.4rem; height: 1.4rem; }
@@ -669,8 +669,9 @@
     #tabBar { top: 0; bottom: auto; border-top: none; border-bottom: 1px solid var(--line); padding: .3rem .2rem; }
     /* 균등 4분할(flex:1) 대신 내용 너비 + 일정한 간격으로 — 라벨 길이가 달라도 간격이 고르게 */
     #tabBar .inner { justify-content: center; gap: 3rem; }
-    #tabBar button { flex: none; flex-direction: row; gap: .4rem; font-size: .92rem; padding: .5rem 0; }
-    #tabBar button svg { width: 1.2rem; height: 1.2rem; }
+    #tabBar button { flex: none; flex-direction: row; align-items: center; gap: .4rem; font-size: .92rem; padding: .5rem 0; }
+    /* 한글 글리프가 박스 아래쪽에 그려져 아이콘이 떠 보임 → 아이콘을 살짝 내려 시각 정렬 */
+    #tabBar button svg { width: 1.2rem; height: 1.2rem; position: relative; top: 1.5px; }
     body.hasTab { padding-bottom: 0; padding-top: 3.4rem; }
     body.hasTab #scrollFab { bottom: 18px; }
     .hubHead { font-size: 1.7rem; padding-top: 2.4rem; }
