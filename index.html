@@ -475,6 +475,9 @@
   .feeTable th:last-child { text-align: right; }
   .feeTable td.amount { text-align: right; font-variant-numeric: tabular-nums; }
   .feeTable tr.total td { font-weight: 700; color: var(--navy); background: #F4F7FB; font-size: 1.05rem; border-bottom: none; }
+  /* 개별 신청 내역으로 금액이 달라진 경우의 산출 근거 줄 (부분 참가 일수, 법구 구입 등) */
+  .feeTable tr.hasDetail td { border-bottom: none; padding-bottom: .15rem; }
+  .feeTable tr.feeDetail td { padding: 0 .5rem .65rem; font-size: .84rem; color: #6B7684; line-height: 1.6; }
   .feeNote { font-size: .85rem; color: #6E6E6E; margin-top: .5rem; }
 
   /* 일정표: 월별 그룹 구분선 리스트 — '안내' 톤 (선택 카드와 시각 무게 차별화) */
@@ -627,6 +630,7 @@
   .doneRow { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; padding: .68rem 0; border-top: 1px solid #EDF1F7; font-size: .94rem; }
   .doneRow .n { color: #333; }
   .doneRow .v { color: #111; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .doneSub { font-size: .83rem; color: #6B7684; line-height: 1.55; margin-top: -.35rem; padding-bottom: .55rem; }
   .doneTotal {
     display: flex; justify-content: space-between; align-items: baseline;
     margin: .6rem -1.4rem -1.1rem; padding: 1rem 1.4rem 1.15rem;
@@ -746,6 +750,12 @@
     display: block; width: 100%; margin: 1.6rem 0 .4rem; padding: 1.05rem;
     font: inherit; font-size: 1.12rem; font-weight: 700;
     background: var(--navy); color: var(--gold-soft); border: none; border-radius: 16px; cursor: pointer;
+  }
+  /* 소개 화면 보조 버튼: 신청하지 않고 수행 목록으로 돌아가기 */
+  .introBackBtn {
+    display: block; width: 100%; margin: .6rem 0 .4rem; padding: .95rem;
+    font: inherit; font-size: 1.02rem; font-weight: 600;
+    background: #fff; color: var(--navy); border: 1.5px solid var(--navy); border-radius: 16px; cursor: pointer;
   }
   .introBtn { background: #FBF8F2; }
 
@@ -883,6 +893,7 @@
 ● 보시금 문의 : 김도희 010-3007-6631 · 김향진 010-5557-4597</div>
 
     <button type="button" class="introApplyBtn" id="introApplyBtn">약사여래 안거 신청하러 가기 →</button>
+    <button type="button" class="introBackBtn" onclick="progIntroBack()">다른 수행 보기</button>
   </div>
 </div>
 
@@ -1866,36 +1877,58 @@ function phoneValue() {
   var d = $('fPhone').value.replace(/\D/g, '');
   return d.length === 8 ? '010-' + d.slice(0, 4) + '-' + d.slice(4) : '';
 }
-// F 약사여래 안거(2026-08-09): 법구 구입을 선택하면 옵션 괄호 안 금액을 참가비에 합산
-function beopguFee() {
+// F 약사여래 안거(2026-08-09): 법구 구입 선택 시 {금액, 품목명} — 옵션 괄호 안 금액을 참가비에 합산
+function beopguInfo() {
   var f = document.querySelector('#subformList .subform[data-code="F"]');
-  if (!f) return 0;
+  if (!f) return null;
   var qs = questionsFor('F');
   for (var i = 0; i < qs.length; i++) {
     if (!/법구/.test(qs[i].label)) continue;
     var r = f.querySelector('input[name="q-F-' + i + '"]:checked');
-    if (!r) return 0;
+    if (!r) return null;
     var m = r.value.replace(/,/g, '').match(/\((\d+)\)/);
-    return m ? Number(m[1]) : 0;
+    if (!m) return null;
+    return { fee: Number(m[1]), label: r.value.replace(/\s*\([\d,]+\)\s*$/, '').trim() };
   }
-  return 0;
+  return null;
 }
-// D 아나빠나 부분 참가(2026-08-08): 개별 날짜만 고르면 일수 × 9만 원, 전일 참가·미선택이면 기본 참가비
+function beopguFee() { var b = beopguInfo(); return b ? b.fee : 0; }
+// D 아나빠나 부분 참가(2026-08-08): 개별 날짜만 고른 경우 그 일수 (전일 참가·미선택이면 0)
+function dPartialDays() {
+  var d = document.querySelector('#subformList .subform[data-code="D"]');
+  if (!d) return 0;
+  var all = false, days = 0;
+  Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox]:checked'), function (c) {
+    if (c.value === '전일 참가') all = true;
+    else if (/^9월 \d+일/.test(c.value)) days++;
+  });
+  return all ? 0 : days;
+}
+// 부분 참가(D)는 일수 × 9만 원, 법구 구입(F)은 참가비에 합산
 function effectiveFee(p) {
   var base = Number(p.fee) || 0;
   if (p.code === 'D') {
-    var d = document.querySelector('#subformList .subform[data-code="D"]');
-    if (d) {
-      var all = false, days = 0;
-      Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox]:checked'), function (c) {
-        if (c.value === '전일 참가') all = true;
-        else if (/^9월 \d+일/.test(c.value)) days++;
-      });
-      if (!all && days) base = days * 90000;
-    }
+    var days = dPartialDays();
+    if (days) base = days * 90000;
   }
   if (p.code === 'F') base += beopguFee();
   return base;
+}
+// 개별 신청 내역 때문에 금액이 기본 참가비와 달라질 때, 산출 근거 줄들을 돌려줌
+function feeBreakdown(p) {
+  var out = [];
+  if (p.code === 'D') {
+    var days = dPartialDays();
+    if (days) out.push('부분 참가 ' + days + '일 × 90,000원');
+  }
+  if (p.code === 'F') {
+    var b = beopguInfo();
+    if (b && b.fee) {
+      out.push('참가비 ' + won(Number(p.fee) || 0));
+      out.push('법구 구입 · ' + b.label + ' +' + won(b.fee));
+    }
+  }
+  return out;
 }
 function effectiveFeeText(p) { return Number(p.fee) === 0 ? '자율보시' : won(effectiveFee(p)); }
 function esc(s) {
@@ -2212,7 +2245,8 @@ function showProgIntro(code) {
       (p.org ? '<div class="introSign">— ' + esc(p.org) + ' 드림</div>' : '') + '</section>' : '') +
     '<div id="progIntroSchedule"></div>' +
     '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
-      esc(p.name) + ' 신청하러 가기 →</button>';
+      esc(p.name) + ' 신청하러 가기 →</button>' +
+    '<button type="button" class="introBackBtn" onclick="progIntroBack()">다른 수행 보기</button>';
 
   var dsId = DS_MAP[code];
   var ds = dsId && document.getElementById(dsId);
@@ -2222,6 +2256,18 @@ function showProgIntro(code) {
   }
   showView('pageProg');
   window.scrollTo(0, 0);
+}
+
+// 소개 화면 보조 버튼: 신청하지 않고 수행 선택 목록으로 돌아가기
+function progIntroBack() {
+  showView('main');
+  var list = $('progList');
+  if (list) {
+    var sec = list.closest('section') || list;
+    setTimeout(function () {
+      window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 70, behavior: 'auto' });
+    }, 30);
+  }
 }
 
 // 소개 화면 하단 CTA: 신청 화면으로 이동 + 해당 수행 자동 선택 + 바로 신청서 작성으로 (카드 체크와 동일 동작)
@@ -2436,7 +2482,12 @@ function renderFees() {
   CONFIG.programs.forEach(function (p) {
     if (!selected[p.code]) return;
     total += effectiveFee(p);
-    rows += '<tr><td>' + esc(titleOf(p)) + '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
+    var det = feeBreakdown(p);
+    rows += '<tr' + (det.length ? ' class="hasDetail"' : '') + '><td>' + esc(titleOf(p)) +
+      '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
+    if (det.length) {
+      rows += '<tr class="feeDetail"><td colspan="2">' + det.map(esc).join('<br>') + '</td></tr>';
+    }
   });
   if (!rows) {
     body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
@@ -2567,8 +2618,10 @@ function showDone(receiptNo, payload) {
   var rows = payload.programs.map(function (sel) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
     total += p ? effectiveFee(p) : 0;
+    var det = p ? feeBreakdown(p) : [];
     return '<div class="doneRow"><span class="n">' + esc(p ? titleOf(p) : '') + '</span>' +
-      '<span class="v">' + (p ? effectiveFeeText(p) : won(0)) + '</span></div>';
+      '<span class="v">' + (p ? effectiveFeeText(p) : won(0)) + '</span></div>' +
+      (det.length ? '<div class="doneSub">' + det.map(esc).join('<br>') + '</div>' : '');
   });
   $('doneReceipt').innerHTML =
     '<div class="doneWho"><span class="nm">' + esc(payload.name) + ' 님</span>' +
