@@ -655,6 +655,13 @@
   }
   #tabBar button svg { width: 1.4rem; height: 1.4rem; }
   #tabBar button.active { color: var(--navy); font-weight: 700; }
+  /* '스승님 소개/수행 사전' 라벨: 모바일 두 줄, PC 한 줄(슬래시) */
+  #tabBar .tabSlash { display: none; }
+  #tabBar button span { line-height: 1.25; text-align: center; }
+  @media (min-width: 700px) {
+    #tabBar .tabSlash { display: inline; }
+    #tabBar .tabBr { display: none; }
+  }
   body.hasTab { padding-bottom: 5.4rem; }
   body.hasTab #scrollFab { bottom: 5.6rem; }
   /* PC: 메뉴를 화면 아래가 아니라 위쪽 바로 (아이콘+글자 가로 배치) */
@@ -738,9 +745,9 @@
 <nav id="tabBar" class="hidden" aria-label="주요 메뉴">
   <div class="inner">
     <button type="button" id="tab-hub" data-go="hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>처음</button>
-    <button type="button" id="tab-dict" data-go="pageDict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></svg>수행 사전</button>
+    <button type="button" id="tab-dict" data-go="pageDict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></svg><span>스승님 소개<span class="tabSlash">/</span><br class="tabBr">수행 사전</span></button>
     <button type="button" id="tab-sched" data-go="pageSched"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg>일정표</button>
-    <button type="button" id="tab-apply" data-go="main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.2-4.5L16.5 4.2a1.6 1.6 0 0 1 2.3 0l1 1a1.6 1.6 0 0 1 0 2.3L8.5 18.8 4 20z"/></svg>신청</button>
+    <button type="button" id="tab-apply" data-go="main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.2-4.5L16.5 4.2a1.6 1.6 0 0 1 2.3 0l1 1a1.6 1.6 0 0 1 0 2.3L8.5 18.8 4 20z"/></svg>수행 신청</button>
   </div>
 </nav>
 
