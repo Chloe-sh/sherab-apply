@@ -284,19 +284,20 @@
     margin-bottom: 1rem; transition: border-color .15s, box-shadow .15s;
     background: #fff;
   }
-  .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); }
+  /* 선택된 카드: 테두리만이 아니라 안쪽까지 연블루로 채워 한눈에 띄게 */
+  .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); background: #E8EFFE; }
   /* 카드 헤더(뱃지형): 수행명 크게 + 기관명은 알약 뱃지. 선택 시 남색 반전 */
   .prog .nameBanner {
     background: #E8EFFE; text-align: left;
     padding: .85rem 1.2rem .8rem;
   }
   .prog .nameBanner .orgBadge {
-    display: inline-block; font-size: .74rem; font-weight: 600; color: var(--navy);
+    display: inline-block; font-size: .82rem; font-weight: 600; color: var(--navy);
     background: #fff; border: 1px solid #B9C8E8; border-radius: 999px;
-    padding: .18rem .65rem; margin-bottom: .4rem;
+    padding: .2rem .7rem; margin-bottom: .45rem;
   }
   .prog .nameBanner .progName {
-    font-weight: 700; font-size: 1.16rem; color: var(--navy);
+    font-weight: 700; font-size: 1.34rem; color: var(--navy);
     letter-spacing: .01em; line-height: 1.35;
   }
   .prog.selected .nameBanner { background: var(--navy); }
@@ -329,8 +330,8 @@
   .prog .desc { font-size: .9rem; color: #555; margin-top: .45rem; }
   .prog .checkline {
     background: #F4F7FB; border-top: 1px solid #E9EEF6;
-    padding: .6rem 1rem; font-weight: 700; color: var(--navy);
-    display: flex; align-items: center; gap: .6rem; font-size: 1rem;
+    padding: .7rem 1rem; font-weight: 700; color: var(--navy);
+    display: flex; align-items: center; gap: .6rem; font-size: 1.1rem;
     cursor: pointer;
   }
   .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
@@ -633,10 +634,9 @@
     background: var(--navy); color: var(--gold-soft); border: none; border-radius: 16px;
     padding: 1.25rem 1.2rem; font: inherit;
   }
-  .hubApply .cap { display: block; font-size: .8rem; opacity: .72; margin-bottom: .4rem; }
-  .hubApply .t { display: block; font-size: 1.35rem; font-weight: 700; }
-  .hubApply .row { display: flex; justify-content: space-between; align-items: center; margin-top: .95rem; }
-  .hubApply .row .s { font-size: .8rem; opacity: .78; }
+  .hubApply .cap { display: block; font-size: .85rem; opacity: .72; margin-bottom: .4rem; }
+  .hubApply .t { display: block; font-size: 1.5rem; font-weight: 700; }
+  .hubApply .row { display: flex; justify-content: flex-end; align-items: center; margin-top: .6rem; }
   .hubApply .row .circ {
     width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--gold-soft); color: var(--navy);
     display: flex; align-items: center; justify-content: center; flex: none;
@@ -757,7 +757,7 @@
     <button type="button" class="hubApply" data-go="main">
       <span class="cap">약사여래 체험 수행으로 초대합니다</span>
       <span class="t">수행 신청하기</span>
-      <span class="row"><span class="s">행복수업협동조합 · 아나빠나사띠명상요가 · 혜봉추모기념사업회</span>
+      <span class="row">
         <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </span>
     </button>
