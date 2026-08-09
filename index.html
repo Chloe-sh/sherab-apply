@@ -525,6 +525,13 @@
 
   .infoBox { background: #F4F6FB; border-radius: 14px; padding: 1.1rem 1.2rem; margin-top: .8rem; font-size: .95rem; white-space: pre-line; }
   .infoBox b { color: var(--navy); }
+  /* 안내문 모바일 전용 줄바꿈: 데스크톱에선 <br class="mbr">가 없는 셈, 모바일에선 여기서 줄을 바꾼다.
+     .pcSep(예: " / " 구분자)는 반대로 데스크톱에서만 보인다. */
+  .mbr { display: none; }
+  @media (max-width: 640px) {
+    .mbr { display: inline; }
+    .pcSep { display: none; }
+  }
 
   /* 제출 */
   #submitBtn {
@@ -1454,7 +1461,8 @@ var CONFIG_DATA = {
         "order": 6,
         "label": "보시금 안내",
         "type": "안내",
-        "hint": "쉐랍텐진님의 방한 일정이 여법하게 진행될 수 있도록 보시금을 모금하고 있습니다.\n몸과 마음의 행복을 이루는 지혜를 보다 많은 존재들과 나누기 위해 열리는 이번 방한 일정의 원활한 진행을 위해 여러 분들의 많은 관심과 보시를 부탁 드립니다.\n\n● 보시금 입금계좌 : 농협 302-1813-2302-91 (박서현)\n● 보시금 문의 : 010-3007-6631 (저녁 7시~9시까지 통화 가능) / 010-5557-4597 (문자 주시면 여유로운 시간에 전화 드리겠습니다.)"
+        "html": true,
+        "hint": "쉐랍텐진님의 방한 일정이 여법하게 진행될 수 있도록 보시금을 모금하고 있습니다.\n몸과 마음의 행복을 이루는 지혜를 보다 많은 존재들과 나누기 위해 열리는 이번 방한 일정의 원활한 진행을 위해 여러 분들의 많은 관심과 보시를 부탁 드립니다.\n\n● 보시금 입금계좌 :<br class=\"mbr\"> 농협 302-1813-2302-91 (박서현)\n● 보시금 문의 :<br class=\"mbr\"> 010-3007-6631 (저녁 7시~9시까지 통화 가능)<span class=\"pcSep\"> / </span><br class=\"mbr\">010-5557-4597 (문자 주시면 여유로운 시간에 전화 드리겠습니다.)"
       },
       {
         "order": 7,
@@ -1834,7 +1842,10 @@ function renderSubforms() {
       var qid = p.code + '-' + qi;
       var old = oldAnswers[q.label] || '';
       if (q.type === '안내') {
-        html += '<div class="infoBox">' + esc(q.label) + (q.hint ? '<br>' + esc(q.hint) : '') + '</div>';
+        // html:true는 CONFIG_DATA에 우리가 직접 쓴 안내문 전용(모바일 줄바꿈 <br class="mbr"> 등).
+        // 신청자 입력이 아니므로 안전하지만, 시트 등 외부 값에는 절대 켜지 말 것.
+        var body = q.html ? String(q.hint || '') : esc(q.hint || '');
+        html += '<div class="infoBox">' + esc(q.label) + (body ? '<br>' + body : '') + '</div>';
         return;
       }
       if (q.type === '유무') {
