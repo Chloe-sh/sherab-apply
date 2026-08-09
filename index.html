@@ -1311,16 +1311,9 @@
       <h2 class="sec"><span class="num">1</span>수행 선택 <span style="font-size:.85rem; font-weight:400; color:#6E6E6E;">(여러 개 선택 가능)</span></h2>
       <p class="hint" id="selectHint"></p>
       <div id="progList"></div>
-      <!-- 아래로 안내: 문구 + 화살표 하나 -->
-      <div class="scrollCue">
-        <p>수행 신청을 위한 정보 입력이 필요합니다.<br>아래로 내려가 주세요.</p>
-        <svg viewBox="0 0 40 50" role="img" aria-label="아래로 내려가 주세요">
-          <polygon points="13,0 27,0 27,26 40,26 20,50 0,26 13,26"/>
-        </svg>
-      </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="applyForm">
       <h2 class="sec"><span class="num">2</span>신청서 작성</h2>
       <div class="chosenBox" id="chosenList"></div>
       <h3 class="subSec">신청자 기본 정보</h3>
@@ -2183,11 +2176,16 @@ function renderPrograms() {
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
     // 카드 아무 곳이나 눌러 선택되지 않도록, 체크 표시 줄에서만 신청 토글
+    // 체크(선택)하는 순간 바로 신청서 작성 칸으로 이동 — 해제할 때는 이동하지 않음
     div.querySelector('.checkline').addEventListener('click', function (e) {
       if (e.target.tagName === 'INPUT') return;
       toggle(p.code);
+      if (selected[p.code]) scrollToApplyForm();
     });
-    div.querySelector('input').addEventListener('change', function () { toggle(p.code, this.checked); });
+    div.querySelector('input').addEventListener('change', function () {
+      toggle(p.code, this.checked);
+      if (this.checked) scrollToApplyForm();
+    });
     list.appendChild(div);
   });
 }
@@ -2246,6 +2244,13 @@ function progIntroApply(code) {
   if (!selected[code]) toggle(code, true);
   var card = $('prog-' + code);
   if (card) setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+}
+
+// 신청서 작성 카드로 부드럽게 스크롤 (PC 상단 바에 가리지 않도록 여유를 둠)
+function scrollToApplyForm() {
+  var el = $('applyForm');
+  if (!el) return;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' });
 }
 
 function toggle(code, force) {
