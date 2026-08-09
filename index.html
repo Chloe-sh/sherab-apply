@@ -285,11 +285,22 @@
     background: #fff;
   }
   .prog.selected { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,44,91,.12); }
+  /* 카드 헤더(뱃지형): 수행명 크게 + 기관명은 알약 뱃지. 선택 시 남색 반전 */
   .prog .nameBanner {
-    background: var(--navy); color: #fff;
-    text-align: left; font-weight: 700; font-size: 1.18rem; letter-spacing: .01em;
-    padding: .9rem 1.2rem;
+    background: #E8EFFE; text-align: left;
+    padding: .85rem 1.2rem .8rem;
   }
+  .prog .nameBanner .orgBadge {
+    display: inline-block; font-size: .74rem; font-weight: 600; color: var(--navy);
+    background: #fff; border: 1px solid #B9C8E8; border-radius: 999px;
+    padding: .18rem .65rem; margin-bottom: .4rem;
+  }
+  .prog .nameBanner .progName {
+    font-weight: 700; font-size: 1.16rem; color: var(--navy);
+    letter-spacing: .01em; line-height: 1.35;
+  }
+  .prog.selected .nameBanner { background: var(--navy); }
+  .prog.selected .nameBanner .progName { color: #fff; }
   .prog .cardBody { padding: .55rem 1.2rem 1.05rem; }
   .prog .feeLine { margin-top: .3rem; }
   .prog .feeAmt { color: var(--navy); font-weight: 700; font-size: 1rem; }
@@ -662,6 +673,32 @@
     #tabBar .tabSlash { display: inline; }
     #tabBar .tabBr { display: none; }
   }
+  /* ───────── 약사여래 안거 소개 화면 (pageF) ───────── */
+  .introHero {
+    background: var(--navy); color: var(--gold-soft); border-radius: 16px;
+    padding: 1.2rem 1.3rem 1.15rem; margin-top: 1rem;
+  }
+  .introHero .cap { font-size: .8rem; opacity: .75; margin-bottom: .45rem; }
+  .introHero .t { font-size: 1.3rem; font-weight: 700; line-height: 1.5; }
+  .introSec h3 { color: var(--navy); font-size: 1.12rem; font-weight: 700; margin-bottom: .7rem; }
+  .introSec p {
+    font-size: .98rem; line-height: 1.85; color: #222;
+    text-align: justify; word-break: normal; overflow-wrap: break-word;
+  }
+  .introSec p + p { margin-top: .6rem; }
+  .introOutline { background: #FBF8F2; }
+  .introOutline .row { display: flex; gap: .8rem; padding: .34rem 0; font-size: .95rem; }
+  .introOutline .row .k { flex: none; width: 3.6em; font-weight: 700; color: var(--navy); }
+  .introOutline .row .v { color: #333; line-height: 1.65; }
+  .introSign { text-align: right; color: #6B7684; font-size: .9rem; margin-top: .9rem; }
+  #introSchedule .dsBlock { margin-top: 1.4rem; }
+  .introApplyBtn {
+    display: block; width: 100%; margin: 1.6rem 0 .4rem; padding: 1.05rem;
+    font: inherit; font-size: 1.12rem; font-weight: 700;
+    background: var(--navy); color: var(--gold-soft); border: none; border-radius: 16px; cursor: pointer;
+  }
+  .introBtn { background: #FBF8F2; }
+
   body.hasTab { padding-bottom: 5.4rem; }
   body.hasTab #scrollFab { bottom: 5.6rem; }
   /* PC: 메뉴를 화면 아래가 아니라 위쪽 바로 (아이콘+글자 가로 배치) */
@@ -740,6 +777,62 @@
   <div class="wrap">
     <div class="pageHead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg>2026 쉐랍 텐진 방한 일정표</div>
     <div id="schedPageBody"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 1.8 약사여래 안거 소개 화면 (혜봉추모기념사업회 구글폼 원문 기반) ═══════════ -->
+<div id="pageF" class="hidden">
+  <div class="wrap">
+    <div class="introHero">
+      <div class="cap">혜봉추모기념사업회 · 2026. 9. 10(목) ~ 13(일) · 전남 보성 대원사</div>
+      <div class="t">정화와 회복의 푸른빛을 깨우는<br>약사여래 안거</div>
+    </div>
+
+    <section class="card introSec">
+      <h3>세상과 우리가 병든 것은 몸만이 아닙니다</h3>
+      <p>불안한 마음도, 지친 삶도, 희망을 잃은 세상도 건강한 회복을 기다리고 있습니다. 우리는 어느 때보다 풍요로운 시대를 살고 있지만, 전쟁과 폭력, 기후 위기, 경제적 불안, 관계의 갈등, 우울과 외로움, 그리고 삶의 의미를 잃어가는 현실입니다. 이러한 상황에서 우리에게 필요한 것은 단순한 위로를 넘어 몸과 마음의 건강과 평화, 그리고 삶의 희망을 회복시키는 자비와 지혜의 큰 힘입니다.</p>
+    </section>
+
+    <section class="card introSec">
+      <h3>약사여래 부처님은</h3>
+      <p>모든 중생의 질병뿐만 아니라 가난과 두려움, 여러 고통에서 벗어나 건강하고 평화롭고 지혜로운 삶을 살아가기를 서원하신 부처님입니다. 약사여래의 열두 가지 큰 서원은 단지 병을 낫게 하는 데 그치지 않고, 삶의 어둠을 밝히고 희망을 일깨우며, 자신과 세상이 함께 건강하게 회복하는 길을 열어 줍니다. 이번 약사여래 안거수행은 약사여래의 큰 원력을 깊이 이해하고, 내 안의 건강한 빛의 본성을 깨워 일상 속에서 실천할 수 있도록 마련하였습니다.</p>
+    </section>
+
+    <section class="card introSec">
+      <h3>닥터 쉐랍 선생님은</h3>
+      <p>부탄 왕실의 주치의셨으며 4년 전 네팔에서 혜봉스승님의 주치의로 깊은 법연을 맺으셨고, 2,500년 전통의 티벳 의학을 공부하신 네팔 의사이시기도 합니다. 또한 티베트불교 닝마파와 까규파의 여러 스승들로부터 수행을 전수받아 수행자의 길을 걸어오시고 계십니다. 현재까지 한국을 비롯해서 전 세계 수행자들과 수행과 법을 나누는 귀한 교류를 이어오고 계시며, 혜봉스승님께서는 살아생전에 여러 차례 제자들에게 "닥터 쉐랍님과의 소중한 법연을 오래도록 이어가라." 당부하셨습니다. 그 뜻을 받들어 올해 네 번째 한국에서 법석을 열게 되었습니다.</p>
+    </section>
+
+    <section class="card introSec">
+      <h3>이번 약사여래 안거는</h3>
+      <p>지난 3년 동안 약사여래 수행을 지속한 분들에게는 수행의 토대를 더욱 깊게 다지는 여정이 되며, 처음 오시는 분들에게는 약사여래의 큰 자비와 몸과 마음의 건강과 평화를 쉽게 이해하고 함께 경험하실 겁니다. 좀 더 정리된 법본을 바탕으로 약사여래 수행의 깊은 의미를 새기고, 다양한 무드라(수인)와 법구의 올바른 사용법을 익힙니다. 그리고 우리를 존재하게 해주신 조상님과 모든 존재들의 안녕과 평화를 기원하는 산화공의식(뿌자)을 포함해서 쉐랍선생님과 함께 평화와 건강을 위한 수행 방법을 직접 배우고 익히는 귀한 안거가 되겠습니다.</p>
+    </section>
+
+    <section class="card introSec">
+      <h3>초대합니다</h3>
+      <p>오늘날 세상이 절실히 필요로 하는 것은 폭력보다 자비, 불안보다 평화, 절망보다 희망을 담은, 고통에 깨어있는 보리심입니다. 우리의 마음이 회복되어 건강한 빛이 깨어날 때 가정이 건강해지고, 사회가 건강해지며, 동시에 세상을 향한 따뜻한 자비가 피어납니다. 약사부처님의 큰 원력과 자비의 에너지를 통해 내 안에 건강한 본성을 깨우며, 나와 이웃, 그리고 세상의 평화와 안녕을 위해 함께 발원하는 수행의 여정에 여러분을 초대합니다.</p>
+    </section>
+
+    <section class="card introSec introOutline">
+      <h3>모집 요강</h3>
+      <div class="row"><span class="k">일시</span><span class="v">2026년 9월 10일(목) ~ 13일(일) 3박 4일</span></div>
+      <div class="row"><span class="k">장소</span><span class="v">전남 보성 대원사 (전남 보성군 문덕면 죽산길 506-8)</span></div>
+      <div class="row"><span class="k">대상</span><span class="v">치유와 평화가 필요한 35명</span></div>
+      <div class="row"><span class="k">수련비</span><span class="v">38만 원 (법본집 비용 포함) · 입금 선착순 마감<br>전 일정 참여를 권장하지만 부분 참여 가능하며 수련비는 동일합니다.<br>경제적 배려가 필요하신 분은 연락주세요.</span></div>
+      <div class="row"><span class="k">입금</span><span class="v">농협 302-1813-2302-91 (박서현)</span></div>
+      <div class="row"><span class="k">문의</span><span class="v">김도희 010-3007-6631 (저녁 7시~9시까지 통화 가능)<br>김향진 010-5557-4597 (문자 주시면 여유로운 시간에 전화드리겠습니다.)</span></div>
+      <div class="introSign">— 혜봉추모기념사업회 드림</div>
+    </section>
+
+    <div id="introSchedule"></div>
+
+    <div class="infoBox">보시금 안내
+쉐랍텐진님의 방한 일정이 여법하게 진행될 수 있도록 보시금을 모금하고 있습니다.
+
+● 보시금 입금계좌 : 농협 302-1813-2302-91 (박서현)
+● 보시금 문의 : 김도희 010-3007-6631 · 김향진 010-5557-4597</div>
+
+    <button type="button" class="introApplyBtn" id="introApplyBtn">약사여래 안거 신청하러 가기 →</button>
   </div>
 </div>
 
@@ -1363,7 +1456,7 @@ var CONFIG_DATA = {
       "desc": "",
       "image": "https://docs.google.com/forms-images-rt/AI1Qifhv4Ruy4-1UWStDensVPVjK6PMX0czRJ3dOr2VEza-6I64QFQTYx0WuElxI2lnKyGJ89G4MyVJGYJHksIV8L9lN5uDlirhu_0hj5D__aWSIS_vAzGzEWjsDcg4ZkYPvdLNsSKKxJsnHMg6JxlLDBRDIl41ReeIEba0uMhY6700fp98OpZ6PZY8g2_stEAyNQAhPTKNOObBlsQ=w520",
       "account": "농협 302-1813-2302-91 (박서현)",
-      "phone": "010-3007-6631 (저녁 7시~9시까지 통화 가능) · 010-5557-4597 (문자 주시면 여유로운 시간에 전화 드리겠습니다)"
+      "phone": "김도희 010-3007-6631 (저녁 7시~9시까지 통화 가능) · 김향진 010-5557-4597 (문자 주시면 여유로운 시간에 전화 드리겠습니다)"
     }
   ],
   "questions": {
@@ -1594,7 +1687,7 @@ var CONFIG_DATA = {
         "label": "보시금 안내",
         "type": "안내",
         "html": true,
-        "hint": "쉐랍텐진님의 방한 일정이 여법하게 진행될 수 있도록 보시금을 모금하고 있습니다.\n몸과 마음의 행복을 이루는 지혜를 보다 많은 존재들과 나누기 위해 열리는 이번 방한 일정의 원활한 진행을 위해 여러 분들의 많은 관심과 보시를 부탁 드립니다.\n\n● 보시금 입금계좌 :<br class=\"mbr\"> 농협 302-1813-2302-91 (박서현)\n● 보시금 문의 :<br class=\"mbr\"> 010-3007-6631 (저녁 7시~9시까지 통화 가능)<span class=\"pcSep\"> / </span><br class=\"mbr\">010-5557-4597 (문자 주시면 여유로운 시간에 전화 드리겠습니다.)"
+        "hint": "쉐랍텐진님의 방한 일정이 여법하게 진행될 수 있도록 보시금을 모금하고 있습니다.\n몸과 마음의 행복을 이루는 지혜를 보다 많은 존재들과 나누기 위해 열리는 이번 방한 일정의 원활한 진행을 위해 여러 분들의 많은 관심과 보시를 부탁 드립니다.\n\n● 보시금 입금계좌 :<br class=\"mbr\"> 농협 302-1813-2302-91 (박서현)\n● 보시금 문의 :<br class=\"mbr\"> 김도희 010-3007-6631 (저녁 7시~9시까지 통화 가능)<span class=\"pcSep\"> / </span><br class=\"mbr\">김향진 010-5557-4597 (문자 주시면 여유로운 시간에 전화 드리겠습니다.)"
       },
       {
         "order": 7,
@@ -1881,7 +1974,7 @@ function applyPreviewView() {
 
 // ── 프로그램 카드 ──
 // 수행 코드 → 세부 일정 블록 id (일정표 섹션의 정적 HTML 블록을 카드 안으로 옮겨 씀)
-var DS_MAP = { G: 'ds1', C: 'ds2', D: 'ds4', F: 'dsDetail' };
+var DS_MAP = { G: 'ds1', C: 'ds2', D: 'ds4' };   // F의 세부 일정(dsDetail)은 안거 소개 화면(pageF)에 상시 펼침
 
 function renderPrograms() {
   var list = $('progList');
@@ -1900,12 +1993,20 @@ function renderPrograms() {
         '" data-label="' + esc(titleOf(p)) + '" aria-label="' + esc(titleOf(p)) + ' 일정 자세히 보기"' +
         ' onclick="dsToggleBtn(this, \'' + dsId + '\')">일정 자세히 보기 ▾</button>'
       : '';
+    // F(약사여래 안거)는 전용 소개 화면으로 안내하는 버튼을 카드에 추가
+    var introBtnHtml = (p.code === 'F' && document.getElementById('pageF'))
+      ? '<button type="button" class="dsCardBtn introBtn" onclick="showView(\'pageF\')">수행 소개 보기</button>'
+      : '';
     div.innerHTML =
-      '<div class="nameBanner">' + esc(titleOf(p)) + '</div>' +
+      '<div class="nameBanner">' +
+        (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
+        '<div class="progName">' + esc(p.name) + '</div>' +
+      '</div>' +
       '<div class="cardBody">' +
         '<div class="feeLine"><span class="feeAmt">참가비 ' + feeText(p) + '</span>' +
           (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</div>' +
         metaHtml(p) +
+        introBtnHtml +
         dsBtnHtml +
         (descHtml ? '<div class="desc">' + descHtml + '</div>' : '') +
         (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '') +
@@ -2366,10 +2467,13 @@ window.addEventListener('resize', updateFab);
   });
   var sch = document.getElementById('schedule');
   if (sch) $('schedPageBody').appendChild(sch);
+  // 약사여래 안거 세부 일정표: 소개 화면에 상시 펼침으로 이동
+  var dsD = document.getElementById('dsDetail');
+  if (dsD) { $('introSchedule').appendChild(dsD); dsD.classList.add('open'); }
 })();
 
-var VIEW_IDS = ['gate', 'hub', 'pageDict', 'pageSched', 'main', 'done'];
-var TAB_OF = { hub: 'tab-hub', pageDict: 'tab-dict', pageSched: 'tab-sched', main: 'tab-apply' };
+var VIEW_IDS = ['gate', 'hub', 'pageDict', 'pageSched', 'pageF', 'main', 'done'];
+var TAB_OF = { hub: 'tab-hub', pageDict: 'tab-dict', pageSched: 'tab-sched', pageF: 'tab-apply', main: 'tab-apply' };
 function showView(id) {
   VIEW_IDS.forEach(function (v) {
     var el = document.getElementById(v);
@@ -2378,8 +2482,9 @@ function showView(id) {
   var showTab = !!TAB_OF[id];
   $('tabBar').classList.toggle('hidden', !showTab);
   document.body.classList.toggle('hasTab', showTab);
-  Object.keys(TAB_OF).forEach(function (v) {
-    $(TAB_OF[v]).classList.toggle('active', v === id);
+  var activeTab = TAB_OF[id];
+  ['tab-hub', 'tab-dict', 'tab-sched', 'tab-apply'].forEach(function (t) {
+    $(t).classList.toggle('active', t === activeTab);
   });
   window.scrollTo(0, 0);
   updateFab();
@@ -2389,6 +2494,13 @@ document.querySelectorAll('[data-go]').forEach(function (b) {
   b.addEventListener('click', function () { showView(b.getAttribute('data-go')); });
 });
 $('gateNext').addEventListener('click', function () { showView('hub'); });
+// 안거 소개 화면 하단 CTA: 신청 화면으로 이동 + F 자동 선택 + 해당 카드로 스크롤
+$('introApplyBtn').addEventListener('click', function () {
+  showView('main');
+  if (!selected['F']) toggle('F', true);
+  var card = $('prog-F');
+  if (card) setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+});
 $('submitBtn').addEventListener('click', submit);
 // 소개 글 더보기/접기 (혜봉·쉐랍)
 document.querySelectorAll('.bioMoreBtn').forEach(function (btn) {
