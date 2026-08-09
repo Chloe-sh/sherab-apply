@@ -667,7 +667,9 @@
   /* PC: 메뉴를 화면 아래가 아니라 위쪽 바로 (아이콘+글자 가로 배치) */
   @media (min-width: 700px) {
     #tabBar { top: 0; bottom: auto; border-top: none; border-bottom: 1px solid var(--line); padding: .3rem .2rem; }
-    #tabBar button { flex-direction: row; gap: .4rem; font-size: .92rem; padding: .5rem 0; }
+    /* 균등 4분할(flex:1) 대신 내용 너비 + 일정한 간격으로 — 라벨 길이가 달라도 간격이 고르게 */
+    #tabBar .inner { justify-content: center; gap: 3rem; }
+    #tabBar button { flex: none; flex-direction: row; gap: .4rem; font-size: .92rem; padding: .5rem 0; }
     #tabBar button svg { width: 1.2rem; height: 1.2rem; }
     body.hasTab { padding-bottom: 0; padding-top: 3.4rem; }
     body.hasTab #scrollFab { bottom: 18px; }
@@ -744,7 +746,7 @@
 <!-- ═══════════ 하단 고정 메뉴 (게이트·완료 화면에서는 숨김) ═══════════ -->
 <nav id="tabBar" class="hidden" aria-label="주요 메뉴">
   <div class="inner">
-    <button type="button" id="tab-hub" data-go="hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>처음</button>
+    <button type="button" id="tab-hub" data-go="hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>홈</button>
     <button type="button" id="tab-dict" data-go="pageDict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></svg><span>스승님 소개<span class="tabSlash">/</span><br class="tabBr">수행 사전</span></button>
     <button type="button" id="tab-sched" data-go="pageSched"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg>일정표</button>
     <button type="button" id="tab-apply" data-go="main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.2-4.5L16.5 4.2a1.6 1.6 0 0 1 2.3 0l1 1a1.6 1.6 0 0 1 0 2.3L8.5 18.8 4 20z"/></svg>수행 신청</button>
