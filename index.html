@@ -363,6 +363,15 @@
   .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
   .prog.selected .checkline { background: var(--navy); color: #fff; }
 
+  /* 신청서 작성 카드: 상단 선택 수행 목록 + 소제목(기본 정보 / 수행별 추가 질문) */
+  .chosenBox {
+    background: #F4F7FB; border: 1px solid #E9EEF6; border-radius: 12px;
+    padding: .75rem .95rem; margin-top: .9rem; font-size: .95rem; color: #41537B; line-height: 1.6;
+  }
+  .chosenBox b { color: var(--navy); font-weight: 700; }
+  .subSec { color: var(--navy); font-size: 1.05rem; font-weight: 700; margin-top: 1.5rem; }
+  .subSec.divided { border-top: 1px solid #E9EEF6; padding-top: 1.5rem; margin-top: 1.8rem; }
+
   /* 선택별 신청서: 수행 카드의 '분신'처럼 보이게 — 팀 컬러 미니 헤더(뱃지+수행명) + 흰 본문 */
   .subform {
     border: 1px solid var(--line); border-radius: 16px; padding: 0; margin-bottom: 1rem;
@@ -1302,7 +1311,9 @@
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">2</span>신청자 기본 정보</h2>
+      <h2 class="sec"><span class="num">2</span>신청서 작성</h2>
+      <div class="chosenBox" id="chosenList"></div>
+      <h3 class="subSec">신청자 기본 정보</h3>
       <p class="hint">모든 수행 공통입니다. 한 번만 적으시면 됩니다.</p>
       <label class="q">이름 <span class="req">*</span></label>
       <input type="text" id="fName" autocomplete="name" maxlength="30">
@@ -1332,16 +1343,16 @@
       <label class="q">건강 상태 및 참고(배려) 사항 <span class="req">*</span></label>
       <div class="hint">주의해야 할 신체적/정신적 특이사항이 있으면 꼭 적어 주세요. (예 : 무릎/허리 통증, 임신, 질환 등 · 없으면 "없음")</div>
       <textarea id="fHealth" maxlength="1000"></textarea>
-    </section>
 
-    <section class="card" id="subforms" style="display:none">
-      <h2 class="sec"><span class="num">3</span>수행별 추가 질문</h2>
-      <p class="hint">1번에서 선택하신 수행 수만큼 질문지가 나타납니다.</p>
-      <div id="subformList"></div>
+      <!-- 수행별 추가 질문: 기본 정보와 같은 카드 안에서 이어짐 (수행 선택 시 나타남) -->
+      <div id="subforms" style="display:none">
+        <h3 class="subSec divided">수행별 추가 질문</h3>
+        <div id="subformList"></div>
+      </div>
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">4</span>참가비 안내</h2>
+      <h2 class="sec"><span class="num">3</span>참가비 안내</h2>
       <table class="feeTable" id="feeTable">
         <thead><tr><th>선택한 수행</th><th>참가비</th></tr></thead>
         <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
@@ -1355,7 +1366,7 @@
     </section>
 
     <section class="card">
-      <h2 class="sec"><span class="num">5</span>동의 및 기타</h2>
+      <h2 class="sec"><span class="num">4</span>동의 및 기타</h2>
       <label class="q">개인정보 수집 및 이용 동의 <span class="req">*</span></label>
       <div class="hint">
         수집 항목 : 이름, 성별, 연락처, 나이, 거주지(구 단위), 수행 경험, 입금자명, 수행별 신청서 답변<br>
@@ -1985,6 +1996,7 @@ function render() {
   $('contactFoot').textContent = '문의 : ' + (s['문의처'] || '');
 
   renderPrograms();
+  renderSubforms();
   renderFees();
   applyPreviewView();
 }
@@ -2250,6 +2262,14 @@ function questionsFor(code) {
 function renderSubforms() {
   var codes = CONFIG.programs.filter(function (p) { return selected[p.code]; });
   $('subforms').style.display = codes.length ? '' : 'none';
+
+  // 신청서 카드 상단: 지금 신청하는 수행 목록 (선택할 때마다 갱신)
+  var chosen = $('chosenList');
+  if (chosen) {
+    chosen.innerHTML = codes.length
+      ? '신청하시는 수행 : ' + codes.map(function (p) { return '<b>' + esc(p.name) + '</b>'; }).join(' · ')
+      : '위 1번에서 수행을 선택하시면 여기에 표시됩니다.';
+  }
   var wrapEl = $('subformList');
 
   // 이미 입력한 값 보존 (질문 라벨 기준)
