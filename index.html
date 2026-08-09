@@ -601,10 +601,10 @@
 
   /* ───────── 허브(메인 메뉴) ───────── */
   #hub .wrap { padding-top: 1rem; padding-bottom: 2rem; }
+  /* 허브 제목: 배너(버튼)와 헷갈리지 않도록 박스 없이 큰 글자만 */
   .hubHead {
-    background: var(--navy); color: var(--gold-soft);
-    border-radius: 20px; padding: 1.05rem 1.25rem;
-    font-size: 1.28rem; font-weight: 700; line-height: 1.5; letter-spacing: .02em;
+    color: var(--navy); padding: 1.3rem .15rem .7rem;
+    font-size: 1.45rem; font-weight: 700; line-height: 1.45; letter-spacing: .02em;
   }
   .hubGrid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .8rem; }
   .hubCard {
@@ -657,6 +657,15 @@
   #tabBar button.active { color: var(--navy); font-weight: 700; }
   body.hasTab { padding-bottom: 5.4rem; }
   body.hasTab #scrollFab { bottom: 5.6rem; }
+  /* PC: 메뉴를 화면 아래가 아니라 위쪽 바로 (아이콘+글자 가로 배치) */
+  @media (min-width: 700px) {
+    #tabBar { top: 0; bottom: auto; border-top: none; border-bottom: 1px solid var(--line); padding: .3rem .2rem; }
+    #tabBar button { flex-direction: row; gap: .4rem; font-size: .92rem; padding: .5rem 0; }
+    #tabBar button svg { width: 1.2rem; height: 1.2rem; }
+    body.hasTab { padding-bottom: 0; padding-top: 3.4rem; }
+    body.hasTab #scrollFab { bottom: 18px; }
+    .hubHead { font-size: 1.7rem; padding-top: 2.4rem; }
+  }
 </style>
 </head>
 <body>
