@@ -300,8 +300,18 @@
     font-weight: 700; font-size: 1.34rem; color: var(--navy);
     letter-spacing: .01em; line-height: 1.35;
   }
+  /* 단체별 구분 컬러: 전부 파란 계열, 같은 명도·채도로 어느 카드도 튀지 않게 */
+  .prog.orgHappy .nameBanner { background: #E8EFFE; }   /* 행복수업협동조합 — 블루 */
+  .prog.orgAna .nameBanner { background: #E2F1F9; }     /* 아나빠나사띠명상요가 — 하늘빛 블루 */
+  .prog.orgHye .nameBanner { background: #DBE7FA; }     /* 혜봉추모기념사업회 — 한 톤 깊은 블루 */
+  .prog.orgHappy.selected { background: #E8EFFE; }
+  .prog.orgAna.selected { background: #E2F1F9; }
+  .prog.orgHye.selected { background: #DBE7FA; }
   .prog.selected .nameBanner { background: var(--navy); }
   .prog.selected .nameBanner .progName { color: #fff; }
+  /* 헤더 안 한 줄 설명 (2026-08-09 카드 단순화: 단체명·수행명·설명만 헤더에) */
+  .prog .nameBanner .progDesc { margin-top: .4rem; font-size: .9rem; color: #41537B; line-height: 1.5; }
+  .prog.selected .nameBanner .progDesc { color: #CBD8F2; }
   .prog .cardBody { padding: .55rem 1.2rem 1.05rem; }
   .prog .feeLine { margin-top: .3rem; }
   .prog .feeAmt { color: var(--navy); font-weight: 700; font-size: 1rem; }
@@ -328,6 +338,22 @@
   .infoLine { font-size: .87rem; color: #6B7684; margin-top: .75rem; }
   .infoLine + .infoLine { margin-top: .2rem; }
   .prog .desc { font-size: .9rem; color: #555; margin-top: .45rem; }
+  /* 카드 본문: 일자·시간·장소·비용 요약 행 (2026-08-09 카드 단순화) */
+  .prog .infoRows { margin-top: .5rem; }
+  .prog .ir { display: flex; gap: .8rem; padding: .34rem 0; align-items: baseline; }
+  .prog .ir .k { flex: 0 0 2.4em; color: #8A94A6; font-weight: 600; font-size: .85rem; }
+  .prog .ir .v { color: #222; font-size: .95rem; font-weight: 500; white-space: pre-line; line-height: 1.5; }
+  .prog .ir .v .feeSub { font-size: .84rem; color: #6B7684; font-weight: 400; margin-left: .4rem; }
+  @media (max-width: 640px) {
+    .prog .ir .v .feeSub { display: block; margin-left: 0; margin-top: .1rem; }
+  }
+  /* 자세히 보기 접이 영역: 세부 일정·문의 등 부가 정보를 담음 */
+  .cardDetail { display: none; }
+  .cardDetail.open { display: block; }
+  .cardDetail .dsBlock { display: block; }
+  .cardDetail .infoLine { margin-top: .8rem; }
+  .cardDetail .infoLine + .infoLine { margin-top: .35rem; }
+  .cardDetail .detailIntro { font-size: .93rem; color: #444; line-height: 1.75; margin-top: .9rem; }
   .prog .checkline {
     background: #F4F7FB; border-top: 1px solid #E9EEF6;
     padding: .7rem 1rem; font-weight: 700; color: var(--navy);
@@ -337,18 +363,23 @@
   .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
   .prog.selected .checkline { background: var(--navy); color: #fff; }
 
-  /* 선택별 신청서 */
+  /* 선택별 신청서: 수행 카드의 '분신'처럼 보이게 — 팀 컬러 미니 헤더(뱃지+수행명) + 흰 본문 */
   .subform {
-    border: none; border-radius: 16px; padding: 1.2rem 1.1rem; margin-bottom: 1rem;
-    background: #F7F9FC;
+    border: 1px solid var(--line); border-radius: 16px; padding: 0; margin-bottom: 1rem;
+    background: #fff; overflow: hidden;
   }
-  .subform input[type=text], .subform textarea, .subform select { background: #fff; }
-  .subform h4 {
-    color: var(--navy); font-size: 1.12rem; font-weight: 700;
-    padding-bottom: .8rem; margin-bottom: 1rem; border-bottom: 1px solid #E3EAF4;
+  .subform .sfHead { padding: .85rem 1.2rem .8rem; background: #E8EFFE; }
+  .subform.orgHappy .sfHead { background: #E8EFFE; }
+  .subform.orgAna .sfHead { background: #E2F1F9; }
+  .subform.orgHye .sfHead { background: #DBE7FA; }
+  .subform .sfHead .orgBadge {
+    display: inline-block; font-size: .82rem; font-weight: 600; color: var(--navy);
+    background: #fff; border: 1px solid #B9C8E8; border-radius: 999px;
+    padding: .2rem .7rem; margin-bottom: .45rem;
   }
-  .subform h4 .code { color: var(--gold); }
-  /* 신청서 배경(#F7F9FC) 위에서는 미니카드·안내박스를 흰색+테두리로 반전해 위계 확보 */
+  .subform .sfHead .sfName { font-weight: 700; font-size: 1.15rem; color: var(--navy); line-height: 1.35; }
+  .subform .sfHead .sfNote { margin-top: .35rem; font-size: .86rem; color: #41537B; }
+  .subform .sfBody { padding: .9rem 1.1rem 1.2rem; }
   .subform .sess { background: #fff; border: 1px solid var(--line); }
   .subform .sessGrid { margin-top: .2rem; }
   .subform .infoLine { margin-top: .6rem; }
@@ -691,7 +722,7 @@
   .introOutline .row .k { flex: none; width: 3.6em; font-weight: 700; color: var(--navy); }
   .introOutline .row .v { color: #333; line-height: 1.65; }
   .introSign { text-align: right; color: #6B7684; font-size: .9rem; margin-top: .9rem; }
-  #introSchedule .dsBlock { margin-top: 1.4rem; }
+  #introSchedule .dsBlock, #progIntroSchedule .dsBlock { margin-top: 1.4rem; }
   .introApplyBtn {
     display: block; width: 100%; margin: 1.6rem 0 .4rem; padding: 1.05rem;
     font: inherit; font-size: 1.12rem; font-weight: 700;
@@ -814,9 +845,9 @@
     </section>
 
     <section class="card introSec introOutline">
-      <h3>모집 요강</h3>
+      <h3>참가 안내</h3>
       <div class="row"><span class="k">일시</span><span class="v">2026년 9월 10일(목) ~ 13일(일) 3박 4일</span></div>
-      <div class="row"><span class="k">장소</span><span class="v">전남 보성 대원사 (전남 보성군 문덕면 죽산길 506-8)</span></div>
+      <div class="row"><span class="k">장소</span><span class="v">전남 보성 대원사 (전남 보성군 문덕면 죽산길 506-8 · 보성역에서 차량 30분)</span></div>
       <div class="row"><span class="k">대상</span><span class="v">치유와 평화가 필요한 35명</span></div>
       <div class="row"><span class="k">수련비</span><span class="v">38만 원 (법본집 비용 포함) · 입금 선착순 마감<br>전 일정 참여를 권장하지만 부분 참여 가능하며 수련비는 동일합니다.<br>경제적 배려가 필요하신 분은 연락주세요.</span></div>
       <div class="row"><span class="k">입금</span><span class="v">농협 302-1813-2302-91 (박서현)</span></div>
@@ -834,6 +865,12 @@
 
     <button type="button" class="introApplyBtn" id="introApplyBtn">약사여래 안거 신청하러 가기 →</button>
   </div>
+</div>
+
+<!-- ═══════════ 1.9 수행별 소개 화면 (pageF와 동일 포맷 — JS가 프로그램별로 채움) ═══════════ -->
+<div id="pageProg" class="hidden">
+  <div class="wrap" id="progIntroBody"></div>
+  <div id="dsStash" style="display:none"></div>
 </div>
 
 <!-- ═══════════ 하단 고정 메뉴 (게이트·완료 화면에서는 숨김) ═══════════ -->
@@ -1178,6 +1215,16 @@
       btn.setAttribute('aria-label', label + (o ? ' 일정 접기' : ' 일정 자세히 보기'));
       if (o) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+    // 카드 하단 '자세히 보기': 세부 일정 + 문의 등 부가 정보 접이 영역 토글
+    function cardMoreToggle(btn, id) {
+      var b = document.getElementById(id);
+      var o = b.classList.toggle('open');
+      btn.textContent = o ? '접기 ▴' : '자세히 보기 ▾';
+      btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+      var label = btn.getAttribute('data-label') || '';
+      btn.setAttribute('aria-label', label + (o ? ' 접기' : ' 자세히 보기'));
+      if (o) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
     </script>
 
     <section class="card" id="practiceGuide">
@@ -1256,6 +1303,7 @@
 
     <section class="card">
       <h2 class="sec"><span class="num">2</span>신청자 기본 정보</h2>
+      <p class="hint">모든 수행 공통입니다. 한 번만 적으시면 됩니다.</p>
       <label class="q">이름 <span class="req">*</span></label>
       <input type="text" id="fName" autocomplete="name" maxlength="30">
       <label class="q">성별 <span class="req">*</span></label>
@@ -1281,16 +1329,14 @@
         <input type="checkbox" id="fExpSherab" disabled>
         <span>쉐랍 텐진 수행 경험 있음</span>
       </label>
-      <label class="q">참가 동기 <span class="req">*</span></label>
-      <div class="hint">수행을 통해 원하시는 것이나 기대를 짧게 적어 주세요.</div>
-      <textarea id="fMotivation" maxlength="500"></textarea>
       <label class="q">건강 상태 및 참고(배려) 사항 <span class="req">*</span></label>
       <div class="hint">주의해야 할 신체적/정신적 특이사항이 있으면 꼭 적어 주세요. (예 : 무릎/허리 통증, 임신, 질환 등 · 없으면 "없음")</div>
       <textarea id="fHealth" maxlength="1000"></textarea>
     </section>
 
     <section class="card" id="subforms" style="display:none">
-      <h2 class="sec"><span class="num">3</span>선택한 수행별 신청서</h2>
+      <h2 class="sec"><span class="num">3</span>수행별 추가 질문</h2>
+      <p class="hint">1번에서 선택하신 수행 수만큼 질문지가 나타납니다.</p>
       <div id="subformList"></div>
     </section>
 
@@ -1312,7 +1358,7 @@
       <h2 class="sec"><span class="num">5</span>동의 및 기타</h2>
       <label class="q">개인정보 수집 및 이용 동의 <span class="req">*</span></label>
       <div class="hint">
-        수집 항목 : 이름, 성별, 연락처, 나이, 거주지(구 단위), 수행 경험, 참가 동기, 입금자명, 수행별 신청서 답변<br>
+        수집 항목 : 이름, 성별, 연락처, 나이, 거주지(구 단위), 수행 경험, 입금자명, 수행별 신청서 답변<br>
         수집 목적 : 수행 신청 접수 및 참가자 관리, 안내 문자·연락, 참가비 입금 확인<br>
         보유 기간 : 수행 종료 후 1년까지 보관 후 지체 없이 파기<br>
         동의를 거부하실 수 있으나, 거부 시 신청 접수가 불가능합니다.
@@ -1405,9 +1451,27 @@ var CONFIG_DATA = {
       "fee": 0,
       "schedule": "26. 8. 26(수) ~ 27(목) 9:00~18:00/룽즁쥭 쌍악쑤 닥빠 - 혜봉 선생님 인연을 위한 호흡 수행",
       "place": "서울 관악구 봉천로31길 3 1층",
+      "hero": "호흡에 만트라를 새기는 티베트 전통 수행\n룽즁쥭 쌍악쑤 닥빠",
+      "introSecs": [
+        { "h": "룽즁쥭 쌍악쑤 닥빠란", "ps": [
+          "룽(바람)·즁(날숨)·쥭(들숨)의 흐름을 따라 신성한 만트라(쌍악쑤 닥빠)를 몸과 호흡에 새기는 수행입니다. 티베트 밀교 전통에서 '금강 염송'이라 불리는 호흡-만트라 결합 수행으로, 호흡과 명상 기법을 통해 미세한 바람을 중앙 채널로 이끌어 모으고 머무르게 하는 것이 핵심 원리로 전해집니다.",
+          "들숨-머묾-날숨 세 단계에 씨앗 만트라(옴-아-훔)를 붙여 마음으로 새기며, 세 채널과 다섯 차크라를 정화합니다. 외적(몸동작)·내적(에너지)·비밀(마음) 세 층위로 심화되며, 슬픔이 놓이면 기쁨이, 분노가 놓이면 사랑이 드러나듯 정서적 막힘의 해소를 체험할 수 있습니다."
+        ] },
+        { "h": "이번 수행은", "ps": [
+          "혜봉 선생님과의 소중한 인연으로 이어진 쉐랍 텐진 선생님과 함께, 이틀에 걸쳐 룽즁쥭 쌍악쑤 닥빠를 직접 배우고 익히는 자리입니다."
+        ] }
+      ],
+      "reqRows": [
+        { "k": "일시", "v": "2026년 8월 26일(수) ~ 27일(목)" },
+        { "k": "시간", "v": "9:00 ~ 18:00" },
+        { "k": "장소", "v": "행복수업협동조합 · 서울 관악구 봉천로31길 3 1층" },
+        { "k": "참가비", "v": "자율보시" },
+        { "k": "입금", "v": "카카오뱅크 3333-02-2894011 (서문희)" },
+        { "k": "문의", "v": "010-6685-6957" }
+      ],
       "desc": "",
       "image": "",
-      "account": "계좌 추후 안내",
+      "account": "카카오뱅크 3333-02-2894011 (서문희)",
       "phone": "010-6685-6957"
     },
     {
@@ -1416,11 +1480,30 @@ var CONFIG_DATA = {
       "org": "행복수업협동조합",
       "fee": 180000,
       "schedule": "26. 8. 29(토) ~ 30(일) 9:00~18:00/꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지",
-      "place": "서울 관악구 봉천로31길 3 1층",
+      "place": "서울 관악구 봉천로31길 3(봉천역 4번 출구)",
+      "hero": "잠 속에서도 깨어 있는 알아차림\n꿈요가",
+      "introSecs": [
+        { "h": "꿈요가란", "ps": [
+          "우리의 각성과 몽환, 양극의 의식으로부터 깨어나 잠들어 꿈꾸는 동안에도 깨어 있는 자각을 잃지 않는 것을 목표로 하는 수행입니다.",
+          "낮 동안의 의도 세우기와 구루요가 같은 기초 수행에서 시작해, 꿈속에서 지금이 꿈임을 알아차리는 단계, 나아가 꿈의 내용을 자유롭게 바꾸고 변형하는 단계로 나아갑니다.",
+          "꿈 수행에서 얻은 자각을 깊은 잠(수면요가·정광명)과 죽음 이후의 중음(바르도) 상태까지 이어, 삶과 꿈과 죽음을 하나의 수행 여정으로 통합하는 것을 돕습니다."
+        ] }
+      ],
+      "reqRows": [
+        { "k": "일시", "v": "2026년 8월 29일(토) ~ 30일(일)" },
+        { "k": "시간", "v": "9:00 ~ 18:00 (점심시간 12:00 ~ 13:30)" },
+        { "k": "장소", "v": "행복수업협동조합 큰명상홀 · 서울 관악구 봉천로31길 3 (봉천역 4번 출구)" },
+        { "k": "대상", "v": "관심 있는 누구나" },
+        { "k": "참가비", "v": "18만 원 (1일 참가 9만 원) · 입금 선착순 마감\n전일 참가를 권장하지만 부득이한 경우 부분 참가도 가능합니다.\n경제적 배려가 필요하신 분은 연락 주세요." },
+        { "k": "입금", "v": "카카오뱅크 3333-02-2894011 (서문희)" },
+        { "k": "점심", "v": "제공됩니다" },
+        { "k": "숙박", "v": "필요하신 분은 미리 신청해 주세요 (숙박비 2만 원)" },
+        { "k": "문의", "v": "010-6734-5597 / 010-6685-6957" }
+      ],
       "desc": "",
       "image": "https://docs.google.com/forms-images-rt/AI1QifjhSrwNroLGPVkG0ZKfWN9bd-90hdNjM6fS8X5oe6HB3p9hBuO9eau4JLFpaE5MUhjYCovMoEnHSW75CSSI4nSyeD1kLzlnCIpi7ZQI8fn_J0ySnMFapKx4p7nbVoXJjGT0hY8f1HvzBEB_hYCxKok9EJPcRkfnwc6JV7E3E2QLybbBz8O3JIICZprMHMaoGjA1zqEVtD-txg=w520",
-      "account": "계좌 추후 안내",
-      "phone": "010-6685-6957"
+      "account": "카카오뱅크 3333-02-2894011 (서문희)",
+      "phone": "010-6734-5597 / 010-6685-6957"
     },
     {
       "code": "D",
@@ -1429,10 +1512,37 @@ var CONFIG_DATA = {
       "fee": 400000,
       "schedule": "26. 9. 4(금) ~ 9. 8(화) 9:00~18:00/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
+      "hero": "욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가\n5일 통합 수행",
+      "introSecs": [
+        { "h": "5일 수행은", "ps": [
+          "욱죵, 룽즁쥭 쌍악쑤 닥빠, 꿈요가 — 세 수행을 5일에 걸쳐 순서대로 배우고 익히는 통합 과정입니다. 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다."
+        ] },
+        { "h": "욱죵", "ps": [
+          "티베트 전통에서 '차(채널)'와 '룽(바람, 프라나)'을 다루는 정화 수행입니다. 몸속 미세한 통로를 따라 흐르는 바람을 호흡과 함께 다루어 막힌 통로를 열어주며, 정수리·목·심장·배꼽·비밀 차크라 다섯 지점을 중심으로 다섯 원소에 상응하는 다섯 갈래의 수행으로 구성되어 전승되었습니다."
+        ] },
+        { "h": "룽즁쥭 쌍악쑤 닥빠", "ps": [
+          "룽(바람)·즁(날숨)·쥭(들숨)의 흐름을 따라 신성한 만트라를 몸과 호흡에 새기는 호흡-만트라 결합 수행입니다. 흩어진 바람을 중앙 채널로 모아들이며 세 채널과 다섯 차크라를 정화합니다."
+        ] },
+        { "h": "꿈요가", "ps": [
+          "잠들어 꿈꾸는 동안에도 깨어 있는 자각을 잃지 않는 것을 목표로 하는 수행입니다. 삶과 꿈과 죽음을 하나의 수행 여정으로 통합하는 것을 돕습니다."
+        ] }
+      ],
+      "reqRows": [
+        { "k": "일시", "v": "2026년 9월 4일(금) ~ 8일(화)" },
+        { "k": "시간", "v": "9:00 ~ 18:00" },
+        { "k": "장소", "v": "아나빠나사띠명상요가 3층 · 서울 관악구 승방10길 2 (사당역 4번 출구)" },
+        { "k": "대상", "v": "수행에 대해 솔직하고 성실한 분 누구나 가능합니다.\n호흡명상을 지속적으로 해 오신 분은 보다 깊은 경험을 가질 수 있습니다." },
+        { "k": "참가비", "v": "40만 원 (1일 참가 9만 원) · 입금 선착순 마감\n수행 이해와 경험을 위해 전 과정을 순서대로 참가하시길 권장하며, 부득이한 경우 부분 참가도 가능합니다.\n경제적 배려가 필요하신 분은 연락 주세요." },
+        { "k": "입금", "v": "국민은행 084-21-0710-611 (김정수)" },
+        { "k": "점심", "v": "비건식" },
+        { "k": "숙박", "v": "반드시 필요하신 분은 미리 신청해 주세요 (공간 한정)" },
+        { "k": "준비물", "v": "앉기 편한 옷, 소리 나지 않는 옷, 필기도구, 텀블러, 무릎 담요 등" },
+        { "k": "문의", "v": "010-4709-9918 / 010-6313-9189" }
+      ],
       "desc": "",
       "image": "https://docs.google.com/forms-images-rt/AI1Qifja51QTn_zjxy1TyKy1Z1Y6IC9CrBXkScq7OsnbyDS-a5X3AoIpJHJpMo7Zr3uAq1Ezv612_Rhysh-x5kRTZpN861INAeZ_Daz_w4it3tGxPE_M_6pL2nFLJYwNMUAbQGxjIvzyP9rtFtX3QoISRTJXWxFhGFGb_krus6GORkX8v5wDhAsLjTyEzXJHtWz6Foi4W5wlNH2rgg=w520",
       "account": "국민은행 084-21-0710-611 (김정수)",
-      "phone": "010-6313-9189"
+      "phone": "010-4709-9918 / 010-6313-9189"
     },
     {
       "code": "E",
@@ -1441,6 +1551,31 @@ var CONFIG_DATA = {
       "fee": 0,
       "schedule": "26. 9. 1(화) ~ 9. 2(수) 20:00~22:00/한의사 茶談 수행 - 한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
+      "hero": "차 한 잔에 담아 나누는 티베트 전통 의학\n한의사 茶談 수행",
+      "introSecs": [
+        { "h": "세상의 약손(藥手)들을 한자리에", "ps": [
+          "고통스런 사람과 삶, 몸과 마음을 살펴 오신 약손(藥手) 위에, 티베트의 藥草를 올립니다.",
+          "동양의학과 대체의학을 다루는 손(手), 요가와 몸의 언어를 아는 손(手), 마음을 함께 살피는 상담의 손(手), 건강한 몸과 마음을 위해 다양한 藥을 연구하며 삶을 꾸려온 손(手)들 — 사람의 건강과 행복을 향해 걸어온 분들을 한자리에 모셔 차 한 잔을 올립니다."
+        ] },
+        { "h": "티베트 전통 의학과 수행의 藥", "ps": [
+          "부탄 왕실 주치의를 지냈고, 히말라야의 약용식물을 지켜온 연구자며, 티베트 전통 수행자인 쉐랍 텐진 박사의 티베트 전통 의학, 그리고 오랜 전통 수행의 藥을 소중히 나누는 자리입니다."
+        ] },
+        { "h": "가르침이 아니라 대화로", "ps": [
+          "이론이 아니라 차 한 잔에 담긴 실천으로 나누는 談話의 시간 — 서로 다른 곳, 다른 분야에서 저마다의 고통을 마주해 온 이들이지만, 그 마음의 근원에는 \"약사여래의 12서원\"이 함께 있음을 확인하는 자리입니다.",
+          "이 자리는 국경을 넘어, 네팔 파르핑의 Pure Vision Sorig Healing and Research Center와의 지속적인 교류로 이어질 인연의 시작이 될 것입니다."
+        ] }
+      ],
+      "reqRows": [
+        { "k": "일시", "v": "2026년 9월 1일(화) ~ 2일(수)" },
+        { "k": "시간", "v": "20:00 ~ 22:00" },
+        { "k": "장소", "v": "아나빠나사띠명상요가 3층 · 서울 관악구 승방10길 2 (사당역 4번 출구)" },
+        { "k": "대상", "v": "동양의학·대체의학·요가지도·상담 분야 전문가, 치유와 웰니스 분야에 오래 몸담아온 분 (국제교류 관심자 포함)" },
+        { "k": "형태", "v": "소규모 다담(茶談) — 대화 형식 수행" },
+        { "k": "참가비", "v": "자율보시" },
+        { "k": "입금", "v": "국민은행 084-21-0710-611 (김정수)" },
+        { "k": "통역", "v": "자홍 스님" },
+        { "k": "문의", "v": "010-6313-9189" }
+      ],
       "desc": "",
       "image": "",
       "account": "국민은행 084-21-0710-611 (김정수)",
@@ -1975,48 +2110,56 @@ function applyPreviewView() {
 // ── 프로그램 카드 ──
 // 수행 코드 → 세부 일정 블록 id (일정표 섹션의 정적 HTML 블록을 카드 안으로 옮겨 씀)
 var DS_MAP = { G: 'ds1', C: 'ds2', D: 'ds4' };   // F의 세부 일정(dsDetail)은 안거 소개 화면(pageF)에 상시 펼침
+// 단체별 구분 컬러 클래스 (수행 카드 헤더 + 수행별 신청서 공용)
+var ORG_CLASS = { '행복수업협동조합': 'orgHappy', '아나빠나사띠명상요가': 'orgAna', '혜봉추모기념사업회': 'orgHye' };
 
 function renderPrograms() {
   var list = $('progList');
   list.innerHTML = '';
   CONFIG.programs.forEach(function (p) {
     var div = document.createElement('div');
-    div.className = 'prog';
+    div.className = 'prog' + (ORG_CLASS[p.org] ? ' ' + ORG_CLASS[p.org] : '');
     div.id = 'prog-' + p.code;
-    var descHtml = String(p.desc || '').split('\n').map(function (l) {
-      return l.trim() ? '<div>' + esc(l.trim()) + '</div>' : '';
-    }).join('');
+    // 카드 단순화(2026-08-09): 헤더(단체명·수행명·설명) + 일자/시간/장소/비용 요약 행 + 자세히 보기
+    var sess = sessionsOf(p.schedule);
+    var s0 = sess && sess[0];
+    var dateTxt = '', timeTxt = '', whyTxt = '', compTxt = '';
+    if (s0) {
+      var wm = s0.when.match(/^(.*\))\s+(\d\S*.*)$/);
+      dateTxt = wm ? wm[1] : s0.when;
+      timeTxt = wm ? wm[2] : '';
+      whyTxt = s0.why || '';
+      var what = s0.what.replace('(2일 18만 원, 1일 9만 원)', '').trim();
+      if (what.indexOf('·') >= 0) compTxt = what;   // 여러 수행 묶음(D)만 구성을 따로 표시
+    } else {
+      dateTxt = String(p.schedule || '').trim();
+    }
     var feeSubTxt = String((CONFIG.settings['참가비메모' + p.code] || '')).trim().replace(', ', ' · ');
-    var dsId = DS_MAP[p.code];
-    var dsBtnHtml = dsId && document.getElementById(dsId)
-      ? '<button type="button" class="dsCardBtn" aria-expanded="false" aria-controls="' + dsId +
-        '" data-label="' + esc(titleOf(p)) + '" aria-label="' + esc(titleOf(p)) + ' 일정 자세히 보기"' +
-        ' onclick="dsToggleBtn(this, \'' + dsId + '\')">일정 자세히 보기 ▾</button>'
-      : '';
-    // F(약사여래 안거)는 전용 소개 화면으로 안내하는 버튼을 카드에 추가
-    var introBtnHtml = (p.code === 'F' && document.getElementById('pageF'))
-      ? '<button type="button" class="dsCardBtn introBtn" onclick="showView(\'pageF\')">수행 소개 보기</button>'
-      : '';
+
+    var rows = '<div class="ir"><span class="k">일자</span><span class="v">' + esc(dateTxt) + '</span></div>';
+    if (timeTxt) rows += '<div class="ir"><span class="k">시간</span><span class="v">' + esc(timeTxt) + '</span></div>';
+    // 장소는 괄호 부가 정보(역 출구 등) 없이 간결하게 — 전체 주소는 신청서·소개 화면에 있음
+    var placeShort = String(p.place || '').replace(/\([^)]*\)\s*$/, '').trim();
+    if (placeShort) rows += '<div class="ir"><span class="k">장소</span><span class="v">' + esc(placeShort) + '</span></div>';
+    rows += '<div class="ir"><span class="k">비용</span><span class="v">' + feeText(p) +
+      (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</span></div>';
+
+    // 자세히 보기: 수행별 전용 소개 화면으로 이동 (F는 기존 안거 소개 화면, 나머지는 pageProg 공용 틀)
+    var moreBtnHtml = (p.code === 'F' && document.getElementById('pageF'))
+      ? '<button type="button" class="dsCardBtn" onclick="showView(\'pageF\')">자세히 보기</button>'
+      : '<button type="button" class="dsCardBtn" onclick="showProgIntro(\'' + esc(p.code) + '\')">자세히 보기</button>';
+
     div.innerHTML =
       '<div class="nameBanner">' +
         (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
         '<div class="progName">' + esc(p.name) + '</div>' +
+        ((compTxt || whyTxt) ? '<div class="progDesc">' + esc(compTxt || whyTxt) + '</div>' : '') +
       '</div>' +
       '<div class="cardBody">' +
-        '<div class="feeLine"><span class="feeAmt">참가비 ' + feeText(p) + '</span>' +
-          (feeSubTxt ? '<span class="feeSub">' + esc(feeSubTxt) + '</span>' : '') + '</div>' +
-        metaHtml(p) +
-        introBtnHtml +
-        dsBtnHtml +
-        (descHtml ? '<div class="desc">' + descHtml + '</div>' : '') +
-        (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '') +
-        (p.phone ? '<div class="infoLine">문의 : ' + esc(p.phone) + '</div>' : '') +
+        '<div class="infoRows">' + rows + '</div>' +
+        moreBtnHtml +
       '</div>' +
       '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
-    if (dsBtnHtml) {
-      // 세부 일정 블록을 일정표 섹션에서 떼어 버튼 바로 아래로 이동
-      div.querySelector('.dsCardBtn').insertAdjacentElement('afterend', document.getElementById(dsId));
-    }
     // 카드 아무 곳이나 눌러 선택되지 않도록, 체크 표시 줄에서만 신청 토글
     div.querySelector('.checkline').addEventListener('click', function (e) {
       if (e.target.tagName === 'INPUT') return;
@@ -2025,6 +2168,62 @@ function renderPrograms() {
     div.querySelector('input').addEventListener('change', function () { toggle(p.code, this.checked); });
     list.appendChild(div);
   });
+}
+
+// ── 수행별 소개 화면 (pageF와 동일 포맷: 히어로 → 소개 섹션 → 모집 요강 → 세부 일정 → 신청 CTA) ──
+function showProgIntro(code) {
+  var p = CONFIG.programs.find(function (x) { return x.code === code; });
+  if (!p) return;
+  var body = $('progIntroBody');
+  // 이전에 옮겨 둔 세부 일정 블록을 먼저 대피시킨 뒤 화면을 다시 그림 (innerHTML로 파괴되지 않도록)
+  Array.prototype.forEach.call(body.querySelectorAll('.dsBlock'), function (b) {
+    b.classList.remove('open');
+    $('dsStash').appendChild(b);
+  });
+
+  var sess = sessionsOf(p.schedule);
+  var s0 = sess && sess[0];
+  var dateTxt = s0 ? s0.when : String(p.schedule || '');
+  var wm = dateTxt.match(/^(.*\))\s+\d\S*.*$/);
+  if (wm) dateTxt = wm[1];
+  var capPlace = String(p.place || '').split(' ').slice(0, 2).join(' ');
+  var cap = [p.org, dateTxt.replace(/^26\./, '2026.'), capPlace].filter(Boolean).join(' · ');
+
+  var secs = (p.introSecs || []).map(function (s) {
+    return '<section class="card introSec"><h3>' + esc(s.h) + '</h3>' +
+      s.ps.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</section>';
+  }).join('');
+  var rows = (p.reqRows || []).map(function (r) {
+    return '<div class="row"><span class="k">' + esc(r.k) + '</span><span class="v">' +
+      esc(r.v).replace(/\n/g, '<br>') + '</span></div>';
+  }).join('');
+
+  body.innerHTML =
+    '<div class="introHero"><div class="cap">' + esc(cap) + '</div>' +
+      '<div class="t">' + esc(p.hero || p.name).replace(/\n/g, '<br>') + '</div></div>' +
+    secs +
+    (rows ? '<section class="card introSec introOutline"><h3>참가 안내</h3>' + rows +
+      (p.org ? '<div class="introSign">— ' + esc(p.org) + ' 드림</div>' : '') + '</section>' : '') +
+    '<div id="progIntroSchedule"></div>' +
+    '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
+      esc(p.name) + ' 신청하러 가기 →</button>';
+
+  var dsId = DS_MAP[code];
+  var ds = dsId && document.getElementById(dsId);
+  if (ds) {
+    $('progIntroSchedule').appendChild(ds);
+    ds.classList.add('open');
+  }
+  showView('pageProg');
+  window.scrollTo(0, 0);
+}
+
+// 소개 화면 하단 CTA: 신청 화면으로 이동 + 해당 수행 자동 선택 + 카드로 스크롤 (pageF의 introApplyBtn과 동일 동작)
+function progIntroApply(code) {
+  showView('main');
+  if (!selected[code]) toggle(code, true);
+  var card = $('prog-' + code);
+  if (card) setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
 }
 
 function toggle(code, force) {
@@ -2062,10 +2261,15 @@ function renderSubforms() {
     (prev[p.code] || []).forEach(function (a) { oldAnswers[a.q] = a.a; });
 
     var d = document.createElement('div');
-    d.className = 'subform';
+    d.className = 'subform' + (ORG_CLASS[p.org] ? ' ' + ORG_CLASS[p.org] : '');
     d.dataset.code = p.code;
     var html =
-      '<h4>' + esc(titleOf(p)) + ' 신청서</h4>' +
+      '<div class="sfHead">' +
+        (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
+        '<div class="sfName">' + esc(p.name) + '</div>' +
+        '<div class="sfNote">위에서 이 수행을 선택하셔서 나온 추가 질문입니다.</div>' +
+      '</div>' +
+      '<div class="sfBody">' +
       metaHtml(p, true) +
       (p.place ? '<div class="infoLine">장소 : ' + esc(p.place) + '</div>' : '');
 
@@ -2119,6 +2323,7 @@ function renderSubforms() {
         html += '<input type="text" name="q-' + esc(qid) + '" data-label="' + esc(q.label) + '" value="' + esc(old) + '" maxlength="100">';
       }
     });
+    html += '</div>';   // .sfBody 닫기
 
     d.innerHTML = html;
 
@@ -2231,7 +2436,6 @@ function validate() {
     errs.push('나이를 1~120 사이 숫자로 입력해 주세요.');
   }
   if (!$('fRegion').value.trim()) errs.push('거주하는 지역을 입력해 주세요.');
-  if (!$('fMotivation').value.trim()) errs.push('참가 동기를 입력해 주세요.');
   if (!$('fHealth').value.trim()) errs.push('건강 상태를 입력해 주세요. (없으면 "없음")');
   var subs = collectSubforms();
   codes.forEach(function (c) {
@@ -2270,7 +2474,7 @@ function submit() {
     age: $('fAge').value.trim(),
     region: $('fRegion').value.trim(),
     experience: expValue,
-    motivation: $('fMotivation').value.trim(),
+    motivation: '',   // 참가 동기 문항 삭제(2026-08-09) — 시트 열 유지를 위해 빈 값으로 전송
     health: $('fHealth').value.trim(),
     depositorName: $('fDepositor').value.trim(),
     privacyConsent: $('fPrivacy').checked ? '동의함' : '',
@@ -2472,8 +2676,8 @@ window.addEventListener('resize', updateFab);
   if (dsD) { $('introSchedule').appendChild(dsD); dsD.classList.add('open'); }
 })();
 
-var VIEW_IDS = ['gate', 'hub', 'pageDict', 'pageSched', 'pageF', 'main', 'done'];
-var TAB_OF = { hub: 'tab-hub', pageDict: 'tab-dict', pageSched: 'tab-sched', pageF: 'tab-apply', main: 'tab-apply' };
+var VIEW_IDS = ['gate', 'hub', 'pageDict', 'pageSched', 'pageF', 'pageProg', 'main', 'done'];
+var TAB_OF = { hub: 'tab-hub', pageDict: 'tab-dict', pageSched: 'tab-sched', pageF: 'tab-apply', pageProg: 'tab-apply', main: 'tab-apply' };
 function showView(id) {
   VIEW_IDS.forEach(function (v) {
     var el = document.getElementById(v);
