@@ -462,6 +462,10 @@
     line-height: 1.5; word-break: keep-all;
   }
   #scheduleBody .dsBlock { margin: .9rem 0 1.1rem; }
+  /* 모바일: 구절 단위(nowrap span)가 화면 폭보다 길면 밖으로 삐져나가므로, 단위 안 줄바꿈을 허용 */
+  @media (max-width: 640px) {
+    .schedRow .tit span, .schedRow .meta span { white-space: normal; }
+  }
   @media (max-width: 480px) {
     .schedRow { gap: .8rem; }
     .schedRow .when { width: 6.9em; font-size: .9rem; }
