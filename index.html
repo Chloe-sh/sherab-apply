@@ -734,6 +734,7 @@
   }
   .introHero .cap { font-size: .8rem; opacity: .75; margin-bottom: .45rem; }
   .introHero .t { font-size: 1.3rem; font-weight: 700; line-height: 1.5; }
+  .introPoster { display: block; width: 100%; margin-top: 1rem; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 2px 10px rgba(26,44,91,.05); }
   .introSec h3 { color: var(--navy); font-size: 1.12rem; font-weight: 700; margin-bottom: .7rem; }
   .introSec p {
     font-size: .98rem; line-height: 1.85; color: #222;
@@ -1571,6 +1572,7 @@ var CONFIG_DATA = {
       "code": "E",
       "name": "한의사 茶談 수행",
       "org": "아나빠나사띠명상요가",
+      "introImg": "images/dadam-poster.jpg",
       "fee": 0,
       "schedule": "26. 9. 1(화) ~ 9. 2(수) 20:00~22:00/한의사 茶談 수행 - 한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
@@ -2143,7 +2145,7 @@ function accountTable(programs) {
     var acc = isAccountPending(p.account)
       ? '<span class="accPending">확정 후 개별 안내</span>'
       : esc(p.account);
-    return '<tr><td>' + orgNameHtml(p.org || p.name) + '</td><td>' + acc + '</td><td class="amount">' + feeText(p) + '</td></tr>';
+    return '<tr><td>' + orgNameHtml(p.org || p.name) + '</td><td>' + acc + '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
   }).join('');
 
   // 계좌 미확정 수행이 섞여 있으면, "아래 계좌로 입금 바랍니다"와 모순되지 않도록 따로 안내한다.
@@ -2269,6 +2271,7 @@ function showProgIntro(code) {
   body.innerHTML =
     '<div class="introHero"><div class="cap">' + esc(cap) + '</div>' +
       '<div class="t">' + esc(p.hero || p.name).replace(/\n/g, '<br>') + '</div></div>' +
+    (p.introImg ? '<img class="introPoster" src="' + esc(p.introImg) + '" alt="' + esc(p.name) + ' 포스터">' : '') +
     secs +
     (rows ? '<section class="card introSec introOutline"><h3>참가 안내</h3>' + rows +
       (p.org ? '<div class="introSign">— ' + esc(p.org) + ' 드림</div>' : '') + '</section>' : '') +
