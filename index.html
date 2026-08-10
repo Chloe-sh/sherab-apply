@@ -478,6 +478,7 @@
   /* 개별 신청 내역으로 금액이 달라진 경우의 산출 근거 줄 (부분 참가 일수, 법구 구입 등) */
   .feeTable tr.hasDetail td { border-bottom: none; padding-bottom: .15rem; }
   .feeTable tr.feeDetail td { padding: 0 .5rem .65rem; font-size: .84rem; color: #6B7684; line-height: 1.6; }
+  .feeTable .feeAcc { display: block; margin-top: .2rem; font-size: .92rem; color: var(--ink); }
   .feeNote { font-size: .85rem; color: #6E6E6E; margin-top: .5rem; }
 
   /* 일정표: 월별 그룹 구분선 리스트 — '안내' 톤 (선택 카드와 시각 무게 차별화) */
@@ -1373,7 +1374,7 @@
         <thead><tr><th>선택한 수행</th><th>참가비</th></tr></thead>
         <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
       </table>
-      <div class="infoBox" id="paymentInfo"></div>
+      <div class="feeNote" id="depositNote" style="display:none"></div>
       <div class="infoBox"><b>환불 규정</b><br><span id="refundInfo"></span></div>
       <label class="q">참가비 입금자명</label>
       <div class="hint">신청자명과 입금자명이 다른 경우만 적어 주세요.<br>입금 시 "신청자명+룽즁쥭 / 신청자명+꿈요가 / 신청자명+5일"과 같이 입금해 주시면 확인이 빠릅니다.</div>
@@ -1461,7 +1462,7 @@ var CONFIG_DATA = {
     "쉐랍소개": "쉐랍 텐진은 2,500년 전통의 티베트 전통의학 소와 릭빠의 정식 학위(멘 람파)를 지닌 의사이며, 트로가와 린포체로부터 '유톡닝틱' 법맥을 계승한 수행자입니다. 부탄 왕실 주치의로 활동했으며, 내셔널 지오그래픽 및 세계자연기금과 협력하여 히말라야의 멸종위기 약용식물을 보존하는 연구에 참여하셨습니다. 현재 네팔의 파르핑에 퓨어 비전 '소와 릭빠 힐링 센터'를 설립하여 국제적 진료와 교육 활동을 이어오고 계십니다. 한국과는 4년 전부터 매년 약사여래 수행을 통해 한국 수행자를 위한 티베트 불교 전통 수행법과 건강법을 전하고 계십니다.",
     "쉐랍사진URL": "https://docs.google.com/forms-images-rt/AI1QifjygdJygRAUxrGCNbFobXyi8cVVFw3oPgux8kboolhq8GxwYvbXCRnN3NMMZmkLP0H00rjZsEMSwpQvJTmXZ_pRTWsFkZVsedSSE_tUo8s7BYluXx8M19suBO_JkmBlXDxpB_RGeNP0utRxwbvKCody7WPNKV5lsrG47u2dn7VNODGrX0BXjkn0NUIHkbbnUcN-UZDL5P-UFA=w850",
     "선택안내": "참가하실 수행을 선택해 주세요.",
-    "입금안내": "아래 계좌로 입금 바랍니다.(선착순 마감)",
+    "입금안내": "각 수행의 계좌로 입금 바랍니다. (선착순 마감)",
     "입금계좌": "국민은행 084-21-0710-611 (김정수)",
     "문의처": "010-9028-8929 / 010-3293-1634",
     "환불규정": "7일 전 취소 : 100% 환불\n3일 ~ 6일 전 취소 : 50% 환불\n2일 전 ~ 당일 취소 : 환불 불가\n※ 환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.",
@@ -2044,7 +2045,6 @@ function render() {
   }
 
   $('selectHint').textContent = s['선택안내'] || '';
-  $('paymentInfo').innerHTML = '<b>입금 안내</b><br>' + esc(s['입금안내']) + '<div id="paymentAccounts"></div>';
   $('refundInfo').textContent = s['환불규정'] || '';
   $('contactFoot').textContent = '문의 : ' + (s['문의처'] || '');
 
@@ -2511,31 +2511,44 @@ function collectSubforms() {
   return out;
 }
 
-// ── 참가비 표 ──
+// ── 참가비 표 (B안 통합: 수행별 금액 + 요금 기준·산출 내역·입금 계좌를 한 표에) ──
 function renderFees() {
   var body = $('feeBody');
   var rows = '';
   var total = 0;
+  var pending = [];
   CONFIG.programs.forEach(function (p) {
     if (!selected[p.code]) return;
     total += effectiveFee(p);
-    var det = feeBreakdown(p);
-    rows += '<tr' + (det.length ? ' class="hasDetail"' : '') + '><td>' + esc(titleOf(p)) +
-      '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>';
-    if (det.length) {
-      rows += '<tr class="feeDetail"><td colspan="2">' + det.map(esc).join('<br>') + '</td></tr>';
-    }
+    var det = [];
+    var memo = String((CONFIG.settings['참가비메모' + p.code] || '')).trim();
+    if (memo) det.push(memo);
+    det = det.concat(feeBreakdown(p));
+    if (isAccountPending(p.account)) pending.push(p);
+    var acc = isAccountPending(p.account)
+      ? '<span class="accPending">계좌 확정 후 개별 안내</span>'
+      : esc(p.account || '계좌 추후 안내');
+    rows += '<tr class="hasDetail"><td>' + esc(titleOf(p)) +
+      '</td><td class="amount">' + effectiveFeeText(p) + '</td></tr>' +
+      '<tr class="feeDetail"><td colspan="2">' +
+      det.map(esc).join('<br>') + (det.length ? '<br>' : '') +
+      '<span class="feeAcc">입금 계좌 · ' + acc + '</span></td></tr>';
   });
+  var note = $('depositNote');
   if (!rows) {
-    body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr>';
+    body.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비와 입금 계좌가 표시됩니다.</td></tr>';
+    if (note) note.style.display = 'none';
   } else {
     body.innerHTML = rows + '<tr class="total"><td>합계</td><td class="amount">' + won(total) + '</td></tr>';
-  }
-
-  // 선택한 기관별 입금 계좌 갱신
-  var accEl = document.getElementById('paymentAccounts');
-  if (accEl) {
-    accEl.innerHTML = accountTable(CONFIG.programs.filter(function (p) { return selected[p.code]; }));
+    if (note) {
+      var orgs = {};
+      CONFIG.programs.forEach(function (p) { if (selected[p.code]) orgs[p.org || p.name] = 1; });
+      var txt = '※ ' + esc(CONFIG.settings['입금안내'] || '각 수행의 계좌로 입금 바랍니다. (선착순 마감)').replace(/\n/g, '<br>');
+      if (Object.keys(orgs).length > 1) txt += '<br>기관이 서로 달라 계좌가 다릅니다. 수행별 금액을 각 계좌로 나누어 입금해 주세요.';
+      if (pending.length) txt += '<br><b>' + esc(pending.map(function (p) { return titleOf(p); }).join(', ')) + '</b> — 계좌가 확정되는 대로 신청하신 연락처로 안내드립니다. 안내를 받으신 뒤에 입금해 주세요.';
+      note.innerHTML = txt;
+      note.style.display = '';
+    }
   }
 }
 
