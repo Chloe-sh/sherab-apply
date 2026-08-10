@@ -1373,6 +1373,7 @@
         <thead><tr><th>선택한 수행</th><th>참가비</th></tr></thead>
         <tbody id="feeBody"><tr><td colspan="2" style="text-align:center; color:#767676;">위에서 수행을 선택하면 참가비가 표시됩니다.</td></tr></tbody>
       </table>
+      <div class="feeNote" id="feeNoteG" style="display:none">여러분의 보시는 수행 프로그램 운영과 스승님 초청에 소중히 사용됩니다.<br>귀한 법회가 이어질 수 있도록 정성 어린 보시로 함께해 주세요.</div>
       <div class="infoBox" id="paymentInfo"></div>
       <div class="infoBox"><b>환불 규정</b><br><span id="refundInfo"></span></div>
       <label class="q">참가비 입금자명</label>
@@ -2531,6 +2532,10 @@ function renderFees() {
   } else {
     body.innerHTML = rows + '<tr class="total"><td>합계</td><td class="amount">' + won(total) + '</td></tr>';
   }
+
+  // 룽즁쥭(G·동참보시) 선택 시에만 보시 동참 안내 표시
+  var noteG = document.getElementById('feeNoteG');
+  if (noteG) noteG.style.display = selected['G'] ? '' : 'none';
 
   // 선택한 기관별 입금 계좌 갱신
   var accEl = document.getElementById('paymentAccounts');
