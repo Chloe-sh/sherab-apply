@@ -479,6 +479,8 @@
   .feeTable tr.hasDetail td { border-bottom: none; padding-bottom: .15rem; }
   .feeTable tr.feeDetail td { padding: 0 .5rem .65rem; font-size: .84rem; color: #6B7684; line-height: 1.6; }
   .feeTable .feeAcc { display: block; margin-top: .2rem; font-size: .92rem; color: var(--ink); }
+  .feeTable tr.hasDetail td { font-weight: 700; color: var(--navy); }
+  .feeNote .noteEm { font-weight: 700; color: var(--navy); }
   .feeNote { font-size: .85rem; color: #6E6E6E; margin-top: .5rem; }
 
   /* 일정표: 월별 그룹 구분선 리스트 — '안내' 톤 (선택 카드와 시각 무게 차별화) */
@@ -2544,7 +2546,7 @@ function renderFees() {
       var orgs = {};
       CONFIG.programs.forEach(function (p) { if (selected[p.code]) orgs[p.org || p.name] = 1; });
       var txt = '※ ' + esc(CONFIG.settings['입금안내'] || '각 수행의 계좌로 입금 바랍니다. (선착순 마감)').replace(/\n/g, '<br>');
-      if (Object.keys(orgs).length > 1) txt += '<br>기관이 서로 달라 계좌가 다릅니다. 수행별 금액을 각 계좌로 나누어 입금해 주세요.';
+      if (Object.keys(orgs).length > 1) txt += '<br><span class="noteEm">기관이 서로 달라 계좌가 다릅니다. 수행별 금액을 각 계좌로 나누어 입금해 주세요.</span>';
       if (pending.length) txt += '<br><b>' + esc(pending.map(function (p) { return titleOf(p); }).join(', ')) + '</b> — 계좌가 확정되는 대로 신청하신 연락처로 안내드립니다. 안내를 받으신 뒤에 입금해 주세요.';
       note.innerHTML = txt;
       note.style.display = '';
