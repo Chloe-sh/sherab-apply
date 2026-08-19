@@ -880,9 +880,11 @@
     <section class="card introSec introOutline">
       <h3>참가 안내</h3>
       <div class="row"><span class="k">일시</span><span class="v">2026년 9월 10일(목) ~ 13일(일) 3박 4일</span></div>
-      <div class="row"><span class="k">장소</span><span class="v">전남 보성 대원사 (전남 보성군 문덕면 죽산길 506-8 · 보성역에서 차량 30분)</span></div>
+      <div class="row"><span class="k">장소</span><span class="v">전남 보성 대원사 (전남 보성군 문덕면 죽산길 506-8 · 보성역에서 차량 30분)<br>오시는 길은 수련 신청 후에 자세히 안내드릴 예정입니다.</span></div>
       <div class="row"><span class="k">대상</span><span class="v">치유와 평화가 필요한 35명</span></div>
-      <div class="row"><span class="k">수련비</span><span class="v">38만 원 (법본집 비용 포함) · 입금 선착순 마감<br>전 일정 참여를 권장하지만 부분 참여 가능하며 수련비는 동일합니다.<br>경제적 배려가 필요하신 분은 연락주세요.</span></div>
+      <div class="row"><span class="k">수련비</span><span class="v">전 일정(3박 4일) 38만 원 (법본집 비용 포함) · 입금 선착순 마감<br>부분 참여 : 1일 13만 원 (숙식비 포함)</span></div>
+      <div class="row"><span class="k">장학생</span><span class="v">장학생 할인 신청이 필요하신 분은 별도로 연락 바랍니다.<br>스님은 자율보시입니다.</span></div>
+      <div class="row"><span class="k">준비물</span><span class="v">수건, 모기약, 세면도구, 편한 신발, 무릎 담요 등<br>복장은 편안한 복장으로 하시되, 사찰의 분위기에 맞춰 짧은 반바지 등은 삼가 부탁드립니다.</span></div>
       <div class="row"><span class="k">입금</span><span class="v">농협 302-1813-2302-91 (박서현)</span></div>
       <div class="row"><span class="k">문의</span><span class="v">김도희 010-3007-6631 (저녁 7시~9시까지 통화 가능)<br>김향진 010-5557-4597 (문자 주시면 여유로운 시간에 전화드리겠습니다.)</span></div>
       <div class="introSign">— 혜봉추모기념사업회 드림</div>
@@ -1470,7 +1472,8 @@ var CONFIG_DATA = {
     "환불규정": "7일 전 취소 : 100% 환불\n3일 ~ 6일 전 취소 : 50% 환불\n2일 전 ~ 당일 취소 : 환불 불가\n※ 환불 문의는 작성하신 연락처로 문자 접수 부탁드립니다.",
     "완료메시지": "참가비를 입금하시면 확인 후 문자를 보내드립니다.\n감사합니다.",
     "참가비메모C": "2일 기준, 1일 참여 시 9만 원",
-    "참가비메모D": "5일 기준, 1일 참여 시 9만 원"
+    "참가비메모D": "5일 기준, 1일 참여 시 9만 원",
+    "참가비메모F": "3박 4일 기준, 부분 참여 시 1일 13만 원"
   },
   "programs": [
     {
@@ -1614,7 +1617,7 @@ var CONFIG_DATA = {
       "org": "혜봉추모기념사업회",
       "fee": 380000,
       "schedule": "26. 9. 10(목) ~ 9. 13(일) · 숙박/약사여래 수행 - 혜봉 선생님의 수행 정신과 가르침을 기리며, 모든 중생이 질병과 고통에서 벗어나기를 서원한 약사여래의 지혜와 자비를 함께 닦는 수행입니다.",
-      "place": "대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분)",
+      "place": "대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분 · 오시는 길은 신청 후 안내)",
       "desc": "",
       "image": "https://docs.google.com/forms-images-rt/AI1Qifhv4Ruy4-1UWStDensVPVjK6PMX0czRJ3dOr2VEza-6I64QFQTYx0WuElxI2lnKyGJ89G4MyVJGYJHksIV8L9lN5uDlirhu_0hj5D__aWSIS_vAzGzEWjsDcg4ZkYPvdLNsSKKxJsnHMg6JxlLDBRDIl41ReeIEba0uMhY6700fp98OpZ6PZY8g2_stEAyNQAhPTKNOObBlsQ=w520",
       "account": "농협 302-1813-2302-91 (박서현)",
@@ -1822,21 +1825,24 @@ var CONFIG_DATA = {
       {
         "order": 1,
         "label": "참가 일정 선택",
-        "type": "선택",
+        "type": "복수선택",
         "options": [
           "전 일정 참가 (9월 10일(목) ~ 13일(일) · 3박 4일)",
-          "부분 참여"
+          "9월 10일(목)",
+          "9월 11일(금)",
+          "9월 12일(토)",
+          "9월 13일(일)"
         ],
         "required": true,
-        "hint": ""
+        "hint": "전 일정 참가는 38만 원(법본집 비용 포함), 부분 참여는 1일 13만 원(숙식비 포함)입니다.\n부분 참여이시면 참가하실 날짜를 모두 선택해 주세요."
       },
       {
         "order": 2,
-        "label": "부분 참여 시 참가 날짜",
+        "label": "부분 참여 시 참가 시간 등 참고 사항",
         "type": "단답",
         "options": [],
         "required": false,
-        "hint": "예 : 9월 11일(금) ~ 12일(토) 참여"
+        "hint": "예 : 9월 11일(금) 오후 수업부터 참가 가능합니다."
       },
       {
         "order": 3,
@@ -1954,14 +1960,22 @@ function partialDays(code, dayRe) {
   if (!d) return 0;
   var all = false, days = 0;
   Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox]:checked'), function (c) {
-    if (c.value === '전일 참가') all = true;
+    if (/^전(일|\s*일정)\s*참가/.test(c.value)) all = true;   // '전일 참가'(A·C·D·G) / '전 일정 참가'(F)
     else if (dayRe.test(c.value)) days++;
   });
   return all ? 0 : days;
 }
 function dPartialDays() { return partialDays('D', /^9월 \d+일/); }
 function cPartialDays() { return partialDays('C', /^8월 \d+일/); }
-// 부분 참가(D·C)는 일수 × 9만 원, 법구 구입(F)은 참가비에 합산
+function fPartialDays() { return partialDays('F', /^9월 \d+일/); }
+// F 약사여래 안거(2026-08-20): 부분 참여는 1일 13만 원 — 전 일정 참가비(38만)를 넘지 않도록 상한
+var F_DAY_FEE = 130000;
+function fPartialFee(p) {
+  var days = fPartialDays();
+  if (!days) return null;
+  return { days: days, raw: days * F_DAY_FEE, fee: Math.min(days * F_DAY_FEE, Number(p.fee) || 0) };
+}
+// 부분 참가(D·C)는 일수 × 9만 원, F는 일수 × 13만 원, 법구 구입(F)은 참가비에 합산
 function effectiveFee(p) {
   var base = Number(p.fee) || 0;
   if (p.code === 'D') {
@@ -1972,7 +1986,11 @@ function effectiveFee(p) {
     var cdays = cPartialDays();
     if (cdays) base = cdays * 90000;
   }
-  if (p.code === 'F') base += beopguFee();
+  if (p.code === 'F') {
+    var fp = fPartialFee(p);
+    if (fp) base = fp.fee;
+    base += beopguFee();
+  }
   return base;
 }
 // 개별 신청 내역 때문에 금액이 기본 참가비와 달라질 때, 산출 근거 줄들을 돌려줌
@@ -1987,9 +2005,14 @@ function feeBreakdown(p) {
     if (cdays && cdays * 90000 !== Number(p.fee)) out.push('부분 참가 ' + cdays + '일 × 90,000원');
   }
   if (p.code === 'F') {
+    var fp = fPartialFee(p);
+    if (fp) {
+      out.push('부분 참여 ' + fp.days + '일 × ' + won(F_DAY_FEE) +
+        (fp.raw > fp.fee ? ' → 전 일정 참가비 ' + won(fp.fee) + ' 적용' : ''));
+    }
     var b = beopguInfo();
     if (b && b.fee) {
-      out.push('참가비 ' + won(Number(p.fee) || 0));
+      if (!fp) out.push('참가비 ' + won(Number(p.fee) || 0));
       out.push('법구 구입 · ' + b.label + ' +' + won(b.fee));
     }
   }
@@ -2498,7 +2521,7 @@ function renderSubforms() {
     // 참가 일정 변경 시 참가비 계산서 즉시 갱신 (D 부분 참가 일수 계산)
     d.addEventListener('change', function () { renderFees(); });
     // '전일 참가'를 체크하면 같은 그룹의 개별 날짜 체크는 해제·비활성화
-    Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox][value="전일 참가"]'), function (allBox) {
+    Array.prototype.forEach.call(d.querySelectorAll('input[type=checkbox][value^="전일 참가"], input[type=checkbox][value^="전 일정 참가"]'), function (allBox) {
       var group = d.querySelectorAll('input[type=checkbox][name="' + allBox.name + '"]');
       var syncAll = function () {
         Array.prototype.forEach.call(group, function (c) {
