@@ -362,6 +362,19 @@
   }
   .prog input[type=checkbox] { width: 1.3rem; height: 1.3rem; accent-color: var(--navy); }
   .prog.selected .checkline { background: var(--navy); color: #fff; }
+  /* 마감된 수행: 회색 처리 + 체크 줄 대신 마감 안내 (CONFIG programs의 closed: true) */
+  .prog.closed .nameBanner { background: #EFF2F6; }
+  .prog.closed .nameBanner .progName { color: #6B7684; }
+  .prog.closed .nameBanner .progDesc { color: #8A93A3; }
+  .prog.closed .nameBanner .orgBadge { color: #6B7684; border-color: #D5DBE4; }
+  .prog.closed .cardBody { opacity: .6; }
+  .prog.closed .checkline { background: #EFF2F6; color: #6B7684; cursor: default; font-weight: 600; }
+  .closedBadge {
+    display: inline-block; font-size: .82rem; font-weight: 700; color: #fff;
+    background: #8A93A3; border-radius: 999px; padding: .2rem .7rem;
+    margin-left: .35rem; margin-bottom: .45rem; vertical-align: top;
+  }
+  .introApplyBtn.introClosed { background: #8A93A3; cursor: default; }
 
   /* 신청서 작성 카드: 상단 선택 수행 목록 + 소제목(기본 정보 / 수행별 추가 질문) */
   /* 선택 수행 목록: 남색 배너 + 수행명 흰 알약 칩 — 한눈에 띄게 */
@@ -1481,6 +1494,7 @@ var CONFIG_DATA = {
       "name": "룽즁쥭 쌍악쑤 닥빠",
       "org": "행복수업협동조합",
       "fee": 0,
+      "closed": true,
       "schedule": "26. 8. 26(수) ~ 27(목) 9:00~18:00/룽즁쥭 쌍악쑤 닥빠 - 혜봉 선생님 인연을 위한 호흡 수행",
       "place": "서울 관악구 봉천로31길 3(봉천역 4번 출구)",
       "introSecs": [
@@ -2239,7 +2253,7 @@ function renderPrograms() {
   list.innerHTML = '';
   CONFIG.programs.forEach(function (p) {
     var div = document.createElement('div');
-    div.className = 'prog' + (ORG_CLASS[p.org] ? ' ' + ORG_CLASS[p.org] : '');
+    div.className = 'prog' + (ORG_CLASS[p.org] ? ' ' + ORG_CLASS[p.org] : '') + (p.closed ? ' closed' : '');
     div.id = 'prog-' + p.code;
     // 카드 단순화(2026-08-09): 헤더(단체명·수행명·설명) + 일자/시간/장소/비용 요약 행 + 자세히 보기
     var sess = sessionsOf(p.schedule);
@@ -2273,6 +2287,7 @@ function renderPrograms() {
     div.innerHTML =
       '<div class="nameBanner">' +
         (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
+        (p.closed ? '<span class="closedBadge">신청 마감</span>' : '') +
         '<div class="progName">' + esc(p.name) + '</div>' +
         ((compTxt || whyTxt) ? '<div class="progDesc">' + esc(compTxt || whyTxt) + '</div>' : '') +
       '</div>' +
@@ -2280,18 +2295,22 @@ function renderPrograms() {
         '<div class="infoRows">' + rows + '</div>' +
         moreBtnHtml +
       '</div>' +
-      '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>';
+      (p.closed
+        ? '<div class="checkline"><span>신청이 마감되었습니다</span></div>'
+        : '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>');
     // 카드 아무 곳이나 눌러 선택되지 않도록, 체크 표시 줄에서만 신청 토글
     // 체크(선택)하는 순간 바로 신청서 작성 칸으로 이동 — 해제할 때는 이동하지 않음
-    div.querySelector('.checkline').addEventListener('click', function (e) {
-      if (e.target.tagName === 'INPUT') return;
-      toggle(p.code);
-      if (selected[p.code]) scrollToApplyForm();
-    });
-    div.querySelector('input').addEventListener('change', function () {
-      toggle(p.code, this.checked);
-      if (this.checked) scrollToApplyForm();
-    });
+    if (!p.closed) {
+      div.querySelector('.checkline').addEventListener('click', function (e) {
+        if (e.target.tagName === 'INPUT') return;
+        toggle(p.code);
+        if (selected[p.code]) scrollToApplyForm();
+      });
+      div.querySelector('input').addEventListener('change', function () {
+        toggle(p.code, this.checked);
+        if (this.checked) scrollToApplyForm();
+      });
+    }
     list.appendChild(div);
   });
 }
@@ -2332,8 +2351,10 @@ function showProgIntro(code) {
     (rows ? '<section class="card introSec introOutline"><h3>참가 안내</h3>' + rows +
       (p.org ? '<div class="introSign">— ' + esc(p.org) + ' 드림</div>' : '') + '</section>' : '') +
     '<div id="progIntroSchedule"></div>' +
-    '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
-      esc(p.name) + ' 신청하러 가기 →</button>' +
+    (p.closed
+      ? '<button type="button" class="introApplyBtn introClosed" disabled>신청이 마감되었습니다</button>'
+      : '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
+        esc(p.name) + ' 신청하러 가기 →</button>') +
     '<button type="button" class="introBackBtn" onclick="progIntroBack()">다른 수행 보기</button>';
 
   var dsId = DS_MAP[code];
@@ -2373,6 +2394,9 @@ function scrollToApplyForm() {
 }
 
 function toggle(code, force) {
+  // 마감된 수행은 어떤 경로(카드 체크·소개 화면 CTA)로도 선택되지 않게
+  var pDef = CONFIG.programs.find(function (x) { return x.code === code; });
+  if (pDef && pDef.closed) force = false;
   selected[code] = (force !== undefined) ? force : !selected[code];
   var oi = selOrder.indexOf(code);
   if (oi >= 0) selOrder.splice(oi, 1);
