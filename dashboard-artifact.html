@@ -144,7 +144,7 @@ body.locked .wrap { display: none; }
     <form id="gateForm">
       <label for="gatePw">열람 암호</label>
       <div class="grow">
-        <input id="gatePw" type="password" autocomplete="off" autofocus>
+        <input id="gatePw" type="password" inputmode="numeric" autocomplete="off" autofocus>
         <button type="submit">열기</button>
       </div>
       <div class="gerr" id="gateErr"></div>
@@ -236,8 +236,8 @@ window.DD = {"asOf":"2026-08-27 14:29","progs":[{"code":"G","name":"룽즁쥭 �
 <script>
 // ── 암호 게이트 ──
 (function(){
-  const HASH = 'd1b72f598a5fa3dd46ad3867b00eba6380901835862856238949888cf0006ef8';
-  const KEY = 'sherab_dash_ok';
+  const HASH = '1a1024939ae1a1395ad5675ee62113f77267b55f46a805b15ccc0bbe7773aacb';
+  const KEY = 'sherab_dash_ok2';
   async function sha(s){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
     return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
   function unlock(){ document.body.classList.remove('locked'); const g=document.getElementById('gate'); if(g) g.remove(); }
