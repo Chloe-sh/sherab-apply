@@ -124,9 +124,40 @@ footer { margin-top: 60px; border-top: 3px solid var(--rule); padding-top: 10px;
 #tip { position: fixed; display: none; pointer-events: none; z-index: 20; background: var(--tip-bg); color: var(--tip-ink);
   padding: 7px 11px; font-size: .76rem; line-height: 1.5; max-width: 230px; }
 #tip b { font-size: .8rem; }
+/* 암호 게이트 */
+#gate { position: fixed; inset: 0; z-index: 100; background: var(--paper); display: flex;
+  align-items: center; justify-content: center; padding: 24px; }
+#gate .gbox { width: 100%; max-width: 340px; border-top: 3px solid var(--rule); padding-top: 18px; }
+#gate .gover { font-size: .78rem; font-weight: 500; color: var(--muted); letter-spacing: .22em; }
+#gate h1 { font-size: 1.4rem; font-weight: 700; margin: 4px 0 18px; }
+#gate label { display: block; font-size: .76rem; color: var(--muted); margin-bottom: 6px; }
+#gate .grow { display: flex; gap: 8px; }
+#gate input { flex: 1; font-family: inherit; font-size: .95rem; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--hair); border-bottom: 2px solid var(--rule); padding: 8px 10px; outline: none; min-width: 0; }
+#gate input:focus { border-color: var(--ink); }
+#gate button { font-family: inherit; font-size: .85rem; font-weight: 700; color: var(--paper);
+  background: var(--ink); border: none; padding: 8px 18px; cursor: pointer; }
+#gate .gerr { font-size: .76rem; color: var(--seal); margin-top: 10px; min-height: 1.2em; }
+#gate .gnote { font-size: .72rem; color: var(--faint); margin-top: 16px; }
+body.locked .wrap { display: none; }
 </style>
 </head>
-<body>
+<body class="locked">
+<div id="gate">
+  <div class="gbox">
+    <div class="gover">2026 쉐랍 텐진 방한수련</div>
+    <h1>신청 현황</h1>
+    <form id="gateForm">
+      <label for="gatePw">열람 암호</label>
+      <div class="grow">
+        <input id="gatePw" type="password" autocomplete="off" autofocus>
+        <button type="submit">열기</button>
+      </div>
+      <div class="gerr" id="gateErr"></div>
+    </form>
+    <div class="gnote">운영진 전용 페이지입니다. 암호는 담당자에게 문의해 주세요.</div>
+  </div>
+</div>
 <div class="wrap">
 
 <header class="mast">
@@ -209,6 +240,23 @@ window.DD = {"asOf":"2026-08-27 14:29","progs":[{"code":"G","name":"룽즁쥭 �
 <!--DD_END-->
 
 <script>
+// ── 암호 게이트 ──
+(function(){
+  const HASH = 'd1b72f598a5fa3dd46ad3867b00eba6380901835862856238949888cf0006ef8';
+  const KEY = 'sherab_dash_ok';
+  async function sha(s){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+  function unlock(){ document.body.classList.remove('locked'); const g=document.getElementById('gate'); if(g) g.remove(); }
+  let saved = null; try { saved = localStorage.getItem(KEY); } catch(e) {}
+  if (saved === HASH) { unlock(); }
+  document.getElementById('gateForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const v = document.getElementById('gatePw').value.trim();
+    if (await sha(v) === HASH) { try { localStorage.setItem(KEY, HASH); } catch(err) {} unlock(); }
+    else { document.getElementById('gateErr').textContent = '암호가 맞지 않습니다.'; document.getElementById('gatePw').select(); }
+  });
+})();
+
 const ORGV = { h: ['행복수업협동조합','var(--happy)','var(--happy-bg)'],
                a: ['아나빠나사띠명상요가','var(--anapana)','var(--anapana-bg)'],
                b: ['혜봉추모기념사업회','var(--hyebong)','var(--hyebong-bg)'] };
