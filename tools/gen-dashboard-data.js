@@ -10,7 +10,7 @@
 // 확정 규칙(2026-08-27 운영진 확정):
 //  - 테스트 = 접수원본 회색행(8/10 이후분) + 이름 휴리스틱(초기 구간)
 //  - 동일인 중복 신청은 접수원본에 있는(=재신청) 건만 인정
-//  - 전역 제외: 권양희·김정수·김해리 / 김연희는 E·F만 제외 / 260812 김선희·김태형은 실참가
+//  - 전역 제외: 권양희·권영희·김정수·김해리 / 김연희는 E·F만 제외 / 260812 김선희·김태형은 실참가
 //  - F 신형 질문지 "참가 일정 선택: 전 일정 참가" 파싱 필수
 (async () => {
 const SID = '1ZBF3ZilXm9JWroLTI7E15SjZhQIzGUFx36TeqrWFfhs';
@@ -44,7 +44,7 @@ for(const rm of sh.matchAll(/<row r="(\d+)"[^>]*>([\s\S]*?)<\/row>/g)){
 const t = await fetch('https://docs.google.com/spreadsheets/d/'+SID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent('개별내역')).then(r=>r.text());
 function parseCSV(s){const rows=[];let row=[],cur='',q=false;for(let i=0;i<s.length;i++){const c=s[i];if(q){if(c==='"'){if(s[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===','){row.push(cur);cur='';}else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur='';}else if(c!=='\r')cur+=c;}}if(cur!==''||row.length){row.push(cur);rows.push(row);}return rows;}
 const recs = parseCSV(t).slice(1).filter(r=>r.length>5&&r[2]);
-const WL=new Set(['260812-220450','260812-224230']), GEX=['권양희','김정수','김해리'];
+const WL=new Set(['260812-220450','260812-224230']), GEX=['권양희','권영희','김정수','김해리'];
 function isTest(r){ const id=String(r[1]).trim(), name=(r[2]||'').trim(), blob=r.join(' ');
   if(WL.has(id)||name.includes('정연아')) return false;
   if(graySet.has(id)) return true;
