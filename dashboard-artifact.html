@@ -1,0 +1,311 @@
+<meta name="robots" content="noindex, nofollow">
+<title>쉐랍 방한수련 대시보드</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<style>
+:root {
+  --paper: #FCFCFB; --ink: #17150F; --muted: #6B665C; --faint: #99938A;
+  --rule: #17150F; --hair: #DEDAD3; --cell: #F1EFEA;
+  --happy: #3E6FB5; --anapana: #A8701B; --hyebong: #1F8A6E;
+  --happy-bg: #EAF0F8; --anapana-bg: #F5EEDF; --hyebong-bg: #E5F1EC;
+  --seal: #B93A20;
+  --tip-bg: #17150F; --tip-ink: #FCFCFB;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1C1B18; --ink: #EAE6DF; --muted: #A29B8F; --faint: #736D62;
+    --rule: #EAE6DF; --hair: #3B3833; --cell: #26241F;
+    --happy: #4E82C9; --anapana: #C08428; --hyebong: #2E9B7E;
+    --happy-bg: #262E3A; --anapana-bg: #332B1C; --hyebong-bg: #20322B;
+    --seal: #D96A4E;
+    --tip-bg: #EAE6DF; --tip-ink: #1C1B18;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1C1B18; --ink: #EAE6DF; --muted: #A29B8F; --faint: #736D62;
+  --rule: #EAE6DF; --hair: #3B3833; --cell: #26241F;
+  --happy: #4E82C9; --anapana: #C08428; --hyebong: #2E9B7E;
+  --happy-bg: #262E3A; --anapana-bg: #332B1C; --hyebong-bg: #20322B;
+  --seal: #D96A4E;
+  --tip-bg: #EAE6DF; --tip-ink: #1C1B18;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 34px 28px 90px; }
+.mast { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap;
+  border-bottom: 3px solid var(--rule); padding-bottom: 14px; }
+.mast h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; margin: 0; line-height: 1.2; }
+.mast .over { font-size: .8rem; font-weight: 500; color: var(--muted); letter-spacing: .22em; margin-bottom: 3px; }
+.mast .meta { text-align: right; font-size: .76rem; color: var(--muted); line-height: 1.7; }
+.mast .meta b { color: var(--ink); font-weight: 700; }
+.orgkey { display: flex; gap: 18px; flex-wrap: wrap; font-size: .78rem; color: var(--muted);
+  border-bottom: 1px solid var(--hair); padding: 9px 0; }
+.orgkey i { display: inline-block; width: 9px; height: 9px; margin-right: 6px; }
+.orgkey .seal-note { margin-left: auto; color: var(--seal); font-weight: 500; }
+section { margin-top: 46px; }
+.sechead { display: flex; align-items: baseline; gap: 12px; border-bottom: 2px solid var(--rule); padding-bottom: 6px; }
+.sechead h2 { font-size: 1.02rem; font-weight: 700; margin: 0; letter-spacing: .01em; }
+.sechead .no { font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: var(--faint); }
+.sechead .note { margin-left: auto; font-size: .75rem; color: var(--muted); text-align: right; }
+.board-scroll { overflow-x: auto; }
+table.board { border-collapse: collapse; width: 100%; min-width: 900px; }
+table.board th, table.board td { padding: 0; }
+table.board thead th { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: .72rem;
+  color: var(--muted); padding: 8px 0 6px; text-align: center; border-bottom: 1px solid var(--hair); }
+table.board thead th .dow { display: block; font-size: .66rem; color: var(--faint); }
+table.board thead th.wknd, table.board thead th.wknd .dow { color: var(--seal); opacity: .85; }
+table.board th.rowh { text-align: left; font-size: .82rem; font-weight: 700; padding: 0 14px 0 2px;
+  white-space: nowrap; border-bottom: 1px solid var(--hair); }
+table.board th.rowh .org { display: block; font-size: .68rem; font-weight: 400; color: var(--muted); }
+.stamp { display: inline-block; font-size: .66rem; font-weight: 700; color: var(--seal);
+  border: 1.5px solid var(--seal); border-radius: 2px; padding: 0 4px; margin-left: 6px;
+  transform: rotate(-3deg); vertical-align: 2px; letter-spacing: .12em; }
+table.board td { border-bottom: 1px solid var(--hair); text-align: center; height: 46px; min-width: 40px; }
+table.board td .n { display: flex; align-items: center; justify-content: center; height: 38px; margin: 4px 2px;
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: .92rem;
+  background: var(--bandbg); color: var(--band); cursor: default; }
+table.board td.off { background: repeating-linear-gradient(45deg, transparent 0 5px, var(--cell) 5px 6px); }
+table.board td.total { font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: .95rem; padding-right: 4px; }
+table.board td.total small { display: block; font-size: .64rem; font-weight: 400; color: var(--muted); line-height: 1.3; }
+.board-foot { font-size: .74rem; color: var(--muted); padding-top: 8px; }
+.cols2 { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; }
+@media (max-width: 800px) { .cols2 { grid-template-columns: 1fr; } }
+table.mtx { border-collapse: collapse; width: 100%; }
+table.mtx th, table.mtx td { padding: 6px 8px; font-size: .82rem; border-bottom: 1px solid var(--hair); text-align: center; }
+table.mtx thead th { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: .72rem; color: var(--muted); }
+table.mtx td.nm { text-align: left; font-weight: 500; white-space: nowrap; }
+table.mtx td .on { font-family: "IBM Plex Mono", monospace; font-weight: 700; color: var(--anapana); }
+table.mtx td .off { color: var(--hair); }
+table.mtx tfoot td { border-top: 2px solid var(--rule); border-bottom: none; font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+table.mtx tfoot td.nm { font-family: "IBM Plex Sans KR", sans-serif; }
+.aside-note { font-size: .8rem; color: var(--muted); line-height: 1.75; }
+.aside-note b { color: var(--ink); }
+.aside-note .row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--hair); padding: 5px 0; gap: 10px; }
+.aside-note .row .v { font-family: "IBM Plex Mono", monospace; font-weight: 700; color: var(--ink); }
+.prog { border-bottom: 1px solid var(--hair); padding: 18px 0 20px; }
+.prog:last-child { border-bottom: none; }
+.prog .head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.prog .head .bullet { width: 10px; height: 10px; background: var(--band); align-self: center; }
+.prog .head h3 { font-size: .95rem; font-weight: 700; margin: 0; }
+.prog .head .info { font-size: .76rem; color: var(--muted); }
+.prog .head .cnt { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: .95rem; font-weight: 700; }
+.prog .head .cnt small { font-weight: 400; font-size: .7rem; color: var(--muted); }
+.nlist { display: grid; grid-template-columns: 92px 1fr; gap: 4px 14px; font-size: .84rem; }
+.nlist dt { color: var(--muted); font-size: .76rem; padding-top: 2px; white-space: nowrap; }
+.nlist dt b { font-family: "IBM Plex Mono", monospace; color: var(--ink); font-weight: 700; font-size: .84rem; }
+.nlist dd { margin: 0; line-height: 1.9; }
+.nlist dd .d { font-family: "IBM Plex Mono", monospace; font-size: .72rem; color: var(--muted); }
+.nlist dd .sep { color: var(--hair); margin: 0 2px; }
+.nlist dd.dim { color: var(--muted); }
+/* 신청 시각 */
+.sigbar { display: flex; gap: 10px; align-items: center; padding: 10px 0; font-size: .78rem; color: var(--muted); flex-wrap: wrap; }
+.sigbar select { font-family: inherit; font-size: .8rem; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--hair); padding: 3px 8px; }
+.sig-scroll { max-height: 480px; overflow-y: auto; border-bottom: 1px solid var(--hair); }
+table.sig { border-collapse: collapse; width: 100%; }
+table.sig th, table.sig td { padding: 5px 10px; font-size: .8rem; border-bottom: 1px solid var(--hair); text-align: left; }
+table.sig thead th { position: sticky; top: 0; background: var(--paper); font-family: "IBM Plex Mono", monospace;
+  font-weight: 500; font-size: .7rem; color: var(--muted); border-bottom: 1.5px solid var(--rule); }
+table.sig td.t { font-family: "IBM Plex Mono", monospace; white-space: nowrap; font-variant-numeric: tabular-nums; }
+table.sig td.no { font-family: "IBM Plex Mono", monospace; color: var(--faint); width: 34px; }
+table.sig td .odot { display: inline-block; width: 8px; height: 8px; margin-right: 7px; background: var(--band); vertical-align: 0; }
+table.sig td.re { font-size: .7rem; color: var(--faint); }
+footer { margin-top: 60px; border-top: 3px solid var(--rule); padding-top: 10px;
+  font-size: .72rem; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+#tip { position: fixed; display: none; pointer-events: none; z-index: 20; background: var(--tip-bg); color: var(--tip-ink);
+  padding: 7px 11px; font-size: .76rem; line-height: 1.5; max-width: 230px; }
+#tip b { font-size: .8rem; }
+</style>
+<div class="wrap">
+
+<header class="mast">
+  <div>
+    <div class="over">2026 쉐랍 텐진 방한수련</div>
+    <h1>신청 현황</h1>
+  </div>
+  <div class="meta mono" id="mastMeta"></div>
+</header>
+<div class="orgkey">
+  <span><i style="background:var(--happy)"></i>행복수업협동조합</span>
+  <span><i style="background:var(--anapana)"></i>아나빠나사띠명상요가</span>
+  <span><i style="background:var(--hyebong)"></i>혜봉추모기념사업회</span>
+  <span class="seal-note">마감 = 신청 마감된 수행</span>
+</div>
+
+<section>
+  <div class="sechead">
+    <span class="no">01</span><h2>일정 · 날짜별 참석 인원</h2>
+    <span class="note">전일 + 해당일 부분 참가 합산 · 칸에 마우스를 올리면 구성 표시</span>
+  </div>
+  <div class="board-scroll"><table class="board" id="board"></table></div>
+  <div class="board-foot">
+    룽즁쥭·꿈요가는 일자 미기재 인원이 숫자에 빠져 있음 ·
+    서술형 날짜 답변(예: "9/10~9/12")은 해당 날짜로 반영 ·
+    茶談은 신청서에 일자 문항이 없어 양일 참석 전제
+  </div>
+</section>
+
+<section>
+  <div class="cols2">
+    <div>
+      <div class="sechead"><span class="no">02</span><h2 id="mtxTitle">5일 수행 · 부분 참가</h2></div>
+      <table class="mtx" id="mtxTable"></table>
+    </div>
+    <div>
+      <div class="sechead"><span class="no">03</span><h2>수행별 총원</h2></div>
+      <div class="aside-note" id="aside"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <span class="no">04</span><h2>수행별 신청자 명단</h2>
+    <span class="note">전일 → 부분(신청 일자) → 일자 미기재</span>
+  </div>
+  <div id="rosters"></div>
+</section>
+
+<section>
+  <div class="sechead">
+    <span class="no">05</span><h2>신청 접수 시각</h2>
+    <span class="note">인정된 신청 기준 · 재신청자는 최신 접수 시각</span>
+  </div>
+  <div class="sigbar">
+    <label>수행 <select id="sigFilter"><option value="">전체</option></select></label>
+    <span id="sigCount"></span>
+  </div>
+  <div class="sig-scroll">
+    <table class="sig">
+      <thead><tr><th></th><th>신청 일시</th><th>이름</th><th>수행</th><th>구분</th><th></th></tr></thead>
+      <tbody id="sigBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <span>자료: 통합 관리 시트 개별내역 — 테스트 제외 · 중복은 최신 재신청만 · 운영진 확정 기준</span>
+  <span class="mono" id="footAsOf"></span>
+</footer>
+</div>
+
+<div id="tip"></div>
+
+<!--DD_START-->
+<script>
+window.DD = {"asOf":"2026-08-27 14:29","progs":[{"code":"G","name":"룽즁쥭 쌍악쑤 닥빠","org":"h","closed":true,"range":"8/26–27","info":"8/26(수)–27(목) · 봉천","days":["8/26","8/27"],"total":33,"full":22,"part":7,"na":4,"fullLabel":"전일","cells":{"8/26":[27,22,5],"8/27":[26,22,4]},"fullNames":["권영희","김경미","김기호","김미란","김민","김새해","김순영","김영혜","김지혜","들","류지명","박건영","박서현","옹미경","우송스님","유지혜","전민주","조아라","최고은","최대영","최석현","홍승호"],"partList":[["강화","27"],["고은나래","27"],["김도희","26"],["김수진","26·27"],["김은혜","26"],["이윤나","26·27"],["임소은","26"]],"naNames":["서문희","오수영","이정화","홍시"]},{"code":"C","name":"꿈요가","org":"h","closed":false,"range":"8/29–30","info":"8/29(토)–30(일) · 봉천","days":["8/29","8/30"],"total":35,"full":24,"part":7,"na":4,"fullLabel":"전일","cells":{"8/29":[26,24,2],"8/30":[29,24,5]},"fullNames":["강경희","강담희","강영화","김미란","김새해","김순영","김재정","노민향","들","박진용","방호진","빅권오","안태연","옹미경","유림","이관복","이명혜","이주정","전민주","정영아","조원재","최석현","킴제이","홍소라"],"partList":[["김보경","30"],["김지은","29"],["서정인","30"],["송경아","29"],["이상훈","30"],["이윤나","30"],["최도희","30"]],"naNames":["김연희","서문희","이정화","홍시"]},{"code":"E","name":"한의사 茶談 수행","org":"a","closed":true,"range":"9/1–2 저녁","info":"9/1(화)–2(수) 저녁 · 사당 · 양일","days":["9/1","9/2"],"total":17,"full":17,"part":0,"na":0,"fullLabel":"양일","cells":{"9/1":[17,17,0],"9/2":[17,17,0]},"fullNames":["권은경","김범수","김새해","김수진","김형근","김혜정","남명희","들","류정수","서문희","석선희","어해용","이윤나","전민주","정연아","정채빈","최도희"],"partList":[],"naNames":[]},{"code":"D","name":"5일 수행","org":"a","closed":true,"range":"9/4–8","info":"9/4(금)–8(화) · 사당","days":["9/4","9/5","9/6","9/7","9/8"],"total":35,"full":25,"part":10,"na":0,"fullLabel":"전일","cells":{"9/4":[29,25,4],"9/5":[32,25,7],"9/6":[33,25,8],"9/7":[29,25,4],"9/8":[26,25,1]},"fullNames":["강근숙","강희순","권은경","김미옥","김민혜","김새해","김선재","김선희","김연희","김지아 자리타","김화영","남명희","들","류한영","무이스님","문정섭","서문희","서형원","신란영","이선경","전민주","전화진","정연아","최두영","킴제이김정은"],"partList":[["김미란","4·5·6·7"],["김선미","4"],["김태형","4·5·6"],["김혜정","5·6"],["박영주","5·6·7"],["안태연","7"],["유민아","5·6"],["이윤나","4·6·7·8"],["이정은","5·6"],["이충학","5·6"]],"naNames":[]},{"code":"F","name":"약사여래 안거 수행","org":"b","closed":false,"range":"9/10–13 숙박","info":"9/10(목)–13(일) · 대원사 숙박","days":["9/10","9/11","9/12","9/13"],"total":13,"full":12,"part":1,"na":0,"fullLabel":"전일","cells":{"9/10":[13,12,1],"9/11":[13,12,1],"9/12":[13,12,1],"9/13":[12,12,0]},"fullNames":["공현주","김미순","김보성","들","문계순","서문희","양율희","이관복","이윤나","전민주","하연강","dohee kim"],"partList":[["홍시","10·11·12"]],"naNames":[]}],"matrix":[["김미란",1,1,1,1,0],["김선미",1,0,0,0,0],["김태형",1,1,1,0,0],["김혜정",0,1,1,0,0],["박영주",0,1,1,1,0],["안태연",0,0,0,1,0],["유민아",0,1,1,0,0],["이윤나",1,0,1,1,1],["이정은",0,1,1,0,0],["이충학",0,1,1,0,0]],"signups":[{"t":1786189739000,"l":"8/8(토) 20:48","n":"김연희","c":"C","k":"일자 미기재","r":0,"id":"260808-204859"},{"t":1786231209000,"l":"8/9(일) 08:20","n":"서문희","c":"G","k":"일자 미기재","r":0,"id":"260809-082009"},{"t":1786231209000,"l":"8/9(일) 08:20","n":"서문희","c":"C","k":"일자 미기재","r":0,"id":"260809-082009"},{"t":1786231209000,"l":"8/9(일) 08:20","n":"서문희","c":"E","k":"양일","r":0,"id":"260809-082009"},{"t":1786231209000,"l":"8/9(일) 08:20","n":"서문희","c":"D","k":"전일","r":0,"id":"260809-082009"},{"t":1786231209000,"l":"8/9(일) 08:20","n":"서문희","c":"F","k":"전일","r":0,"id":"260809-082009"},{"t":1786231230000,"l":"8/9(일) 08:20","n":"전민주","c":"D","k":"전일","r":0,"id":"260809-082030"},{"t":1786231230000,"l":"8/9(일) 08:20","n":"전민주","c":"F","k":"전일","r":0,"id":"260809-082030"},{"t":1786237554000,"l":"8/9(일) 10:05","n":"dohee kim","c":"F","k":"전일","r":0,"id":"260809-100554"},{"t":1786253504000,"l":"8/9(일) 14:31","n":"홍시","c":"G","k":"일자 미기재","r":0,"id":"260809-143144"},{"t":1786253504000,"l":"8/9(일) 14:31","n":"홍시","c":"C","k":"일자 미기재","r":0,"id":"260809-143144"},{"t":1786253504000,"l":"8/9(일) 14:31","n":"홍시","c":"F","k":"부분","r":0,"id":"260809-143144"},{"t":1786268212000,"l":"8/9(일) 18:36","n":"오수영","c":"G","k":"일자 미기재","r":0,"id":"260809-183652"},{"t":1786268492000,"l":"8/9(일) 18:41","n":"이정화","c":"G","k":"일자 미기재","r":0,"id":"260809-184132"},{"t":1786268492000,"l":"8/9(일) 18:41","n":"이정화","c":"C","k":"일자 미기재","r":0,"id":"260809-184132"},{"t":1786322428000,"l":"8/10(월) 09:40","n":"김화영","c":"D","k":"전일","r":0,"id":"260810-094028"},{"t":1786354071000,"l":"8/10(월) 18:27","n":"김민","c":"G","k":"전일","r":0,"id":"260810-182751"},{"t":1786377415000,"l":"8/11(화) 00:56","n":"옹미경","c":"G","k":"전일","r":0,"id":"260811-005655"},{"t":1786377415000,"l":"8/11(화) 00:56","n":"옹미경","c":"C","k":"전일","r":0,"id":"260811-005655"},{"t":1786391740000,"l":"8/11(화) 04:55","n":"권영희","c":"G","k":"전일","r":0,"id":"260811-045540"},{"t":1786410232000,"l":"8/11(화) 10:03","n":"방호진","c":"C","k":"전일","r":0,"id":"260811-100352"},{"t":1786418311000,"l":"8/11(화) 12:18","n":"강경희","c":"C","k":"전일","r":0,"id":"260811-121831"},{"t":1786419962000,"l":"8/11(화) 12:46","n":"김지혜","c":"G","k":"전일","r":0,"id":"260811-124602"},{"t":1786423896000,"l":"8/11(화) 13:51","n":"김영혜","c":"G","k":"전일","r":0,"id":"260811-135136"},{"t":1786424342000,"l":"8/11(화) 13:59","n":"류지명","c":"G","k":"전일","r":0,"id":"260811-135902"},{"t":1786428463000,"l":"8/11(화) 15:07","n":"박건영","c":"G","k":"전일","r":0,"id":"260811-150743"},{"t":1786432181000,"l":"8/11(화) 16:09","n":"김형근","c":"E","k":"양일","r":0,"id":"260811-160941"},{"t":1786434774000,"l":"8/11(화) 16:52","n":"강희순","c":"D","k":"전일","r":1,"id":"260811-165254"},{"t":1786437792000,"l":"8/11(화) 17:43","n":"김민혜","c":"D","k":"전일","r":1,"id":"260811-174312"},{"t":1786437969000,"l":"8/11(화) 17:46","n":"강화","c":"G","k":"부분","r":0,"id":"260811-174609"},{"t":1786444487000,"l":"8/11(화) 19:34","n":"이선경","c":"D","k":"전일","r":0,"id":"260811-193447"},{"t":1786445604000,"l":"8/11(화) 19:53","n":"김선재","c":"D","k":"전일","r":1,"id":"260811-195324"},{"t":1786449324000,"l":"8/11(화) 20:55","n":"신란영","c":"D","k":"전일","r":1,"id":"260811-205524"},{"t":1786452627000,"l":"8/11(화) 21:50","n":"조원재","c":"C","k":"전일","r":0,"id":"260811-215027"},{"t":1786455646000,"l":"8/11(화) 22:40","n":"이관복","c":"F","k":"전일","r":0,"id":"260811-224046"},{"t":1786456584000,"l":"8/11(화) 22:56","n":"박서현","c":"G","k":"전일","r":0,"id":"260811-225624"},{"t":1786474659000,"l":"8/12(수) 03:57","n":"안태연","c":"C","k":"전일","r":0,"id":"260812-035739"},{"t":1786494616000,"l":"8/12(수) 09:30","n":"양율희","c":"F","k":"전일","r":0,"id":"260812-093016"},{"t":1786498296000,"l":"8/12(수) 10:31","n":"권은경","c":"E","k":"양일","r":0,"id":"260812-103136"},{"t":1786499335000,"l":"8/12(수) 10:48","n":"권은경","c":"D","k":"전일","r":0,"id":"260812-104855"},{"t":1786511903000,"l":"8/12(수) 14:18","n":"최석현","c":"G","k":"전일","r":1,"id":"260812-141823"},{"t":1786512441000,"l":"8/12(수) 14:27","n":"강근숙","c":"D","k":"전일","r":0,"id":"260812-142721"},{"t":1786514660000,"l":"8/12(수) 15:04","n":"김혜정","c":"E","k":"양일","r":0,"id":"260812-150420"},{"t":1786514660000,"l":"8/12(수) 15:04","n":"김혜정","c":"D","k":"부분","r":0,"id":"260812-150420"},{"t":1786525616000,"l":"8/12(수) 18:06","n":"김미옥","c":"D","k":"전일","r":1,"id":"260812-180656"},{"t":1786532172000,"l":"8/12(수) 19:56","n":"이주정","c":"C","k":"전일","r":0,"id":"260812-195612"},{"t":1786536763000,"l":"8/12(수) 21:12","n":"하연강","c":"F","k":"전일","r":0,"id":"260812-211243"},{"t":1786539890000,"l":"8/12(수) 22:04","n":"김선희","c":"D","k":"전일","r":0,"id":"260812-220450"},{"t":1786542150000,"l":"8/12(수) 22:42","n":"김태형","c":"D","k":"부분","r":0,"id":"260812-224230"},{"t":1786547163000,"l":"8/13(목) 00:06","n":"석선희","c":"E","k":"양일","r":0,"id":"260813-000603"},{"t":1786579974000,"l":"8/13(목) 09:12","n":"김연희","c":"D","k":"전일","r":1,"id":"260813-091254"},{"t":1786587612000,"l":"8/13(목) 11:20","n":"공현주","c":"F","k":"전일","r":0,"id":"260813-112012"},{"t":1786613676000,"l":"8/13(목) 18:34","n":"박진용","c":"C","k":"전일","r":1,"id":"260813-183436"},{"t":1786680098000,"l":"8/14(금) 13:01","n":"송경아","c":"C","k":"부분","r":0,"id":"260814-130138"},{"t":1786681493000,"l":"8/14(금) 13:24","n":"김기호","c":"G","k":"전일","r":0,"id":"260814-132453"},{"t":1786703133000,"l":"8/14(금) 19:25","n":"우송스님","c":"G","k":"전일","r":0,"id":"260814-192533"},{"t":1786711892000,"l":"8/14(금) 21:51","n":"이윤나","c":"G","k":"부분","r":0,"id":"260814-215132"},{"t":1786711892000,"l":"8/14(금) 21:51","n":"이윤나","c":"C","k":"부분","r":0,"id":"260814-215132"},{"t":1786711892000,"l":"8/14(금) 21:51","n":"이윤나","c":"E","k":"양일","r":0,"id":"260814-215132"},{"t":1786711892000,"l":"8/14(금) 21:51","n":"이윤나","c":"D","k":"부분","r":0,"id":"260814-215132"},{"t":1786711892000,"l":"8/14(금) 21:51","n":"이윤나","c":"F","k":"전일","r":0,"id":"260814-215132"},{"t":1786712193000,"l":"8/14(금) 21:56","n":"노민향","c":"C","k":"전일","r":0,"id":"260814-215633"},{"t":1786715404000,"l":"8/14(금) 22:50","n":"강영화","c":"C","k":"전일","r":0,"id":"260814-225004"},{"t":1786751174000,"l":"8/15(토) 08:46","n":"김새해","c":"G","k":"전일","r":0,"id":"260815-084614"},{"t":1786751174000,"l":"8/15(토) 08:46","n":"김새해","c":"C","k":"전일","r":0,"id":"260815-084614"},{"t":1786751174000,"l":"8/15(토) 08:46","n":"김새해","c":"E","k":"양일","r":0,"id":"260815-084614"},{"t":1786751174000,"l":"8/15(토) 08:46","n":"김새해","c":"D","k":"전일","r":0,"id":"260815-084614"},{"t":1786757430000,"l":"8/15(토) 10:30","n":"킴제이김정은","c":"D","k":"전일","r":0,"id":"260815-103030"},{"t":1786766682000,"l":"8/15(토) 13:04","n":"남명희","c":"D","k":"전일","r":0,"id":"260815-130442"},{"t":1786766866000,"l":"8/15(토) 13:07","n":"남명희","c":"E","k":"양일","r":0,"id":"260815-130746"},{"t":1786778893000,"l":"8/15(토) 16:28","n":"서정인","c":"C","k":"부분","r":0,"id":"260815-162813"},{"t":1786779225000,"l":"8/15(토) 16:33","n":"유림","c":"C","k":"전일","r":0,"id":"260815-163345"},{"t":1786790227000,"l":"8/15(토) 19:37","n":"최고은","c":"G","k":"전일","r":0,"id":"260815-193707"},{"t":1786811592000,"l":"8/16(일) 01:33","n":"이정은","c":"D","k":"부분","r":0,"id":"260816-013312"},{"t":1786812686000,"l":"8/16(일) 01:51","n":"이충학","c":"D","k":"부분","r":0,"id":"260816-015126"},{"t":1786840199000,"l":"8/16(일) 09:29","n":"김수진","c":"G","k":"부분","r":0,"id":"260816-092959"},{"t":1786840199000,"l":"8/16(일) 09:29","n":"김수진","c":"E","k":"양일","r":0,"id":"260816-092959"},{"t":1786843180000,"l":"8/16(일) 10:19","n":"들","c":"G","k":"전일","r":0,"id":"260816-101940"},{"t":1786843180000,"l":"8/16(일) 10:19","n":"들","c":"C","k":"전일","r":0,"id":"260816-101940"},{"t":1786843180000,"l":"8/16(일) 10:19","n":"들","c":"E","k":"양일","r":0,"id":"260816-101940"},{"t":1786843180000,"l":"8/16(일) 10:19","n":"들","c":"D","k":"전일","r":0,"id":"260816-101940"},{"t":1786843180000,"l":"8/16(일) 10:19","n":"들","c":"F","k":"전일","r":0,"id":"260816-101940"},{"t":1786873723000,"l":"8/16(일) 18:48","n":"고은나래","c":"G","k":"부분","r":0,"id":"260816-184843"},{"t":1786925957000,"l":"8/17(월) 09:19","n":"최두영","c":"D","k":"전일","r":0,"id":"260817-091917"},{"t":1786936456000,"l":"8/17(월) 12:14","n":"유지혜","c":"G","k":"전일","r":0,"id":"260817-121416"},{"t":1786940871000,"l":"8/17(월) 13:27","n":"전민주","c":"G","k":"전일","r":1,"id":"260817-132751"},{"t":1786940931000,"l":"8/17(월) 13:28","n":"김미란","c":"C","k":"전일","r":0,"id":"260817-132851"},{"t":1786941022000,"l":"8/17(월) 13:30","n":"전민주","c":"C","k":"전일","r":1,"id":"260817-133022"},{"t":1786941523000,"l":"8/17(월) 13:38","n":"전민주","c":"E","k":"양일","r":1,"id":"260817-133843"},{"t":1786941812000,"l":"8/17(월) 13:43","n":"김미란","c":"G","k":"전일","r":0,"id":"260817-134332"},{"t":1786941812000,"l":"8/17(월) 13:43","n":"김미란","c":"D","k":"부분","r":0,"id":"260817-134332"},{"t":1786943190000,"l":"8/17(월) 14:06","n":"김범수","c":"E","k":"양일","r":0,"id":"260817-140630"},{"t":1786944917000,"l":"8/17(월) 14:35","n":"최대영","c":"G","k":"전일","r":0,"id":"260817-143517"},{"t":1786954022000,"l":"8/17(월) 17:07","n":"조아라","c":"G","k":"전일","r":0,"id":"260817-170702"},{"t":1786954844000,"l":"8/17(월) 17:20","n":"어해용","c":"E","k":"양일","r":0,"id":"260817-172044"},{"t":1786956281000,"l":"8/17(월) 17:44","n":"안태연","c":"D","k":"부분","r":0,"id":"260817-174441"},{"t":1786960026000,"l":"8/17(월) 18:47","n":"김순영","c":"G","k":"전일","r":0,"id":"260817-184706"},{"t":1786960151000,"l":"8/17(월) 18:49","n":"김순영","c":"C","k":"전일","r":0,"id":"260817-184911"},{"t":1787050764000,"l":"8/18(화) 19:59","n":"홍승호","c":"G","k":"전일","r":0,"id":"260818-195924"},{"t":1787101794000,"l":"8/19(수) 10:09","n":"김미순","c":"F","k":"전일","r":0,"id":"260819-100954"},{"t":1787103776000,"l":"8/19(수) 10:42","n":"정채빈","c":"E","k":"양일","r":0,"id":"260819-104256"},{"t":1787127244000,"l":"8/19(수) 17:14","n":"류정수","c":"E","k":"양일","r":0,"id":"260819-171404"},{"t":1787140342000,"l":"8/19(수) 20:52","n":"김지아 자리타","c":"D","k":"전일","r":0,"id":"260819-205222"},{"t":1787190646000,"l":"8/20(목) 10:50","n":"무이스님","c":"D","k":"전일","r":0,"id":"260820-105046"},{"t":1787264873000,"l":"8/21(금) 07:27","n":"김경미","c":"G","k":"전일","r":0,"id":"260821-072753"},{"t":1787291602000,"l":"8/21(금) 14:53","n":"이관복","c":"C","k":"전일","r":0,"id":"260821-145322"},{"t":1787295339000,"l":"8/21(금) 15:55","n":"빅권오","c":"C","k":"전일","r":0,"id":"260821-155539"},{"t":1787304845000,"l":"8/21(금) 18:34","n":"강담희","c":"C","k":"전일","r":0,"id":"260821-183405"},{"t":1787304853000,"l":"8/21(금) 18:34","n":"서형원","c":"D","k":"전일","r":0,"id":"260821-183413"},{"t":1787309225000,"l":"8/21(금) 19:47","n":"최도희","c":"C","k":"부분","r":0,"id":"260821-194705"},{"t":1787309383000,"l":"8/21(금) 19:49","n":"최도희","c":"E","k":"양일","r":0,"id":"260821-194943"},{"t":1787322693000,"l":"8/21(금) 23:31","n":"박영주","c":"D","k":"부분","r":0,"id":"260821-233133"},{"t":1787329385000,"l":"8/22(토) 01:23","n":"정연아","c":"E","k":"양일","r":0,"id":"260822-012305"},{"t":1787329385000,"l":"8/22(토) 01:23","n":"정연아","c":"D","k":"전일","r":0,"id":"260822-012305"},{"t":1787384168000,"l":"8/22(토) 16:36","n":"유민아","c":"D","k":"부분","r":0,"id":"260822-163608"},{"t":1787461327000,"l":"8/23(일) 14:02","n":"김은혜","c":"G","k":"부분","r":0,"id":"260823-140207"},{"t":1787537084000,"l":"8/24(월) 11:04","n":"류한영","c":"D","k":"전일","r":0,"id":"260824-110444"},{"t":1787543849000,"l":"8/24(월) 12:57","n":"전화진","c":"D","k":"전일","r":0,"id":"260824-125729"},{"t":1787557123000,"l":"8/24(월) 16:38","n":"최석현","c":"C","k":"전일","r":0,"id":"260824-163843"},{"t":1787561072000,"l":"8/24(월) 17:44","n":"김선미","c":"D","k":"부분","r":0,"id":"260824-174432"},{"t":1787571949000,"l":"8/24(월) 20:45","n":"김도희","c":"G","k":"부분","r":0,"id":"260824-204549"},{"t":1787576986000,"l":"8/24(월) 22:09","n":"임소은","c":"G","k":"부분","r":0,"id":"260824-220946"},{"t":1787625557000,"l":"8/25(화) 11:39","n":"홍소라","c":"C","k":"전일","r":0,"id":"260825-113917"},{"t":1787628735000,"l":"8/25(화) 12:32","n":"김재정","c":"C","k":"전일","r":0,"id":"260825-123215"},{"t":1787632714000,"l":"8/25(화) 13:38","n":"김보경","c":"C","k":"부분","r":0,"id":"260825-133834"},{"t":1787644089000,"l":"8/25(화) 16:48","n":"킴제이","c":"C","k":"전일","r":0,"id":"260825-164809"},{"t":1787714663000,"l":"8/26(수) 12:24","n":"이명혜","c":"C","k":"전일","r":0,"id":"260826-122423"},{"t":1787717036000,"l":"8/26(수) 13:03","n":"정영아","c":"C","k":"전일","r":0,"id":"260826-130356"},{"t":1787723228000,"l":"8/26(수) 14:47","n":"김보성","c":"F","k":"전일","r":0,"id":"260826-144708"},{"t":1787779839000,"l":"8/27(목) 06:30","n":"이상훈","c":"C","k":"부분","r":0,"id":"260827-063039"},{"t":1787793254000,"l":"8/27(목) 10:14","n":"문정섭","c":"D","k":"전일","r":0,"id":"260827-101414"},{"t":1787803956000,"l":"8/27(목) 13:12","n":"문계순","c":"F","k":"전일","r":0,"id":"260827-131236"},{"t":1787807123000,"l":"8/27(목) 14:05","n":"김지은","c":"C","k":"부분","r":0,"id":"260827-140523"}]};
+</script>
+<!--DD_END-->
+
+<script>
+const ORGV = { h: ['행복수업협동조합','var(--happy)','var(--happy-bg)'],
+               a: ['아나빠나사띠명상요가','var(--anapana)','var(--anapana-bg)'],
+               b: ['혜봉추모기념사업회','var(--hyebong)','var(--hyebong-bg)'] };
+const DOWS = ['일','월','화','수','목','금','토'];
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const total = DD.progs.reduce((s,p)=>s+p.total,0);
+
+document.getElementById('mastMeta').innerHTML =
+  '기준 ' + esc(DD.asOf) + ' · 확정 인원<br>수행 ' + DD.progs.length + ' · 신청 합산 <b>' + total + '</b>명 (중복 참가 포함)';
+document.getElementById('footAsOf').textContent = DD.asOf + ' 자동 집계';
+
+// ── 달력 날짜열: 첫 수행일 ~ 마지막 수행일 연속 ──
+const allDays = DD.progs.flatMap(p=>p.days);
+function dObj(k){ const [m,d]=k.split('/').map(Number); return new Date(2026, m-1, d); }
+const DAYS = [];
+for (let t = dObj(allDays[0]); t <= dObj(allDays[allDays.length-1]); t.setDate(t.getDate()+1)) {
+  DAYS.push({ k: (t.getMonth()+1)+'/'+t.getDate(), dow: DOWS[t.getDay()], wknd: t.getDay()===0||t.getDay()===6 });
+}
+
+// ── 01 일정 보드 ──
+(function(){
+  const tb = document.getElementById('board');
+  let h = '<thead><tr><th class="rowh"></th>';
+  DAYS.forEach(d => { h += '<th class="'+(d.wknd?'wknd':'')+'">'+d.k+'<span class="dow">'+d.dow+'</span></th>'; });
+  h += '<th style="min-width:56px">계</th></tr></thead><tbody>';
+  DD.progs.forEach((p,pi) => {
+    const [oname,oc,obg] = ORGV[p.org];
+    h += '<tr><th class="rowh"><span>'+esc(p.name)+(p.closed?'<span class="stamp">마감</span>':'')+'</span><span class="org">'+oname+' · '+p.range+'</span></th>';
+    DAYS.forEach(d => {
+      const c = p.cells[d.k];
+      if (!c) { h += '<td class="off"></td>'; return; }
+      h += '<td><div class="n" style="--band:'+oc+';--bandbg:'+obg+'" data-p="'+pi+'" data-d="'+d.k+'('+d.dow+')">'+c[0]+'</div></td>';
+    });
+    h += '<td class="total">'+p.total+(p.na?'<small>미기재 '+p.na+'</small>':'')+'</td></tr>';
+  });
+  tb.innerHTML = h + '</tbody>';
+  const tip = document.getElementById('tip');
+  tb.addEventListener('mousemove', e => {
+    const n = e.target.closest('.n');
+    if (!n) { tip.style.display = 'none'; return; }
+    const p = DD.progs[+n.dataset.p], c = p.cells[n.dataset.d.replace(/\(.\)/,'')];
+    tip.innerHTML = '<b>'+esc(p.name)+' · '+n.dataset.d+'</b><br>'+c[0]+'명 — '+p.fullLabel+' '+c[1]+(c[2]?' + 부분 '+c[2]:'');
+    tip.style.display = 'block';
+    tip.style.left = Math.min(e.clientX+14, innerWidth - tip.offsetWidth - 10)+'px';
+    tip.style.top = (e.clientY+14)+'px';
+  });
+  tb.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+})();
+
+// ── 02 5일 수행 부분 매트릭스 ──
+(function(){
+  const D = DD.progs.find(p=>p.code==='D');
+  document.getElementById('mtxTitle').textContent = '5일 수행 · 부분 참가 ' + DD.matrix.length + '명';
+  let h = '<thead><tr><th style="text-align:left">이름</th>' +
+    D.days.map(d=>{const dd=DAYS.find(x=>x.k===d);return '<th>'+d+'<br>'+(dd?dd.dow:'')+'</th>';}).join('') + '</tr></thead><tbody>';
+  DD.matrix.forEach(r => {
+    h += '<tr><td class="nm">'+esc(r[0])+'</td>' + r.slice(1).map(v=>'<td>'+(v?'<span class="on">●</span>':'<span class="off">·</span>')+'</td>').join('') + '</tr>';
+  });
+  h += '</tbody><tfoot><tr><td class="nm">계 ('+D.fullLabel+' '+D.full+'명 포함)</td>' +
+    D.days.map(d=>'<td>'+D.cells[d][0]+'</td>').join('') + '</tr></tfoot>';
+  document.getElementById('mtxTable').innerHTML = h;
+})();
+
+// ── 03 수행별 총원 ──
+document.getElementById('aside').innerHTML = DD.progs.map(p => {
+  const sub = [p.fullLabel+' '+p.full, p.part?'부분 '+p.part:'', p.na?'미기재 '+p.na:''].filter(Boolean).join(' · ');
+  return '<div class="row"><span>'+esc(p.name)+' <span style="color:var(--faint)">— '+sub+'</span></span><span class="v">'+p.total+'</span></div>';
+}).join('') +
+  '<div class="row" style="border-bottom:2px solid var(--rule)"><span><b>합산</b> (동일인 복수 수행 포함)</span><span class="v">'+total+'</span></div>' +
+  '<p style="margin:10px 0 0">테스트 접수 제거, 동일인 중복 신청은 최신 재신청만 인정한 확정 수치. 꿈요가·안거는 접수 중이라 계속 늘어날 수 있음.</p>';
+
+// ── 04 명단 ──
+document.getElementById('rosters').innerHTML = DD.progs.map(p => {
+  const [oname,oc] = ORGV[p.org];
+  const names = a => a.map(esc).join('<span class="sep"> · </span>');
+  let rows = '';
+  if (p.fullNames.length) rows += '<dt>'+p.fullLabel+' <b>'+p.fullNames.length+'</b></dt><dd>'+names(p.fullNames)+'</dd>';
+  if (p.partList.length) rows += '<dt>부분 <b>'+p.partList.length+'</b></dt><dd>' +
+    p.partList.map(x=>esc(x[0])+'<span class="d">('+esc(x[1])+')</span>').join('<span class="sep"> · </span>')+'</dd>';
+  if (p.naNames.length) rows += '<dt>미기재 <b>'+p.naNames.length+'</b></dt><dd class="dim">'+names(p.naNames)+'</dd>';
+  return '<div class="prog" style="--band:'+oc+'">' +
+    '<div class="head"><span class="bullet"></span><h3>'+esc(p.name)+'</h3>' +
+    (p.closed?'<span class="stamp">마감</span>':'') +
+    '<span class="info">'+oname+' · '+p.info+'</span>' +
+    '<span class="cnt">'+p.total+'<small> 명</small></span></div>' +
+    '<dl class="nlist">'+rows+'</dl></div>';
+}).join('');
+
+// ── 05 신청 접수 시각 ──
+(function(){
+  const sel = document.getElementById('sigFilter');
+  DD.progs.forEach(p => { const o=document.createElement('option'); o.value=p.code; o.textContent=p.name; sel.appendChild(o); });
+  function render(){
+    const f = sel.value;
+    const rows = DD.signups.filter(s => !f || s.c === f);
+    document.getElementById('sigBody').innerHTML = rows.map((s,i) => {
+      const p = DD.progs.find(x=>x.code===s.c), [,oc] = ORGV[p.org];
+      return '<tr><td class="no">'+(i+1)+'</td><td class="t">'+esc(s.l)+'</td><td>'+esc(s.n)+'</td>' +
+        '<td><span class="odot" style="--band:'+oc+'"></span>'+esc(p.name)+'</td>' +
+        '<td>'+esc(s.k)+'</td><td class="re">'+(s.r?'재신청':'')+'</td></tr>';
+    }).join('');
+    document.getElementById('sigCount').textContent = '총 ' + rows.length + '건';
+  }
+  sel.addEventListener('change', render);
+  render();
+})();
+</script>
