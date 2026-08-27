@@ -3,13 +3,15 @@
 목표: 대시보드가 Claude/컴퓨터 없이도 항상 최신이 되도록, 시트 데이터를 실시간 제공하는
 Apps Script 웹앱 배포를 마무리한다. 완료되면 이 파일을 삭제할 것.
 
-상태 (2026-08-27 18:15): Apps Script 프로젝트 생성됨(jennie.ch.kim 계정, 빈 상태),
-코드 주입 직전 크롬 연결 끊김. 페이지(dashboard-template.html)와 빌드 스크립트는
-실시간 로딩 지원 완료(LIVE_ENDPOINT — live-url.txt로 주입).
+상태 (2026-08-28 09:4x): 크롬 프로필이 **gkondelas@gmail.com**(사용자 본인 계정)으로 바뀜 —
+이 계정도 시트 편집 접근 가능 확인. jennie 프로젝트 대신 **gkondelas 계정에 새 프로젝트 생성 완료**,
+코드 주입까지 완료했으나 **저장(Ctrl+S) 직전 크롬 연결 끊김** (편집기 탭이 살아있으면 미저장 상태로 남아있음,
+탭이 닫혔으면 2단계 주입부터 다시).
 
-프로젝트 URL: https://script.google.com/home/projects/1LWCtIvPgjld45TZBXAdKJocrBsCUAAv-Y8sGK0eLrV0svrOdXnd9ikd6/edit
+프로젝트 URL(정본, gkondelas): https://script.google.com/home/projects/1m4fveKQHSms5E29Nky1oQciF8i0gjbFYJKPStJuGYUQH4F7YZZSXlJfp/edit
+(구 jennie 프로젝트 1LWCtIvPgjld45TZBXAdKJocrBsCUAAv-Y8sGK0eLrV0svrOdXnd9ikd6 은 폐기 — 접근 불가)
 
-## 절차 (claude-in-chrome 필요, jennie.ch.kim 로그인 상태)
+## 절차 (claude-in-chrome 필요, 어느 계정이든 시트 접근되는 프로필이면 됨)
 
 1. 위 프로젝트 URL을 크롬 탭에서 연다 (계정 팝업 뜨면 OK).
 2. 코드 주입: `tools/gs-b64.txt`의 base64 문자열을 읽어 javascript_tool로
