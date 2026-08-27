@@ -257,11 +257,14 @@ const ORGV = { h: ['행복수업협동조합','var(--happy)','var(--happy-bg)'],
                b: ['혜봉추모기념사업회','var(--hyebong)','var(--hyebong-bg)'] };
 const DOWS = ['일','월','화','수','목','금','토'];
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const LIVE_ENDPOINT = ''; // 빌드 시 live-url.txt 내용으로 치환 (없으면 빈 값 = 내장 데이터만 사용)
+
+function renderAll(){
 const total = DD.progs.reduce((s,p)=>s+p.total,0);
 
 document.getElementById('mastMeta').innerHTML =
-  '기준 ' + esc(DD.asOf) + ' · 확정 인원<br>수행 ' + DD.progs.length + ' · 신청 합산 <b>' + total + '</b>명 (중복 참가 포함)';
-document.getElementById('footAsOf').textContent = DD.asOf + ' 자동 집계';
+  '기준 ' + esc(DD.asOf) + (DD.live ? ' <span style="color:var(--hyebong);font-weight:700">●실시간</span>' : '') + ' · 확정 인원<br>수행 ' + DD.progs.length + ' · 신청 합산 <b>' + total + '</b>명 (중복 참가 포함)';
+document.getElementById('footAsOf').textContent = DD.asOf + (DD.live ? ' 실시간 집계' : ' 자동 집계');
 
 // ── 달력 날짜열: 첫 수행일 ~ 마지막 수행일 연속 ──
 const allDays = DD.progs.flatMap(p=>p.days);
@@ -289,7 +292,7 @@ for (let t = dObj(allDays[0]); t <= dObj(allDays[allDays.length-1]); t.setDate(t
   });
   tb.innerHTML = h + '</tbody>';
   const tip = document.getElementById('tip');
-  tb.addEventListener('mousemove', e => {
+  tb.onmousemove = e => {
     const n = e.target.closest('.n');
     if (!n) { tip.style.display = 'none'; return; }
     const p = DD.progs[+n.dataset.p], c = p.cells[n.dataset.d.replace(/\(.\)/,'')];
@@ -297,8 +300,8 @@ for (let t = dObj(allDays[0]); t <= dObj(allDays[allDays.length-1]); t.setDate(t
     tip.style.display = 'block';
     tip.style.left = Math.min(e.clientX+14, innerWidth - tip.offsetWidth - 10)+'px';
     tip.style.top = (e.clientY+14)+'px';
-  });
-  tb.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+  };
+  tb.onmouseleave = () => { tip.style.display = 'none'; };
 })();
 
 // ── 02 5일 수행 부분 매트릭스 ──
@@ -343,7 +346,10 @@ document.getElementById('rosters').innerHTML = DD.progs.map(p => {
 // ── 05 신청 접수 시각 ──
 (function(){
   const sel = document.getElementById('sigFilter');
+  const keep = sel.value;
+  sel.innerHTML = '<option value="">전체</option>';
   DD.progs.forEach(p => { const o=document.createElement('option'); o.value=p.code; o.textContent=p.name; sel.appendChild(o); });
+  sel.value = keep || '';
   function render(){
     const f = sel.value;
     const rows = DD.signups.filter(s => !f || s.c === f);
@@ -355,7 +361,21 @@ document.getElementById('rosters').innerHTML = DD.progs.map(p => {
     }).join('');
     document.getElementById('sigCount').textContent = '총 ' + rows.length + '건';
   }
-  sel.addEventListener('change', render);
+  sel.onchange = render;
   render();
+})();
+} // renderAll 끝
+
+renderAll();
+
+// ── 실시간 데이터: 시트 API에서 최신값을 받아 다시 그림 ──
+(async function(){
+  if (!LIVE_ENDPOINT || LIVE_ENDPOINT.indexOf('http') !== 0) return;
+  try {
+    const r = await fetch(LIVE_ENDPOINT, { redirect: 'follow' });
+    if (!r.ok) return;
+    const j = await r.json();
+    if (j && j.progs && j.progs.length && j.signups) { window.DD = j; renderAll(); }
+  } catch (e) {}
 })();
 </script>
