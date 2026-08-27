@@ -247,14 +247,15 @@ window.DD = __DD_JSON__;
   async function sha(s){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
     return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
   function unlock(){ document.body.classList.remove('locked'); const g=document.getElementById('gate'); if(g) g.remove(); }
-  let saved = null; try { saved = localStorage.getItem(KEY); } catch(e) {}
-  if (saved === HASH) { unlock(); }
-  document.getElementById('gateForm').addEventListener('submit', async e => {
+  const form = document.getElementById('gateForm');
+  if (form) form.addEventListener('submit', async e => {
     e.preventDefault();
     const v = document.getElementById('gatePw').value.trim();
     if (await sha(v) === HASH) { try { localStorage.setItem(KEY, HASH); } catch(err) {} unlock(); }
     else { document.getElementById('gateErr').textContent = '암호가 맞지 않습니다.'; document.getElementById('gatePw').select(); }
   });
+  let saved = null; try { saved = localStorage.getItem(KEY); } catch(e) {}
+  if (saved === HASH) { unlock(); }
 })();
 
 const ORGV = { h: ['행복수업협동조합','var(--happy)','var(--happy-bg)'],
