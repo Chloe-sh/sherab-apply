@@ -2365,7 +2365,7 @@ function showProgIntro(code) {
   var rows = (p.reqRows || []).map(function (r) {
     var v = esc(r.v).replace(/\n/g, '<br>');
     // 대기 예약 수행: 계좌는 그대로 안내하되, 입금은 자리 확정 후라고 덧붙임
-    if (p.waitlist && !p.closed && r.k === '입금') v += '<br><span class="feeWait">대기 예약 — 입금은 자리가 확정된 뒤 안내드립니다.</span>';
+    if (p.waitlist && !p.closed && r.k === '입금') v += '<br><span class="feeWait">대기 예약 중: 참여가 확정되면 입금해 주세요.</span>';
     return '<div class="row"><span class="k">' + esc(r.k) + '</span><span class="v">' + v + '</span></div>';
   }).join('');
 
@@ -2651,7 +2651,7 @@ function renderFees() {
       '<tr class="feeDetail"><td colspan="2">' +
       det.map(esc).join('<br>') + (det.length ? '<br>' : '') +
       '<span class="feeAcc">입금 계좌 · ' + acc + '</span>' +
-      (isWait ? '<br><span class="feeWait">대기 예약 — 입금은 자리가 확정된 뒤 안내드립니다.</span>' : '') +
+      (isWait ? '<br><span class="feeWait">대기 예약 중: 참여가 확정되면 입금해 주세요.</span>' : '') +
       '</td></tr>';
   });
   var note = $('depositNote');
@@ -2819,7 +2819,7 @@ function showDone(receiptNo, payload) {
       return '<div class="doneOrg"><div class="top"><span class="nm">' + esc(titleOf(p)) + '</span>' +
         '<span class="fee">' + effectiveFeeText(p) + '</span></div>' +
         '<div class="acc">' + esc(p.account || '계좌 추후 안내') + '</div>' +
-        (p.waitlist && !p.closed ? '<div class="accWait">대기 예약 — 입금은 자리가 확정된 뒤 안내드립니다.</div>' : '') +
+        (p.waitlist && !p.closed ? '<div class="accWait">대기 예약 중: 참여가 확정되면 입금해 주세요.</div>' : '') +
         '</div>';
     }).join('') +
     (donePrograms.some(function (p) { return p.waitlist && !p.closed; })
