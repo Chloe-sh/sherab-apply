@@ -375,6 +375,20 @@
     margin-left: .35rem; margin-bottom: .45rem; vertical-align: top;
   }
   .introApplyBtn.introClosed { background: #8A93A3; cursor: default; }
+  /* 대기 예약 수행: 정원 마감 후에도 신청은 받되 '대기 예약'으로 접수 (CONFIG programs의 waitlist: true) */
+  .waitBadge {
+    display: inline-block; font-size: .82rem; font-weight: 700; color: #fff;
+    background: #2E5FAC; border-radius: 999px; padding: .2rem .7rem;
+    margin-left: .35rem; margin-bottom: .45rem; vertical-align: top;
+  }
+  .prog .waitNote {
+    margin-top: .7rem; font-size: .9rem; color: #41537B; line-height: 1.6;
+    background: #F4F7FB; border: 1px solid #DDE6F2; border-radius: 10px; padding: .55rem .75rem;
+  }
+  .introWaitNote {
+    margin-top: 1.1rem; font-size: .95rem; color: #41537B; line-height: 1.6; text-align: center;
+    background: #F4F7FB; border: 1px solid #DDE6F2; border-radius: 12px; padding: .7rem .9rem;
+  }
 
   /* 신청서 작성 카드: 상단 선택 수행 목록 + 소제목(기본 정보 / 수행별 추가 질문) */
   /* 선택 수행 목록: 남색 배너 + 수행명 흰 알약 칩 — 한눈에 띄게 */
@@ -1526,6 +1540,7 @@ var CONFIG_DATA = {
       "name": "꿈요가",
       "org": "행복수업협동조합",
       "fee": 180000,
+      "closed": true,
       "schedule": "26. 8. 29(토) ~ 30(일) 9:00~18:00/꿈요가(2일 18만 원, 1일 9만 원) - 잠든 상태에서도 깨어 있는 알아차림 유지",
       "place": "서울 관악구 봉천로31길 3(봉천역 4번 출구)",
       "introSecs": [
@@ -1557,6 +1572,7 @@ var CONFIG_DATA = {
       "org": "아나빠나사띠명상요가",
       "introImg": "images/dadam-poster.jpg",
       "fee": 0,
+      "waitlist": true,
       "schedule": "26. 9. 1(화) ~ 9. 2(수) 20:00~22:00/한의사 茶談 수행 - 한의학, 동서양 의학, 대체 의학 및 웰니스 전문가들을 티베트 전통 수행과 학술적 탐구의 장에 초대합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
       "introSecs": [
@@ -1593,6 +1609,7 @@ var CONFIG_DATA = {
       "name": "5일 수행",
       "org": "아나빠나사띠명상요가",
       "fee": 400000,
+      "waitlist": true,
       "schedule": "26. 9. 4(금) ~ 9. 8(화) 9:00~18:00/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
       "introSecs": [
@@ -2287,17 +2304,22 @@ function renderPrograms() {
     div.innerHTML =
       '<div class="nameBanner">' +
         (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
-        (p.closed ? '<span class="closedBadge">신청 마감</span>' : '') +
+        (p.closed ? '<span class="closedBadge">신청 마감</span>'
+          : (p.waitlist ? '<span class="waitBadge">대기 예약</span>' : '')) +
         '<div class="progName">' + esc(p.name) + '</div>' +
         ((compTxt || whyTxt) ? '<div class="progDesc">' + esc(compTxt || whyTxt) + '</div>' : '') +
       '</div>' +
       '<div class="cardBody">' +
         '<div class="infoRows">' + rows + '</div>' +
         moreBtnHtml +
+        (!p.closed && p.waitlist
+          ? '<div class="waitNote">현재 정원이 마감되어 <b>대기 예약</b>으로 접수됩니다.<br>자리가 나면 순서대로 안내드리겠습니다.</div>'
+          : '') +
       '</div>' +
       (p.closed
         ? '<div class="checkline"><span>신청이 마감되었습니다</span></div>'
-        : '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>이 수행을 신청합니다</span></div>');
+        : '<div class="checkline"><input type="checkbox" id="chk-' + esc(p.code) + '"><span>' +
+          (p.waitlist ? '대기 예약을 신청합니다' : '이 수행을 신청합니다') + '</span></div>');
     // 카드 아무 곳이나 눌러 선택되지 않도록, 체크 표시 줄에서만 신청 토글
     // 체크(선택)하는 순간 바로 신청서 작성 칸으로 이동 — 해제할 때는 이동하지 않음
     if (!p.closed) {
@@ -2353,8 +2375,12 @@ function showProgIntro(code) {
     '<div id="progIntroSchedule"></div>' +
     (p.closed
       ? '<button type="button" class="introApplyBtn introClosed" disabled>신청이 마감되었습니다</button>'
-      : '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
-        esc(p.name) + ' 신청하러 가기 →</button>') +
+      : (p.waitlist
+        ? '<div class="introWaitNote">현재 정원이 마감되어 <b>대기 예약</b>으로 접수됩니다.<br>자리가 나면 순서대로 안내드리겠습니다.</div>' +
+          '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
+          esc(p.name) + ' 대기 예약하러 가기 →</button>'
+        : '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
+          esc(p.name) + ' 신청하러 가기 →</button>')) +
     '<button type="button" class="introBackBtn" onclick="progIntroBack()">다른 수행 보기</button>';
 
   var dsId = DS_MAP[code];
@@ -2435,7 +2461,9 @@ function renderSubforms() {
     if (codes.length) {
       chosen.className = 'chosenBox';
       chosen.innerHTML = '<span class="cbLabel">신청하시는 수행</span>' +
-        codes.map(function (p) { return '<span class="cbChip">' + esc(p.name) + '</span>'; }).join('');
+        codes.map(function (p) {
+          return '<span class="cbChip">' + esc(p.name) + (p.waitlist && !p.closed ? ' (대기 예약)' : '') + '</span>';
+        }).join('');
     } else {
       chosen.className = 'chosenBox empty';
       chosen.textContent = '위 1번에서 수행을 선택하시면 여기에 표시됩니다.';
@@ -2459,7 +2487,10 @@ function renderSubforms() {
         (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
         '<div class="sfName">' + esc(p.name) + '</div>' +
       '</div>' +
-      '<div class="sfBody">';
+      '<div class="sfBody">' +
+      (p.waitlist && !p.closed
+        ? '<div class="infoBox">이 수행은 현재 정원이 마감되어 <b>대기 예약</b>으로 접수됩니다.<br>자리가 나면 순서대로 안내드리겠습니다.</div>'
+        : '');
 
     questionsFor(p.code).forEach(function (q, qi) {
       var qid = p.code + '-' + qi;
@@ -2695,11 +2726,12 @@ function submit() {
     website: $('fWebsite').value,                  // 허니팟 : 정상 신청이면 항상 빈 값
     elapsedMs: Date.now() - PAGE_LOADED_AT,        // 페이지 진입 → 제출까지 걸린 시간
     programs: Object.keys(subs).filter(function (c) { return selected[c]; }).map(function (c) {
-      return {
-        code: c,
-        answers: subs[c].filter(function (a) { return a.a !== ''; })
-                        .map(function (a) { return { q: a.q, a: a.a }; })
-      };
+      var ans = subs[c].filter(function (a) { return a.a !== ''; })
+                       .map(function (a) { return { q: a.q, a: a.a }; });
+      // 대기 예약 수행은 시트 신청서 응답에 구분이 남도록 표시 (백엔드 수정 없이 답변으로 기록)
+      var pDef = CONFIG.programs.find(function (x) { return x.code === c; });
+      if (pDef && pDef.waitlist && !pDef.closed) ans.unshift({ q: '접수 구분', a: '대기 예약' });
+      return { code: c, answers: ans };
     })
   };
 
@@ -2749,7 +2781,8 @@ function showDone(receiptNo, payload) {
     var p = CONFIG.programs.find(function (x) { return x.code === sel.code; });
     total += p ? effectiveFee(p) : 0;
     var det = p ? feeBreakdown(p) : [];
-    return '<div class="doneRow"><span class="n">' + esc(p ? titleOf(p) : '') + '</span>' +
+    return '<div class="doneRow"><span class="n">' + esc(p ? titleOf(p) : '') +
+      (p && p.waitlist && !p.closed ? ' <small>(대기 예약)</small>' : '') + '</span>' +
       '<span class="v">' + (p ? effectiveFeeText(p) : won(0)) + '</span></div>' +
       (det.length ? '<div class="doneSub">' + det.map(esc).join('<br>') + '</div>' : '');
   });
@@ -2769,7 +2802,10 @@ function showDone(receiptNo, payload) {
       return '<div class="doneOrg"><div class="top"><span class="nm">' + esc(titleOf(p)) + '</span>' +
         '<span class="fee">' + effectiveFeeText(p) + '</span></div>' +
         '<div class="acc">' + esc(p.account || '계좌 추후 안내') + '</div></div>';
-    }).join('');
+    }).join('') +
+    (donePrograms.some(function (p) { return p.waitlist && !p.closed; })
+      ? '<p class="note">대기 예약으로 접수된 수행은 자리가 나면 순서대로 안내드리겠습니다.</p>'
+      : '');
 }
 
 // ── 수행 안내: 배너 클릭 시 아래에 큰 글씨로 설명 펼침 ──
