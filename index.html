@@ -1676,6 +1676,7 @@ var CONFIG_DATA = {
       "name": "약사여래 안거 수행",
       "org": "혜봉추모기념사업회",
       "fee": 380000,
+      "closed": true,
       "schedule": "26. 9. 10(목) ~ 9. 13(일) · 숙박/약사여래 수행 - 혜봉 선생님의 수행 정신과 가르침을 기리며, 모든 중생이 질병과 고통에서 벗어나기를 서원한 약사여래의 지혜와 자비를 함께 닦는 수행입니다.",
       "place": "대원사 · 전남 보성군 문덕면 죽산길 506-8(보성역에서 차량 30분 · 오시는 길은 신청 후 안내)",
       "desc": "",
@@ -3009,6 +3010,17 @@ $('introApplyBtn').addEventListener('click', function () {
   if (!selected['F']) toggle('F', true);
   setTimeout(scrollToApplyForm, 80);
 });
+// 안거(F) 마감 시: pageF 하단 CTA는 카드 밖 별도 버튼이라 여기서 비활성 마감 표시로 교체
+// (이 시점엔 CONFIG가 아직 null — 정본 리터럴 CONFIG_DATA를 직접 참조해야 함)
+(function () {
+  var f = CONFIG_DATA.programs.find(function (p) { return p.code === 'F'; });
+  if (f && f.closed) {
+    var b = $('introApplyBtn');
+    b.textContent = '신청이 마감되었습니다';
+    b.classList.add('introClosed');
+    b.disabled = true;
+  }
+})();
 $('submitBtn').addEventListener('click', submit);
 // 소개 글 더보기/접기 (혜봉·쉐랍)
 document.querySelectorAll('.bioMoreBtn').forEach(function (btn) {
