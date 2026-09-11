@@ -400,6 +400,22 @@
   }
   .feeWait, .accWait { color: #2E5FAC; font-weight: 700; }
   .accWait { margin-top: .25rem; font-size: .9rem; }
+  /* 참여자 추가 접수(수행 종료 후 재오픈): CONFIG programs의 openBadge·openNote·payNote */
+  .openBadge {
+    display: inline-block; font-size: .82rem; font-weight: 700; color: #fff;
+    background: var(--navy); border-radius: 999px; padding: .2rem .7rem;
+    margin-left: .35rem; margin-bottom: .45rem; vertical-align: top;
+  }
+  .prog .openNote {
+    margin-top: .7rem; font-size: .9rem; color: #41537B; line-height: 1.6;
+    background: #F4F7FB; border: 1px solid #DDE6F2; border-radius: 10px; padding: .55rem .75rem;
+  }
+  .introOpenNote {
+    margin-top: 1.1rem; font-size: .95rem; color: #41537B; line-height: 1.6; text-align: center;
+    background: #F4F7FB; border: 1px solid #DDE6F2; border-radius: 12px; padding: .7rem .9rem;
+  }
+  .feePay, .accPay { color: #2E5FAC; font-weight: 700; }
+  .accPay { margin-top: .25rem; font-size: .9rem; }
 
   /* 신청서 작성 카드: 상단 선택 수행 목록 + 소제목(기본 정보 / 수행별 추가 질문) */
   /* 선택 수행 목록: 남색 배너 + 수행명 흰 알약 칩 — 한눈에 띄게 */
@@ -1621,8 +1637,9 @@ var CONFIG_DATA = {
       "name": "5일 수행",
       "org": "아나빠나사띠명상요가",
       "fee": 400000,
-      "closed": true,
-      "closedNote": "수행 참여를 꼭 원하시는 경우 담당자(010-6313-9189)에게 연락해 주세요.",
+      "openBadge": "참여자 추가 접수",
+      "openNote": "5일 수행(9. 4 ~ 9. 8)에 참여하셨으나 신청서를 작성하지 못한 분들을 위한 추가 접수입니다. 참여하신 일정을 선택해 주세요.",
+      "payNote": "참가비를 이미 입금하신 분은 다시 입금하지 않으셔도 됩니다.",
       "schedule": "26. 9. 4(금) ~ 9. 8(화) 9:00~18:00/욱죵 · 룽즁쥭 쌍악쑤 닥빠 · 꿈요가 - 수행 이해와 경험을 위해 모든 과정을 순서대로 참가하시길 권장합니다.",
       "place": "서울 관악구 승방10길 2 3층(사당역 4번 출구)",
       "introSecs": [
@@ -2318,7 +2335,8 @@ function renderPrograms() {
       '<div class="nameBanner">' +
         (p.org ? '<span class="orgBadge">' + esc(p.org) + '</span>' : '') +
         (p.closed ? '<span class="closedBadge">신청 마감</span>'
-          : (p.waitlist ? '<span class="waitBadge">대기 예약</span>' : '')) +
+          : (p.waitlist ? '<span class="waitBadge">대기 예약</span>'
+            : (p.openBadge ? '<span class="openBadge">' + esc(p.openBadge) + '</span>' : ''))) +
         '<div class="progName">' + esc(p.name) + '</div>' +
         ((compTxt || whyTxt) ? '<div class="progDesc">' + esc(compTxt || whyTxt) + '</div>' : '') +
       '</div>' +
@@ -2327,6 +2345,9 @@ function renderPrograms() {
         moreBtnHtml +
         (!p.closed && p.waitlist
           ? '<div class="waitNote">현재 정원이 마감되어 <b>대기 예약</b>으로 접수됩니다.<br>자리가 나면 순서대로 연락드리며, 참가비 입금도 그때 안내드립니다.</div>'
+          : '') +
+        (!p.closed && !p.waitlist && p.openNote
+          ? '<div class="openNote">' + esc(p.openNote) + '</div>'
           : '') +
       '</div>' +
       (p.closed
@@ -2378,6 +2399,7 @@ function showProgIntro(code) {
     var v = esc(r.v).replace(/\n/g, '<br>');
     // 대기 예약 수행: 계좌는 그대로 안내하되, 입금은 자리 확정 후라고 덧붙임
     if (p.waitlist && !p.closed && r.k === '입금') v += '<br><span class="feeWait">대기 예약 중: 참여가 확정되면 입금해 주세요.</span>';
+    if (p.payNote && !p.closed && r.k === '입금') v += '<br><span class="feePay">' + esc(p.payNote) + '</span>';
     return '<div class="row"><span class="k">' + esc(r.k) + '</span><span class="v">' + v + '</span></div>';
   }).join('');
 
@@ -2396,7 +2418,8 @@ function showProgIntro(code) {
         ? '<div class="introWaitNote">현재 정원이 마감되어 <b>대기 예약</b>으로 접수됩니다.<br>자리가 나면 순서대로 연락드리며, 참가비 입금도 그때 안내드립니다.</div>' +
           '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
           esc(p.name) + ' 대기 예약하러 가기 →</button>'
-        : '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
+        : (p.openNote ? '<div class="introOpenNote">' + esc(p.openNote) + '</div>' : '') +
+          '<button type="button" class="introApplyBtn" onclick="progIntroApply(\'' + esc(code) + '\')">' +
           esc(p.name) + ' 신청하러 가기 →</button>')) +
     '<button type="button" class="introBackBtn" onclick="progIntroBack()">다른 수행 보기</button>';
 
@@ -2665,6 +2688,7 @@ function renderFees() {
       det.map(esc).join('<br>') + (det.length ? '<br>' : '') +
       '<span class="feeAcc">입금 계좌 · ' + acc + '</span>' +
       (isWait ? '<br><span class="feeWait">대기 예약 중: 참여가 확정되면 입금해 주세요.</span>' : '') +
+      (p.payNote && !p.closed ? '<br><span class="feePay">' + esc(p.payNote) + '</span>' : '') +
       '</td></tr>';
   });
   var note = $('depositNote');
@@ -2833,6 +2857,7 @@ function showDone(receiptNo, payload) {
         '<span class="fee">' + effectiveFeeText(p) + '</span></div>' +
         '<div class="acc">' + esc(p.account || '계좌 추후 안내') + '</div>' +
         (p.waitlist && !p.closed ? '<div class="accWait">대기 예약 중: 참여가 확정되면 입금해 주세요.</div>' : '') +
+        (p.payNote && !p.closed ? '<div class="accPay">' + esc(p.payNote) + '</div>' : '') +
         '</div>';
     }).join('') +
     (donePrograms.some(function (p) { return p.waitlist && !p.closed; })
